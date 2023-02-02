@@ -12,6 +12,10 @@ class HomeView(TemplateView):
     template_name = 'home.html'
 
 
+class LabelbaseView(TemplateView):
+    template_name = 'labelbase.html'
+
+
 class RegistrationView(FormView):
     template_name = 'registration.html'
     form_class = UserCreationForm

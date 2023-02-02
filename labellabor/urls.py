@@ -6,7 +6,7 @@ from django.urls import include, path
 from two_factor.urls import urlpatterns as tf_urls
 
 from .views import (
-    ExampleSecretView, HomeView, RegistrationCompleteView, RegistrationView,
+    ExampleSecretView, LabelbaseView, HomeView, RegistrationCompleteView, RegistrationView,
 )
 
 urlpatterns = [
@@ -15,6 +15,13 @@ urlpatterns = [
         HomeView.as_view(),
         name='home',
     ),
+
+    path(
+        '',
+        LabelbaseView.as_view(),
+        name='labelbase',
+    ),
+
     path(
         'account/logout/',
         LogoutView.as_view(),

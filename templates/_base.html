@@ -202,7 +202,7 @@ body {
               <span data-feather="plus-circle" class="align-text-bottom"></span>
             </a>
           </h6>
-
+            {% if user.is_authenticated %}
           <ul class="nav flex-column mb-2">
             <li class="nav-item">
               <a class="nav-link" href="#">
@@ -223,8 +223,9 @@ body {
               </a>
             </li>
           </ul>
-
-
+          {% else %}
+          Login to start 
+          {% endif %}
 
           <!-- -->
 <div class="fixed-bottom">

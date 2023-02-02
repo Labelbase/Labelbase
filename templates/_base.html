@@ -180,13 +180,8 @@ body {
     <div class="navbar-nav">
       <div class="nav-item text-nowrap">
 
-
-            <li class="nav-item {% block nav_home %}{% endblock %}">
-              <a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a>
-            </li>
-            <li class="nav-item {% block nav_secret %}{% endblock %}">
-              <a class="nav-link" href="{% url 'secret' %}">{% trans "Secret Page" %}</a>
-            </li>
+          <a class="nav-link px-3 {% block nav_home %}{% endblock %}" href="{% url 'home' %}">{% trans "Home" %}</a>
+          <a class="nav-link px-3 {% block nav_secret %}{% endblock %}"  href="{% url 'secret' %}">{% trans "Secret Page" %}</a>
 
 
 
@@ -210,20 +205,9 @@ body {
             {% endif %}
 
 
-        <a class="nav-link px-3" href="#">
-          asd
 
 
 
-        </a>
-
-
-                <a class="nav-link px-3 active " href="#">
-                  asd
-
-
-
-                </a>
 
 
       </div>

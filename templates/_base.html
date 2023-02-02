@@ -186,9 +186,7 @@ body {
 
       {% else %}
         <a class="nav-link px-3" href="{% url 'two_factor:login' %}">{% trans "Login" %}</a>
-
       {% endif %}
-
     </div>
   </div>
 
@@ -208,14 +206,16 @@ body {
           </h6>
 
 
-          <ul class="nav flex-column mb-2">
+        {% comment %}
         <li class="nav-item">
           <a class="nav-link  {% block nav_home %}{% endblock %}" href="{% url 'home' %}">{% trans "Home" %}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% block nav_secret %}{% endblock %}"  href="{% url 'secret' %}">{% trans "Secret Page" %}</a>
         </li>
+        {% endcomment %}  
 
+        <ul class="nav flex-column mb-2">
 
         {% if user.is_authenticated %}
           <li class="nav-item">
@@ -226,11 +226,6 @@ body {
 
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
-          </li>
-        {% else %}
-
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'two_factor:login' %}">{% trans "Login" %}</a>
           </li>
         {% endif %}
 

@@ -87,7 +87,7 @@
     </div>
   </header>
 
-{% comment %}
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
       <div class="container">
 
@@ -110,10 +110,7 @@
               </li>
               <li class="nav-item {% block nav_profile %}{% endblock %}">
                 <a class="nav-link" href="{% url 'two_factor:profile' %}">{% trans "Account Security" %}</a></li>
-              {% comment %}
-              <li class="nav-item {% block nav_sessions %}{% endblock %}">
-                <a class="nav-link" href="{% url 'user_sessions:session_list' %}">{% trans "Sessions" %}</a></li>
-              {% endcomment %}
+              
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
               </li>
@@ -130,7 +127,7 @@
       </div>
     </nav>
 
-{% endcomment %}
+
     <div class="container">
       {% include "_messages.html" %}
       {% block content %}{% endblock %}

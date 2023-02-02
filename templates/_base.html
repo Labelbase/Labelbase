@@ -99,58 +99,22 @@
             </a>
           </h6>
 
-          <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="database" class="align-text-bottom"></span>
-                LazyTiger 90A1C200
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="file-text" class="align-text-bottom"></span>
-                ExitedCow 2AEDB33F
-              </a>
-            </li>
-          </ul>
+              <ul class="nav flex-column mb-2">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <span data-feather="database" class="align-text-bottom"></span>
+                    LazyTiger 90A1C200
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <span data-feather="file-text" class="align-text-bottom"></span>
+                    ExitedCow 2AEDB33F
+                  </a>
+                </li>
+              </ul>
 
 
-
-
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item {% block nav_home %}{% endblock %}">
-              <a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a>
-            </li>
-            <li class="nav-item {% block nav_secret %}{% endblock %}">
-              <a class="nav-link" href="{% url 'secret' %}">{% trans "Secret Page" %}</a>
-            </li>
-          </ul>
-
-          <ul class="navbar-nav ml-auto">
-            {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link">{{ user }} {% if user.otp_device %}🔒{% endif %}</a>
-              </li>
-              <li class="nav-item {% block nav_profile %}{% endblock %}">
-                <a class="nav-link" href="{% url 'two_factor:profile' %}">{% trans "Account Security" %}</a></li>
-
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
-              </li>
-            {% else %}
-              <li class="nav-item">
-                <span class="navbar-text">{% trans "Not logged in" %}</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'two_factor:login' %}">{% trans "Login" %}</a>
-              </li>
-            {% endif %}
-          </ul>
-        </div>
-      </div>
 
 
 
@@ -208,18 +172,18 @@
               <td>Extended Public Key</td>
 
             </tr>
-           
+
           </tbody>
         </table>
-      </div>
-    </main>
+        </div>
+      </main>
     </nav>
 
 
 
     <div class="container">
       {% include "_messages.html" %}
-      {% block content %}{% endblock %}
+      {#% block content %}{% endblock %#}
     </div>
 
   </div>

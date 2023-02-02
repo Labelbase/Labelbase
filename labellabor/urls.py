@@ -17,7 +17,7 @@ urlpatterns = [
     ),
 
     path(
-        '',
+        'labelbase/',
         LabelbaseView.as_view(),
         name='labelbase',
     ),

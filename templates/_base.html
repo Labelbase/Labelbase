@@ -248,6 +248,11 @@ body {
           <li class="nav-item {% block nav_profile %}{% endblock %}">
             <a class="nav-link" href="{% url 'two_factor:profile' %}">{% trans "Account Security" %}</a></li>
 
+            <li class="nav-item  ">
+              <a class="nav-link" href="">{% trans "Account Security" %}</a></li>
+
+
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
           </li>
@@ -327,7 +332,8 @@ body {
           </div>
 
 
-
+          {% include "_messages.html" %}
+          {% block content %}{% endblock %}
       </main>
 
 

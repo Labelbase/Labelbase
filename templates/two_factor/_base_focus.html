@@ -1,0 +1,19 @@
+{% extends "two_factor/_base.html" %}
+{% load i18n %}
+
+{% block content_wrapper %}
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'home' %}">{% trans "Demo" %}</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+        {% include "_messages.html" %}
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

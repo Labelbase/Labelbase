@@ -1,0 +1,40 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "django-two-factor-auth – Demo Application" %}{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+  <h1>{% blocktrans trimmed %}Improve Your Security <small>your users will thank
+    you</small>{% endblocktrans %}</h1>
+  <p>{% blocktrans trimmed %}Welcome to the example app of
+      <code>django-two-factor-auth</code>. Use this example to get an
+    understanding of what the app can do for you.{% endblocktrans %}</p>
+
+  <h4>{% trans "Please verify your settings" %}</h4>
+  <p>{% blocktrans trimmed%}Have you provided your Twilio settings in the
+      <code>settings_private.py</code> file? By doing so, the example app will
+      be able to call and text you to verify your authentication tokens.
+      Otherwise, the tokens will be shown on the screen.{% endblocktrans %}</p>
+
+  {% url 'registration' as reg_url %}
+  {% url 'two_factor:login' as login_url %}
+  {% url 'two_factor:setup' as setup_url %}
+  {% url 'logout' as logout_url %}
+  {% url 'secret' as secret_url %}
+
+  <h4>{% trans "Next steps:" %}</h4>
+  <ol>
+    <li>{% blocktrans trimmed %}Start by <a href="{{ reg_url }}">registering</a> an
+      account.{% endblocktrans %}</li>
+    <li>{% blocktrans trimmed %}<a href="{{ login_url }}">Login</a> to your account.
+      {% endblocktrans %}</li>
+    <li>{% blocktrans trimmed %}<a href="{{ setup_url }}">Enable</a> two-factor
+      authentication.{% endblocktrans %}</li>
+    <li>{% blocktrans trimmed %}Then, <a href="{{ logout_url }}">logout</a> and
+      <a href="{{ login_url }}">login</a> once more to your account to see
+      two-factor authentication at work.{% endblocktrans %}</li>
+    <li>{% blocktrans trimmed %}At last, you've gained access to the
+      <a href="{{ secret_url }}">secret page</a>! :-){% endblocktrans %}</li>
+  </ol>
+{% endblock %}

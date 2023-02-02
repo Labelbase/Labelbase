@@ -1,0 +1,153 @@
+# django-two-factor-auth example translation.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the django-two-factor-auth package.
+# 
+# Translators:
+# Translators:
+# Aleksi Häkli <aleksi.hakli@iki.fi>, 2016
+# Tuomas Vihinen, 2022
+msgid ""
+msgstr ""
+"Project-Id-Version: django-two-factor-auth\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-15 22:55+0200\n"
+"PO-Revision-Date: 2013-11-20 09:31+0000\n"
+"Last-Translator: Tuomas Vihinen, 2022\n"
+"Language-Team: Finnish (http://www.transifex.com/Bouke/django-two-factor-auth/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: gateways.py:11
+#, python-format
+msgid "Fake call to %(number)s: \"Your token is: %(token)s\""
+msgstr "Valesoitto numeroon %(number)s \"Tunnuksesi on %(token)s\""
+
+#: gateways.py:16
+#, python-format
+msgid "Fake SMS to %(number)s: \"Your token is: %(token)s\""
+msgstr "Valeviesti numeroon %(number)s: \"Tunnuksesi on: %(token)s\""
+
+#: templates/_base.html:15 templates/two_factor/_base_focus.html:7
+msgid "Demo"
+msgstr "Demo"
+
+#: templates/_base.html:26
+msgid "Home"
+msgstr "Etusivu"
+
+#: templates/_base.html:29 templates/secret.html:7
+msgid "Secret Page"
+msgstr "Salainen sivu"
+
+#: templates/_base.html:39
+msgid "Account Security"
+msgstr "Käyttäjätilin turvallisuus"
+
+#: templates/_base.html:41
+msgid "Sessions"
+msgstr "Sessiot"
+
+#: templates/_base.html:43
+msgid "Logout"
+msgstr "Kirjaudu ulos"
+
+#: templates/_base.html:47
+msgid "Not logged in"
+msgstr "Ei kirjautuneena"
+
+#: templates/_base.html:50 templates/registration_complete.html:9
+msgid "Login"
+msgstr "Kirjaudu"
+
+#: templates/home.html:4
+msgid "django-two-factor-auth – Demo Application"
+msgstr "django-two-factor-auth - Demosovellus"
+
+#: templates/home.html:8
+msgid "Improve Your Security <small>your users will thank you</small>"
+msgstr "Paranna turvallisuuttasi <small>käyttäjäsi kiittävät sinua</small>"
+
+#: templates/home.html:10
+msgid ""
+"Welcome to the example app of <code>django-two-factor-auth</code>. Use this "
+"example to get an understanding of what the app can do for you."
+msgstr "Tervetuloa <code>django-two-factor-auth</code>-esimerkkisovellukseen. Käytä tätä esimerkkiä saadaksesi käsityksen siitä, mitä sovellus voi auttaa teitä."
+
+#: templates/home.html:14
+msgid "Please verify your settings"
+msgstr "Vahvista asetuksesi"
+
+#: templates/home.html:15
+msgid ""
+"Have you provided your Twilio settings in the "
+"<code>settings_private.py</code> file? By doing so, the example app will be "
+"able to call and text you to verify your authentication tokens. Otherwise, "
+"the tokens will be shown on the screen."
+msgstr "Oletko antanut Twilio-asetukset <code>settings_private.py</code> tiedostossa? Näin tekemällä, esimerkkisovellus voi soittaa sinulle ja lähettää tekstiviestejä vahvistaaksesi tokenisi. Muussa tapauksessa, tokenit näytetään ruudulla."
+
+#: templates/home.html:26
+msgid "Next steps:"
+msgstr "Seuraavat askeleet:"
+
+#: templates/home.html:28
+#, python-format
+msgid "Start by <a href=\"%(reg_url)s\">registering</a> an account."
+msgstr "Aloita <a href=\\\"%(reg_url)s\\\">rekisteröimällä</a> käyttäjätili."
+
+#: templates/home.html:30
+#, python-format
+msgid "<a href=\"%(login_url)s\">Login</a> to your account."
+msgstr "<a href=\\\"%(login_url)s\\\">Kirjaudu</a> tilillesi."
+
+#: templates/home.html:32
+#, python-format
+msgid "<a href=\"%(setup_url)s\">Enable</a> two-factor authentication."
+msgstr "<a href=\\\"%(setup_url)s\\\">Ota käyttöön</a> kaksivaiheinen todennus."
+
+#: templates/home.html:34
+#, python-format
+msgid ""
+"Then, <a href=\"%(logout_url)s\">logout</a> and <a "
+"href=\"%(login_url)s\">login</a> once more to your account to see two-factor"
+" authentication at work."
+msgstr "Tämän jälkeen <a href=\\\"%(logout_url)s\\\">kirjaudu ulos</a> ja <a href=\"\n\"\\\"%(login_url)s\\\">kirjaudu sisään</a> vielä kerran tilillesi nähdäksesi \"\n\"kaksivaiheisen todennuksen toimivan."
+
+#: templates/home.html:37
+#, python-format
+msgid ""
+"At last, you've gained access to the <a href=\"%(secret_url)s\">secret "
+"page</a>! :-)"
+msgstr "Vihdoinkin pääsit <a href=\\\"%(secret_url)s\\\">salaiselle sivulle</a>! :-)"
+
+#: templates/registration.html:5
+msgid "Registration"
+msgstr "Rekisteröityminen"
+
+#: templates/registration.html:10
+msgid "Register"
+msgstr "Rekisteröidy"
+
+#: templates/registration/logged_out.html:5
+msgid "Logged Out"
+msgstr "Kirjauduit ulos"
+
+#: templates/registration/logged_out.html:6
+msgid "See you around!"
+msgstr "Nähdään!"
+
+#: templates/registration_complete.html:5
+msgid "Registration Complete"
+msgstr "Rekisteröityminen valmis"
+
+#: templates/registration_complete.html:6
+msgid "Congratulations, you've successfully registered an account."
+msgstr "Onnittelut, olet onnistuneesti rekisteröinyt käyttäjätilin."
+
+#: templates/secret.html:9
+msgid ""
+"Congratulations, you've made it. You have successfully enabled two-factor "
+"authentication and logged in with your token."
+msgstr "Onnittelut, olet onnistunut. Olet onnistuneesti ottanut kaksivaiheisen\ntodennuksen käyttöön ja kirjautunut sisään tokenillasi."

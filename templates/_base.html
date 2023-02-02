@@ -110,7 +110,7 @@ body {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
 
-/* end dashboard */ 
+/* end dashboard */
 
 
       .bd-placeholder-img {
@@ -179,7 +179,49 @@ body {
     </button>
     <div class="navbar-nav">
       <div class="nav-item text-nowrap">
-        <!--a class="nav-link px-3" href="#">labelbase.app | labellab. labellabor.com</a>-->
+
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item {% block nav_home %}{% endblock %}">
+              <a class="nav-link" href="{% url 'home' %}">{% trans "Home" %}</a>
+            </li>
+            <li class="nav-item {% block nav_secret %}{% endblock %}">
+              <a class="nav-link" href="{% url 'secret' %}">{% trans "Secret Page" %}</a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link">{{ user }} {% if user.otp_device %}🔒{% endif %}</a>
+              </li>
+              <li class="nav-item {% block nav_profile %}{% endblock %}">
+                <a class="nav-link" href="{% url 'two_factor:profile' %}">{% trans "Account Security" %}</a></li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <span class="navbar-text">{% trans "Not logged in" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'two_factor:login' %}">{% trans "Login" %}</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+      
+        <a class="nav-link px-3" href="#">
+
+
+
+
+
+        </a>
       </div>
     </div>
   </header>
@@ -219,7 +261,7 @@ body {
 
 
         <div class="table-responsive" style="padding-top:1em" >
-          <table id="example" class="table table-striped table-sm">
+          <table id="bip329labels" class="table table-striped table-sm">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -307,7 +349,7 @@ body {
 
 
       $(document).ready(function () {
-          $('#example').DataTable();
+          $('#bip329labels').DataTable();
       });
       </script>
       <!--

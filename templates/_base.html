@@ -183,9 +183,9 @@ body {
       </div>
       <div class="nav-item text-nowrap">
         <a class="nav-link px-3 {% block nav_secret %}{% endblock %}"  href="{% url 'secret' %}">{% trans "Secret Page" %}</a>
+      </div>
 
-
-
+<!--
             {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link">{{ user }} {% if user.otp_device %}🔒{% endif %}</a>
@@ -205,13 +205,12 @@ body {
               </li>
             {% endif %}
 
+-->
 
 
 
 
 
-
-      </div>
     </div>
   </header>
   <div class="container-fluid">

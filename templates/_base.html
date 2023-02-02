@@ -1,12 +1,20 @@
 {% load i18n %}
 <!DOCTYPE html>
-<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<html>
 <head>
   <title>{% block title %}{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
   <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <script defer src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+-->
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+
   {% block extra_media %}{% endblock %}
 </head>
 <body>
@@ -38,8 +46,10 @@
               </li>
               <li class="nav-item {% block nav_profile %}{% endblock %}">
                 <a class="nav-link" href="{% url 'two_factor:profile' %}">{% trans "Account Security" %}</a></li>
+              {% comment %}
               <li class="nav-item {% block nav_sessions %}{% endblock %}">
                 <a class="nav-link" href="{% url 'user_sessions:session_list' %}">{% trans "Sessions" %}</a></li>
+              {% endcomment %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
               </li>

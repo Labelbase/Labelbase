@@ -178,8 +178,8 @@ body {
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
+      <div class="navbar-nav">
+    <ul >
       <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="#">Home</a>
       </li>
@@ -195,7 +195,43 @@ body {
     </ul>
   </div>
 
-    
+{% comment %}
+      <div class="nav-item text-nowrap">
+        <a class="nav-link   {% block nav_home %}{% endblock %}" href="{% url 'home' %}">{% trans "Home" %}</a>
+      </div>
+      <div class="nav-item text-nowrap">
+        <a class="nav-link {% block nav_secret %}{% endblock %}"  href="{% url 'secret' %}">{% trans "Secret Page" %}</a>
+      </div>
+
+<!--
+            {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link">{{ user }} {% if user.otp_device %}🔒{% endif %}</a>
+              </li>
+              <li class="nav-item {% block nav_profile %}{% endblock %}">
+                <a class="nav-link" href="{% url 'two_factor:profile' %}">{% trans "Account Security" %}</a></li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <span class="navbar-text">{% trans "Not logged in" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'two_factor:login' %}">{% trans "Login" %}</a>
+              </li>
+            {% endif %}
+
+-->
+
+
+
+
+
+    </div>
+
+    {% endcomment %}
   </header>
   <div class="container-fluid">
     <div class="row">

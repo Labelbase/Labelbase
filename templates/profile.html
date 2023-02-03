@@ -5,29 +5,8 @@
 {% block nav_profile %}active{% endblock %}
 
 {% block content %}
-  <h2 style="padding-top: 0.9em; text-transform: uppercase;font-weight:800;">All your labels in one place.<br>L<span style="height:1.1em; width:1em" data-feather="tag" class="align-text-bottom"></span>belbase</h1>
-  <p>Labelbase is a
+  <h2 style="padding-top: 1em;">Profile</h2>
 
-  </p>
 
-  {% url 'registration' as reg_url %}
-  {% url 'two_factor:login' as login_url %}
-  {% url 'two_factor:setup' as setup_url %}
-  {% url 'logout' as logout_url %}
-  {% url 'secret' as secret_url %}
 
-  <h4>{% trans "Next steps:" %}</h4>
-  <ol>
-    <li>{% blocktrans trimmed %}Start by <a href="{{ reg_url }}">registering</a> an
-      account.{% endblocktrans %}</li>
-    <li>{% blocktrans trimmed %}<a href="{{ login_url }}">Login</a> to your account.
-      {% endblocktrans %}</li>
-    <li>{% blocktrans trimmed %}<a href="{{ setup_url }}">Enable</a> two-factor
-      authentication.{% endblocktrans %}</li>
-    <li>{% blocktrans trimmed %}Then, <a href="{{ logout_url }}">logout</a> and
-      <a href="{{ login_url }}">login</a> once more to your account to see
-      two-factor authentication at work.{% endblocktrans %}</li>
-    <li>{% blocktrans trimmed %}At last, you've gained access to the
-      <a href="{{ secret_url }}">secret page</a>! :-){% endblocktrans %}</li>
-  </ol>
 {% endblock %}

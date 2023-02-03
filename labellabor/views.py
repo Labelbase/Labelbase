@@ -9,7 +9,7 @@ from two_factor.views.utils import class_view_decorator
 
 from labelbase.models import Label, Labelbase
 from labelbase.forms import LabelForm
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -35,7 +35,7 @@ class LabelbaseView(ListView):
         # success massage
         # error message
 
-        return HttpResponse(label.labelbase.get_absolute_url())
+        return HttpResponseRedirect(label.labelbase.get_absolute_url())
 
 
 

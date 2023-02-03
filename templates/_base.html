@@ -198,7 +198,7 @@ body {
 
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
             <span>Wallets / Labelbases</span>
-            <a class="link-secondary" href="#" aria-label="Add a new wallet">
+            <a class="link-secondary" data-bs-toggle="modal" data-bs-target="#addLabelbaseModal"  href="#" aria-label="Add a new wallet">
               <span data-feather="plus-circle" class="align-text-bottom"></span>
             </a>
           </h6>
@@ -229,14 +229,7 @@ body {
           </h6>
 
 
-        {% comment %}
-        <li class="nav-item">
-          <a class="nav-link  {% block nav_home %}{% endblock %}" href="{% url 'home' %}">{% trans "Home" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% block nav_secret %}{% endblock %}"  href="{% url 'secret' %}">{% trans "Secret Page" %}</a>
-        </li>
-        {% endcomment %}
+
 
         <ul class="nav flex-column mb-2">
 
@@ -290,6 +283,32 @@ body {
   </div>
 </div>
 
+
+
+{% if user.is_authenticated %}
+
+<!-- modal -->
+<div class="modal" tabindex="-1" id="addLabelbaseModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action=".{#% url 'addlabeltolabelbase' labelbase.id %#}" method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Add Label</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ labelform.as_p }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add Label</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %}
 
   {% endblock %}
 

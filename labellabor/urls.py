@@ -9,11 +9,19 @@ from .views import (
     ExampleSecretView, LabelbaseView, HomeView, RegistrationCompleteView, RegistrationView,
 )
 
+from userprofile.views import ProfileView
+
 urlpatterns = [
     path(
         '',
         HomeView.as_view(),
         name='home',
+    ),
+
+    path(
+        '',
+        ProfileView.as_view(),
+        name='profile',
     ),
 
     path(

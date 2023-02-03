@@ -242,7 +242,7 @@ body {
 
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link">{{ user }} {% if user.otp_device %}🔒{% endif %}</a>
+            <a class="nav-link" href="{% url 'profile' as profileg_url %}">{{ user }} {% if user.otp_device %}🔒{% endif %}</a>
           </li>
           <li class="nav-item {% block nav_profile %}{% endblock %}">
             <a class="nav-link" href="{% url 'two_factor:profile' %}">{% trans "Account Security" %}</a></li>

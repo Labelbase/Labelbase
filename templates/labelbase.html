@@ -44,6 +44,7 @@
 </div>
 
   <div class="table-responsive" style="padding-top:1em" >
+    {% if label_list %}
     <table id="bip329labels" class="table table-striped table-sm">
       <thead>
         <tr>
@@ -55,6 +56,7 @@
 
 
       <tbody>
+        {% for label in label_list %}
         <tr>
 
           <td>tx</td>
@@ -62,41 +64,20 @@
           <td>Transaction</td>
 
         </tr>
-        <tr>
-
-          <td>addr</td>
-          <td>bc1q34aq5drpuwy3wgl9lhup9892qp6svr8ldzyy7c</td>
-          <td>Address</td>
-
-        </tr>
-        <tr>
-
-          <td>input</td>
-          <td>0283409659355b6d1cc3c32decd5d561abaac86c37a353b52895a5e6c196d6f448</td>
-          <td>placeholder</td>
-
-        </tr><tr>
-
-          <td>random</td>
-          <td>f91d0a8a78462bc59398f2c5d7a84fcff491c26ba54c4833478b202796c8aafd</td>
-          <td>placeholder</td>
-
-        </tr><tr>
-
-          <td>output</td>
-          <td>f91d0a8a78462bc59398f2c5d7a84fcff491c26ba54c4833478b202796c8aafd</td>
-          <td>placeholder</td>
-
-        </tr><tr>
-
-          <td>xpub</td>
-          <td>xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8</td>
-          <td>Extended Public Key</td>
-
-        </tr>
-
+        {% endfor %}
       </tbody>
     </table>
+    {% else %}
+      <p>There are no labels in this labelbase.</p>
+    {% endif %}
+
+
+
+
+
+
+
+
     </div>
 
 

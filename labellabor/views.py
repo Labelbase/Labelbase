@@ -15,7 +15,7 @@ class HomeView(TemplateView):
 
 class LabelbaseView(ListView):
     template_name = 'labelbase.html'
-
+    context_object_name = 'label_list'  
     def get_queryset(self):
         labelbase_id = self.kwargs['labelbase_id']
         qs = Label.objects.filter(labelbase__user_id=self.request.user.id, labelbase_id=labelbase_id)

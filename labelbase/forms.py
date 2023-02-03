@@ -9,8 +9,11 @@ class LabelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
         super(LabelForm, self).__init__(*args, **kwargs)
+        user_labelbases = Labelbase.objects.filter(user_id=self.request.user.id)
         self.fields['labelbase'] = forms.ModelChoiceField(
-            queryset=Labelbase.objects.filter(user_id=self.request.user.id),
+            queryset=user_labelbases,
             required=True,
             widget=forms.Select(attrs={'class': 'chzn-select'}),
         )
+        if user_labelbases.count() == 1:
+            self.fields['labelbase'].initial = user_labelbases[0]

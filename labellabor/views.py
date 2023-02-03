@@ -8,7 +8,7 @@ from two_factor.views import OTPRequiredMixin
 from two_factor.views.utils import class_view_decorator
 
 from labelbase.models import Label, Labelbase
-from labelbase.froms import LabelForm
+from labelbase.forms import LabelForm
 
 class HomeView(TemplateView):
     template_name = 'home.html'

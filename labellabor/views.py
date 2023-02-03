@@ -22,7 +22,7 @@ class LabelbaseView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(LabelbaseView, self).get_context_data(**kwargs)
-        context['labelbase'] = Labelbase.objects.get(id=self.kwargs['labelbase_id'], user_id=self.request.user.id)
+        context['labelbase'] = Labelbase.objects.filter(id=self.kwargs['labelbase_id'], user_id=self.request.user.id).first()
         return context
 
 

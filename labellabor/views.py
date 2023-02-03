@@ -20,7 +20,7 @@ class LabelbaseView(ListView):
     context_object_name = 'label_list'
     def get_queryset(self):
         qs = Label.objects.filter(labelbase__user_id=self.request.user.id, labelbase_id=self.kwargs['labelbase_id'])
-        return qs.order_by("-id")
+        return qs.order_by("id")
 
     def get_context_data(self, **kwargs):
         labelbase_id = self.kwargs['labelbase_id']

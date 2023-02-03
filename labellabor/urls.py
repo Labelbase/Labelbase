@@ -21,7 +21,7 @@ urlpatterns = [
     path(
         '',
         ProfileView.as_view(),
-        name='profile',
+        name='userprofile',
     ),
 
     path(

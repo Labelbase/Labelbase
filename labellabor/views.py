@@ -25,7 +25,7 @@ class LabelbaseView(ListView):
     def get_context_data(self, **kwargs):
         context = super(LabelbaseView, self).get_context_data(**kwargs)
         context['labelbase'] = Labelbase.objects.filter(id=self.kwargs['labelbase_id'], user_id=self.request.user.id).first()
-        context['labelform'] = LabelForm(request=self.request)
+        context['labelform'] = LabelForm(request=self.request, labelbase_id=labelbase_id)
         return context
 
     def post(self, request, *args, **kwargs):

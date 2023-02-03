@@ -8,8 +8,10 @@ class LabelForm(forms.ModelForm):
         fields = ['labelbase', 'type', 'ref', 'label']
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
+        self.labelbase_id =  kwargs.pop('labelbase_id')
         super(LabelForm, self).__init__(*args, **kwargs)
-        user_labelbases = Labelbase.objects.filter(user_id=self.request.user.id)
+        user_labelbases = Labelbase.objects.filter(
+            user_id=self.request.user.id, id=self.labelbase_id)
         self.fields['labelbase'] = forms.ModelChoiceField(
             queryset=user_labelbases,
             required=True,

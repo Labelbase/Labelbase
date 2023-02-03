@@ -30,7 +30,8 @@ class LabelbaseView(ListView):
         return context
 
     def post(self, request, *args, **kwargs):
-        labelform = LabelForm(request.POST, request=request)
+        labelbase_id = self.kwargs['labelbase_id']
+        labelform = LabelForm(request.POST, request=request, labelbase_id=labelbase_id)
         if labelform.is_valid():
             label = labelform.save()
         # success massage

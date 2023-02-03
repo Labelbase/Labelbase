@@ -51,7 +51,7 @@
   <p>There is no such labelbase.</p>
 {% endif %}
 </div>
-
+{% if labelbase %}
 
   <div class="table-responsive" style="padding-top:1em" >
     {% if label_list %}
@@ -80,15 +80,7 @@
     {% else %}
       <p>There are no labels in this labelbase.</p>
     {% endif %}
-
-
-
-
-
-
-
-
-    </div>
-
+</div>
+{% endif %}
 
 {% endblock %}

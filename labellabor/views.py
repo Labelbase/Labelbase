@@ -31,11 +31,11 @@ class LabelbaseView(ListView):
     def post(self, request, *args, **kwargs):
         labelform = LabelForm(request.POST, request=request)
         if labelform.is_valid():
-            labelform.save()
+            label = labelform.save()
         # success massage
         # error message
 
-        return HttpResponse(labelform.labelbase.get_absolute_url())
+        return HttpResponse(label.labelbase.get_absolute_url())
 
 
 

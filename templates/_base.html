@@ -312,7 +312,9 @@ body {
 
 
       $(document).ready(function () {
-          $('#bip329labels').DataTable();
+          $('#bip329labels').DataTable({
+            order: [[0, 'desc']],
+        });
       });
       </script>
       <!--

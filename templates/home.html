@@ -1,21 +1,16 @@
 {% extends "_base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "django-two-factor-auth – Demo Application" %}{% endblock %}
+{% block title %}Labelbase{% endblock %}
 {% block nav_home %}active{% endblock %}
 
 {% block content %}
-  <h2 style="padding-top: 1em;">{% blocktrans trimmed %}Improve Your Security <small>your users will thank
-    you</small>{% endblocktrans %}</h2>
-  <p>{% blocktrans trimmed %}Welcome to the example app of
-      <code>django-two-factor-auth</code>. Use this example to get an
-    understanding of what the app can do for you.{% endblocktrans %}</p>
+  <h1>All your labels in one place. Labelbase.</h1>
+  
+  <h2 style="padding-top: 1em;">Welcome to Labelbase.</h2>
+  <p>
 
-  <h4>{% trans "Please verify your settings" %}</h4>
-  <p>{% blocktrans trimmed%}Have you provided your Twilio settings in the
-      <code>settings_private.py</code> file? By doing so, the example app will
-      be able to call and text you to verify your authentication tokens.
-      Otherwise, the tokens will be shown on the screen.{% endblocktrans %}</p>
+  </p>
 
   {% url 'registration' as reg_url %}
   {% url 'two_factor:login' as login_url %}

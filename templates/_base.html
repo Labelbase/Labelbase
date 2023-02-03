@@ -204,24 +204,17 @@ body {
           </h6>
           <ul class="nav flex-column mb-2">
             {% if user.is_authenticated %}
+            {% for labelbase in labelbases %}
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <span data-feather="database" class="align-text-bottom"></span>
-                SmoothGlider E0545A5C
+                {% if labelbase.name %}{{ labelbase.name  }}{% enfif %} {% if  labelbase.fingerprint %}{{ labelbase.fingerprint  }}{% enfif %}
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="database" class="align-text-bottom"></span>
-                LazyTiger 90A1C200
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="file-text" class="align-text-bottom"></span>
-                ExitedCow 2AEDB33F
-              </a>
-            </li>
+            {% empty %}
+            There are no labelbases.
+            {% endif %}
+
 
           {% else %}
               <li class="nav-item">

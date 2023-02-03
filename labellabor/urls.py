@@ -30,6 +30,9 @@ urlpatterns = [
         name='labelbase',
     ),
 
+
+
+
     path(
         'account/logout/',
         LogoutView.as_view(),

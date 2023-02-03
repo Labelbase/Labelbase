@@ -5,11 +5,18 @@
 
 
 
+
+
+
 <div style="padding-top: 1em;">
 
   <div class="row">
     <div class="col float-start">
-      <h2>{% block title %}LazyTiger {% endblock %}</h2>
+      <h2>{% block title %}{{ labelbase.name  }} {% endblock %}</h2>
+      <tt>{{ labelbase.fingerprint }} </tt>
+      {% if about.about %}
+      <p>{{ about.about}} </p>
+      {% endif %}
     </div>
 
     <div class="col float-end" >

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
 
 import jsonfield
 
@@ -16,7 +16,7 @@ class Labelbase(models.Model):
         blank=True
     )
     about = models.CharField(
-        max_length=200, 
+        max_length=200,
         default="",
         blank=True
     )
@@ -27,8 +27,8 @@ class Label(models.Model):
     TYPE_ADDR = 'addr'
     TYPE_PUBKEY = 'pubkey'
     TYPE_INPUT = 'input'
-    TYPE_OUTPUT = 'output' 
-    TYPE_XPUT = 'xpub' 
+    TYPE_OUTPUT = 'output'
+    TYPE_XPUT = 'xpub'
 
     TYPE_CHOICES = [
         (TYPE_TX, 'tx'),
@@ -55,5 +55,3 @@ class Label(models.Model):
     )
     data = jsonfield.JSONField()
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
-    
-

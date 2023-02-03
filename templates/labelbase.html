@@ -7,9 +7,8 @@
 
 
 
-
+{% if labelbase %}
 <div style="padding-top: 1em;">
-
   <div class="row">
     <div class="col float-start">
       <h2>{% block title %}{{ labelbase.name  }} {% endblock %}</h2>
@@ -50,7 +49,9 @@
     </div>
   </div>
 </div>
-
+{% else %}
+  <p>There is no such labelbase.</p>
+{% endif %}
   <div class="table-responsive" style="padding-top:1em" >
     {% if label_list %}
     <table id="bip329labels" class="table table-striped table-sm">

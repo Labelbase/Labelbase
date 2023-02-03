@@ -31,8 +31,8 @@ class LabelbaseView(ListView):
         if labelform.is_valid():
             labelform.save()
         # success massage
-        # error message 
-
+        # error message
+        return super(LabelbaseView, self).post(request, *args, **kwargs)
 
 
 

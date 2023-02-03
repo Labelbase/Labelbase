@@ -9,6 +9,7 @@ from two_factor.views.utils import class_view_decorator
 
 from labelbase.models import Label, Labelbase
 from labelbase.forms import LabelForm
+from django.http import HttpResponse
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -26,13 +27,15 @@ class LabelbaseView(ListView):
         context['labelbase'] = Labelbase.objects.filter(id=self.kwargs['labelbase_id'], user_id=self.request.user.id).first()
         context['labelform'] = LabelForm(request=self.request)
         return context
+
     def post(self, request, *args, **kwargs):
         labelform = LabelForm(request.POST, request=request)
         if labelform.is_valid():
             labelform.save()
         # success massage
         # error message
-        return super(LabelbaseView, self).post(request, *args, **kwargs)
+
+        return HttpResponse(labelform.labelbase.get_absolute_url())
 
 
 

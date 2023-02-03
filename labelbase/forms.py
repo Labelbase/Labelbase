@@ -15,7 +15,8 @@ class LabelForm(forms.ModelForm):
         self.fields['labelbase'] = forms.ModelChoiceField(
             queryset=user_labelbases,
             required=True,
-            widget=forms.Select(attrs={'class': 'chzn-select'}),
+            #widget=forms.Select(attrs={'class': 'chzn-select'}),
+            widget = forms.HiddenInput(),
         )
         if user_labelbases.count() == 1:
             self.fields['labelbase'].initial = user_labelbases[0]

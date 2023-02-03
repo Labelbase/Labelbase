@@ -23,8 +23,9 @@ class LabelbaseView(ListView):
         return qs.order_by("-id")
 
     def get_context_data(self, **kwargs):
+        labelbase_id = self.kwargs['labelbase_id']
         context = super(LabelbaseView, self).get_context_data(**kwargs)
-        context['labelbase'] = Labelbase.objects.filter(id=self.kwargs['labelbase_id'], user_id=self.request.user.id).first()
+        context['labelbase'] = Labelbase.objects.filter(id=labelbase_id, user_id=self.request.user.id).first()
         context['labelform'] = LabelForm(request=self.request, labelbase_id=labelbase_id)
         return context
 

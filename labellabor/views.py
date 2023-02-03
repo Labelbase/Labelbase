@@ -35,7 +35,7 @@ class LabelbaseView(ListView):
         if labelform.is_valid():
             label = labelform.save()
             #TODO: Add success massage
-        return HttpResponseRedirect(label.labelbase.get_absolute_url())
+            return HttpResponseRedirect(label.labelbase.get_absolute_url())
 
 
 

@@ -224,7 +224,9 @@ body {
             </li>
           </ul>
           {% else %}
-          Login to start 
+              <li class="nav-item">
+                Login to get started.
+              </li>
           {% endif %}
 
           <!-- -->
@@ -263,6 +265,11 @@ body {
 
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
+          </li>
+
+          {% else %}
+          <li class="nav-item">
+            Login to get started.
           </li>
         {% endif %}
 

@@ -26,8 +26,12 @@ class LabelbaseView(ListView):
         context['labelbase'] = Labelbase.objects.filter(id=self.kwargs['labelbase_id'], user_id=self.request.user.id).first()
         context['labelform'] = LabelForm(request=self.request)
         return context
-
-
+    def post(self, request, *args, **kwargs):
+        labelform = LabelForm(request.POST, request=request)
+        if labelform.is_valid():
+            labelform.save()
+        # success massage
+        # error message 
 
 
 

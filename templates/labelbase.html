@@ -87,11 +87,13 @@
 </div>
 {% endif %}
 
-
+{% if labelbase %}
 <!-- modal -->
 <div class="modal" tabindex="-1" id="addLabelModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
+      <form action=".{#% url 'addlabeltolabelbase' labelbase.id %#}" method="post">
+      {% csrf_token %}
       <div class="modal-header">
         <h5 class="modal-title">Add Label</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -101,12 +103,13 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Add Label</button>
+        <button type="submit" class="btn btn-primary">Add Label</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
-
+{% endif %}
 <!-- end modal -->
 
 {% endblock %}

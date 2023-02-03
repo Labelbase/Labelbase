@@ -1,5 +1,4 @@
-{% load bootstrap %}
-{{ wizard.management_form }}
-<div class="form-horizontal">
-  {{ wizard.form|bootstrap_horizontal:'col-sm-3 col-md-3' }}
-</div>
+<table class="mb-3">
+  {{ wizard.management_form }}
+  {{ wizard.form.as_table }}
+</table>

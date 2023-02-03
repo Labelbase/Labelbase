@@ -1,13 +1,9 @@
-{% extends "_base.html" %}
-{% load i18n %}
+{% extends "two_factor/_base.html" %}
 
 {% block content_wrapper %}
- 
-
   <div class="container">
     <div class="row">
-      <div class="col-sm-8 offset-sm-2 col-md-6 offset-md-3">
-        {% include "_messages.html" %}
+      <div class="col-md-5 offset-md-3">
         {% block content %}{% endblock %}
       </div>
     </div>

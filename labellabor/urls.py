@@ -17,7 +17,7 @@ urlpatterns = [
     ),
 
     path(
-        'labelbase/',
+        'labelbase/<int:labelbase_id>/'
         LabelbaseView.as_view(),
         name='labelbase',
     ),

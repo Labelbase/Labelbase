@@ -8,6 +8,8 @@
 
 <div style="padding-top: 1em;">
 {% if labelbase %}
+
+
   <div class="row">
     <div class="col float-start">
       <h2>{% block title %}{{ labelbase.name  }} {% endblock %}</h2>
@@ -20,7 +22,7 @@
     <div class="col float-end" >
 
       <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown">
-        <button type="button" class="btn btn-primary">Add label</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLabelModal">Add Label</button>
 
         <div class="btn-group" role="group">
           <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,6 +52,9 @@
   <p>There is no such labelbase.</p>
 {% endif %}
 </div>
+
+
+
 {% if labelbase %}
 
   <div class="table-responsive" style="padding-top:1em" >
@@ -81,5 +86,27 @@
     {% endif %}
 </div>
 {% endif %}
+
+
+<!-- modal -->
+<div class="modal" tabindex="-1" id="addLabelModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Label</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add Label</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end modal -->
 
 {% endblock %}

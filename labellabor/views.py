@@ -7,7 +7,7 @@ from django.views.generic.list import ListView
 from two_factor.views import OTPRequiredMixin
 from two_factor.views.utils import class_view_decorator
 
-from labelbase.models import Label 
+from labelbase.models import Label
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -17,7 +17,7 @@ class LabelbaseView(ListView):
     template_name = 'labelbase.html'
 
     def get_queryset(self):
-        self.labelbase_id = self.kwargs['labelbase_id']
+        labelbase_id = self.kwargs['labelbase_id']
         qs = Label.objects.filter(user=self.request.user, labelbase_id=labelbase_id)
         return qs.order_by(order_by="-id")
 

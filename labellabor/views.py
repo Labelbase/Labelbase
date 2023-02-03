@@ -8,6 +8,7 @@ from two_factor.views import OTPRequiredMixin
 from two_factor.views.utils import class_view_decorator
 
 from labelbase.models import Label, Labelbase
+from labelbase.froms import LabelForm
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -16,14 +17,20 @@ class HomeView(TemplateView):
 class LabelbaseView(ListView):
     template_name = 'labelbase.html'
     context_object_name = 'label_list'
-    def get_queryset(self): 
+    def get_queryset(self):
         qs = Label.objects.filter(labelbase__user_id=self.request.user.id, labelbase_id=self.kwargs['labelbase_id'])
         return qs.order_by("-id")
 
     def get_context_data(self, **kwargs):
         context = super(LabelbaseView, self).get_context_data(**kwargs)
         context['labelbase'] = Labelbase.objects.filter(id=self.kwargs['labelbase_id'], user_id=self.request.user.id).first()
+        context['labelform'] = LabelForm()
         return context
+
+
+
+
+
 
 
 

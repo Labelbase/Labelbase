@@ -204,7 +204,7 @@ body {
           </h6>
           <ul class="nav flex-column mb-2">
             {% if user.is_authenticated %}
-            {% for labelbase in labelbases %}
+            {% for labelbase in user.profile.labelbases %}
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <span data-feather="database" class="align-text-bottom"></span>

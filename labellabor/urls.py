@@ -19,7 +19,7 @@ urlpatterns = [
     ),
 
     path(
-        '',
+        'account/userprofile/',
         ProfileView.as_view(),
         name='userprofile',
     ),

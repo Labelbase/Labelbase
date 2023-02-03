@@ -69,9 +69,9 @@
         {% for label in label_list %}
         <tr>
 
-          <td>tx</td>
-          <td>f91d0a8a78462bc59398f2c5d7a84fcff491c26ba54c4833478b202796c8aafd</td>
-          <td>Transaction</td>
+          <td>{{ label.get_type_display }}</td>
+          <td>{{ label.ref }}</td>
+          <td>{{ label.label }}</td>
 
         </tr>
         {% endfor %}

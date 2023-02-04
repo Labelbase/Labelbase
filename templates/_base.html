@@ -279,24 +279,24 @@ body {
 
 
 
-{% if user.is_authenticated %}
+{% if user.is_authenticated and labelbaseform %}
 
 <!-- modal -->
 <div class="modal" tabindex="-1" id="addLabelbaseModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <form action=".{#% url 'addlabeltolabelbase' labelbase.id %#}" method="post">
+      <form action=".{% url 'addlabelbase' %}" method="post">
       {% csrf_token %}
       <div class="modal-header">
-        <h5 class="modal-title">Add Wallet / Labelbase</h5>
+        <h5 class="modal-title">Add Labelbase</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {{ labelform.as_p }}
+        {{ labelbaseform.as_p }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Add Label</button>
+        <button type="submit" class="btn btn-primary">Add Labelbase</button>
       </div>
       </form>
     </div>

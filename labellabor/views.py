@@ -8,7 +8,7 @@ from two_factor.views import OTPRequiredMixin
 from two_factor.views.utils import class_view_decorator
 
 from labelbase.models import Label, Labelbase
-from labelbase.forms import LabelForm
+from labelbase.forms import LabelForm, LabelbaseForm
 from django.http import HttpResponseRedirect
 
 class HomeView(TemplateView):
@@ -20,7 +20,8 @@ class LabelbaseView(ListView):
     context_object_name = 'label_list'
 
     def get_queryset(self):
-        qs = Label.objects.filter(labelbase__user_id=self.request.user.id, labelbase_id=self.kwargs['labelbase_id'])
+        qs = Label.objects.filter(labelbase__user_id=self.request.user.id,
+                                    labelbase_id=self.kwargs['labelbase_id'])
         return qs.order_by("id")
 
     def get_context_data(self, **kwargs):
@@ -40,6 +41,17 @@ class LabelbaseView(ListView):
 
 
 
+
+class LabelbaseFormiew(FormView):
+    template_name = 'labelbase_new.html'
+    form_class = LabelbaseForm
+    success_url = '/thanks/'
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.send_email()
+        return super().form_valid(form)
 
 
 class RegistrationView(FormView):

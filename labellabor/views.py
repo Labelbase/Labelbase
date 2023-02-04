@@ -45,12 +45,12 @@ class LabelbaseView(ListView):
 class LabelbaseFormView(FormView):
     template_name = 'labelbase_new.html'
     form_class = LabelbaseForm
-    success_url = '/thanks/'
+
 
     def form_valid(self, form):
-        form.user = self.request.user
-        form.save()
-        return super().form_valid(form)
+        form.user_id = self.request.user.id
+        labelbase = form.save()
+        return redirect(labelbase.get_absolute_url())
 
 
 class RegistrationView(FormView):

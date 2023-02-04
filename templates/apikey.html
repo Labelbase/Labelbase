@@ -27,7 +27,15 @@
   </p>
   <div id="qrcode"></div>
   <script>
-        var qrcode = new QRCode("qrcode", "https://labelbase.cloud");
+        var qrcode = new QRCode("qrcode", {
+        text: "{{ api_token }}",
+        width: 128,
+        height: 128,
+        colorDark : "#000000",
+        colorLight : "#cfe2ff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+ 
   </script>
 
   <hr>

@@ -16,7 +16,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
-        fields = ['id', 'labelbase', 'type', 'ref', 'label'] #, 'data']
+        fields = ['id', 'labelbase', 'type', 'ref', 'label', 'data']
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def label(request, labelbase_id, id):
@@ -26,7 +26,6 @@ def label(request, labelbase_id, id):
     try:
         label = Label.objects.get(id=id, labelbase_id=labelbase_id)
     except Label.DoesNotExist:
-        print("404")
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':

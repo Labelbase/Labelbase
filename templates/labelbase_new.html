@@ -2,9 +2,11 @@
 {% extends "_base.html" %}
 {% load i18n %}
 {% block content %}
-{% endcomment %}
 <div style="padding-top: 1em;">
-  <form method="post">{% csrf_token %}
+  {% endcomment %}
+
+<form method="post" >
+    {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Create Labelbase">
 </form>

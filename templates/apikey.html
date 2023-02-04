@@ -5,10 +5,9 @@
 {% block nav_apikey %}active{% endblock %}
 
 {% block content %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <h2 style="padding-top: 1em;">API Key</h2>
-
-
-  <h4>Labelbase API </h4>
+  <h4>Labelbase API</h4>
   <p>
      The Labelbase API is used for submitting labels to your Labelbase as well as exporting and managing them.
   </p>
@@ -24,8 +23,13 @@
   <h4 class="alert-heading">API Key</h4>
   <p>
     Your API key is:<br><br>
-    <strong><tt>{{ api_token }}</tt></strong>
+    <strong><tt>{{ api_token }}</tt></strong> <br>
   </p>
+  <div id="qrcode"></div>
+  <script>
+        var qrcode = new QRCode("qrcode", "https://labelbase.cloud");
+  </script>
+
   <hr>
   <p class="mb-0">
       API keys work like passwords. Always keep them secret and secure!

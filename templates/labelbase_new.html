@@ -3,14 +3,15 @@
 {% load i18n %}
 {% block content %}
 <div style="padding-top: 1em;">
-  {% endcomment %}
-
 <form method="post" >
+    {% endcomment %}
+
+x
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Create Labelbase">
-</form>
 {% comment %}
+</form>
 
 {% endblock %}
 {% endcomment %}

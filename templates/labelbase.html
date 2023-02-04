@@ -49,7 +49,6 @@
 
 
 {% if labelbase %}
-
   <div class="table-responsive" style="padding-top:1em" >
     {% if label_list %}
     <table id="bip329labels" class="table table-striped table-sm">
@@ -60,13 +59,12 @@
           <th scope="col">ref</th>
           <th scope="col">label</th>
         </tr>
-      </thead>
-
+      </thead> 
 
       <tbody>
         {% for label in label_list %}
         <tr>
-          <td>{{ label.labelbase_id }}.{{ label.id }}</td>
+          <td>{{ label.id }}</td>
           <td>{{ label.get_type_display }}</td>
           <td>{{ label.ref }}</td>
           <td>{{ label.label }}</td>

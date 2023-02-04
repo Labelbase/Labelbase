@@ -46,6 +46,8 @@ class LabelbaseFormView(FormView):
     template_name = 'labelbase_new.html'
     form_class = LabelbaseForm
 
+    def get(self, request, *args, **kwargs):
+        return redirect(resolve_url('home'))    
 
     def form_valid(self, form):
         form.instance.user = self.request.user

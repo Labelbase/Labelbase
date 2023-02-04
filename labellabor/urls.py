@@ -6,7 +6,7 @@ from django.urls import include, path
 from two_factor.urls import urlpatterns as tf_urls
 
 from .views import (
-    ExampleSecretView, LabelbaseView, HomeView, RegistrationCompleteView, RegistrationView,
+    ExampleSecretView, LabelbaseView, HomeView, RegistrationCompleteView, RegistrationView
 )
 
 from userprofile.views import ProfileView
@@ -58,8 +58,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ]
+ 

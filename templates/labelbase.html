@@ -113,7 +113,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {% labelbaseform labelbase=labelbase as form %}
+        {%  labelbase|labelbaseform as form %}
         {{ form.as_p }}
       </div>
       <div class="modal-footer">

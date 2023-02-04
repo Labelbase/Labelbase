@@ -48,6 +48,7 @@ class LabelbaseFormView(FormView):
     success_url = '/thanks/'
 
     def form_valid(self, form):
+        form.user = self.request.user
         return super().form_valid(form)
 
 

@@ -30,9 +30,7 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 urlpatterns = [
 
     path('api/v1/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
-
-    path('docs/', include_docs_urls(title='My API title'))
-
+    path('docs/', include_docs_urls(title='My API title')),
 
     path(
         '',

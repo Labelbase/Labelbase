@@ -4,7 +4,7 @@ from labelbase.forms import LabelbaseForm
 register = template.Library()
 
 
-def labelbaseform(instance=None):
-    return LabelbaseForm(instance=instance)
+def labelbaseform():
+    return LabelbaseForm()
 
-register.filter('labelbaseform', labelbaseform)
+register.tag('labelbaseform', labelbaseform)

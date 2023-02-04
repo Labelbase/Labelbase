@@ -4,15 +4,31 @@ from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 
 from two_factor.urls import urlpatterns as tf_urls
- 
+
+from labelbase import api
 
 from .views import (
     ExampleSecretView, LabelbaseView, HomeView, RegistrationCompleteView, RegistrationView
 )
 
 from userprofile.views import ProfileView
+"""
+from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
+
 
 urlpatterns = [
+    #path('api/v1/', api.labelbase),
+
+]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
+
+"""
+urlpatterns = [
+
+    path('api/v1/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
+
     path(
         '',
         HomeView.as_view(),
@@ -30,8 +46,6 @@ urlpatterns = [
         LabelbaseView.as_view(),
         name='labelbase',
     ),
-
-
 
     path(
         'account/logout/',

@@ -15,7 +15,7 @@
 
     <div class="col float-end" >
       <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLabelModal">Add Label</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLabelModal">New Label</button>
 
         <div class="btn-group" role="group">
           <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,7 +59,7 @@
           <th scope="col">ref</th>
           <th scope="col">label</th>
         </tr>
-      </thead> 
+      </thead>
 
       <tbody>
         {% for label in label_list %}
@@ -101,6 +101,30 @@
     </div>
   </div>
 </div>
+
+<!-- modal -->
+<div class="modal" tabindex="-1" id="editLabelbaseModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="{% url 'labelbase_new' %}" method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Edit labelbase</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% labelbaseform labelbase as form %}
+        {{ form.as_p }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">OK</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 {% endif %}
 <!-- end modal -->
 

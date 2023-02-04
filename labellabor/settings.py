@@ -26,11 +26,9 @@ SECRET_KEY = 'django-insecure-e@wz7b)sw1=l-(f)615%y%p85_qqgpikn8f(bdxhacz)abk^2w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['*'] # set your own here
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +42,7 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',
     #'django_otp.plugins.otp_email',  # <- if you want email capability.
+
     'two_factor',
     #'two_factor.plugins.phonenumber',  # <- if you want phone number capability.
     #'two_factor.plugins.email',  # <- if you want email capability.
@@ -51,8 +50,6 @@ INSTALLED_APPS = [
 
     'labelbase',
     'userprofile',
-
-    'debug_toolbar',
     'bootstrapform'
 
 ]

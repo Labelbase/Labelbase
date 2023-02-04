@@ -34,7 +34,7 @@ urlpatterns = [
     path('account/apikey/', APIKeyView.as_view(), name='apikey'),
     path('account/userprofile/', ProfileView.as_view(), name='userprofile'),
 
-    path('labelbase/new/', LabelbaseFormView.as_view(), name='labelbase_new'),
+    path('labelbase/', LabelbaseFormView.as_view(), name='labelbase_new'),
     path('labelbase/<int:labelbase_id>/', LabelbaseView.as_view(), name='labelbase'),
     path('account/logout/', LogoutView.as_view(), name='logout'),
     path('account/register/',RegistrationView.as_view(), name='registration'),

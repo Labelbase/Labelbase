@@ -1,21 +1,9 @@
 {% extends "_base.html" %}
 {% load i18n %}
-
 {% block content %}
-
-
-
 
 <div style="padding-top: 1em;">
 {% if labelbase %}
-  {#% if unpaide  %#}
-
-Cost: 10,000 sats
-
-Unlock Now
-
-
-
   <div class="row">
     <div class="col float-start">
       <h2>{% block title %}{{ labelbase.name  }} {% endblock %}</h2>
@@ -24,9 +12,8 @@ Unlock Now
       <p>{{ about.about}} </p>
       {% endif %}
     </div>
-
+    
     <div class="col float-end" >
-
       <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLabelModal">Add Label</button>
 

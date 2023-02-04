@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 import jsonfield
+from django_cryptography.fields import encrypt
 
 class Labelbase(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -44,15 +45,15 @@ class Label(models.Model):
         choices=TYPE_CHOICES,
         default=TYPE_ADDR,
     )
-    ref = models.CharField(
+    ref = encrypt(models.CharField(
         max_length=160,
         default="",
         blank=True,
-    )
-    label = models.CharField(
+    ))
+    label = encrypt(models.CharField(
         max_length=160,
         default="",
         blank=True,
-    )
-    data = jsonfield.JSONField()
+    ))
+    data = encrypt(jsonfield.JSONField())
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)

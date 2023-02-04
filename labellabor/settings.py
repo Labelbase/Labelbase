@@ -93,7 +93,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'labellabor.wsgi.application'
 
 TWO_FACTOR_REMEMBER_COOKIE_AGE = 60*60*24*14
-
+CRYPTOGRAPHY_SALT = "labelbase.cloud"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

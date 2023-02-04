@@ -26,5 +26,4 @@ class LabelbaseForm(forms.ModelForm):
         model = Labelbase
         fields = ['name', 'fingerprint', 'about']
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request')
         super(LabelForm, self).__init__(*args, **kwargs)

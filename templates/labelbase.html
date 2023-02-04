@@ -12,7 +12,7 @@
       <p>{{ about.about}} </p>
       {% endif %}
     </div>
-    
+
     <div class="col float-end" >
       <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLabelModal">Add Label</button>
@@ -66,7 +66,7 @@
       <tbody>
         {% for label in label_list %}
         <tr>
-          <td>{{ label.id }}</td>
+          <td>{{ label.labelbase_id }}.{{ label.id }}</td>
           <td>{{ label.get_type_display }}</td>
           <td>{{ label.ref }}</td>
           <td>{{ label.label }}</td>

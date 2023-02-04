@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'labelbase',
     'userprofile',
     'bootstrapform',
-
+    'cryptography',
     'rest_framework',
     'rest_framework.authtoken'
 

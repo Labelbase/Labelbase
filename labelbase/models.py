@@ -6,21 +6,21 @@ from django_cryptography.fields import encrypt
 
 class Labelbase(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(
+    name = encrypt(models.CharField(
         max_length=160,
         default="",
         blank=True,
-    )
-    fingerprint = models.CharField(
+    ))
+    fingerprint = encrypt(models.CharField(
         max_length=8,
         default="",
         blank=True
-    )
-    about = models.CharField(
+    ))
+    about = encrypt(models.CharField(
         max_length=200,
         default="",
         blank=True
-    )
+    ))
     def get_absolute_url(self):
          return reverse('labelbase', args=[self.id])
 

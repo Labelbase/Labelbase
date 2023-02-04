@@ -48,7 +48,7 @@ class LabelbaseFormView(FormView):
 
 
     def form_valid(self, form):
-        form.user_id = self.request.user.id
+        form['user_id'] = self.request.user.id
         labelbase = form.save()
         return redirect(labelbase.get_absolute_url())
 

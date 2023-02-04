@@ -4,6 +4,8 @@ from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 
 from two_factor.urls import urlpatterns as tf_urls
+from rest_framework.authtoken import views
+
 
 from .views import (
     ExampleSecretView, LabelbaseView, HomeView, RegistrationCompleteView, RegistrationView
@@ -31,7 +33,7 @@ urlpatterns = [
     ),
 
 
-
+    path('api-token-auth/', views.obtain_auth_token),
 
     path(
         'account/logout/',
@@ -57,5 +59,3 @@ urlpatterns = [
     path('', include('user_sessions.urls', 'user_sessions')),
     path('admin/', admin.site.urls),
 ]
-
- 

@@ -29,7 +29,7 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 """
 urlpatterns = [
     path('api/v0/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
-    path('api-reference/', include_docs_urls(title='Labelbase API')),
+    path('api-reference/', include_docs_urls(title='Labelbase API'),  name='api_reference'),
     path('account/userprofile/', ProfileView.as_view(), name='userprofile'),
     path('labelbase/<int:labelbase_id>/', LabelbaseView.as_view(), name='labelbase'),
     path('account/logout/', LogoutView.as_view(), name='logout'),

@@ -7,6 +7,6 @@ register = template.Library()
 def labelbaseform():
     return LabelbaseForm()
 
-@register.assignment_tag
+@register.simple_tag
 def labelbaseform(instance):
     return LabelbaseForm(instance=instance)

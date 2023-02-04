@@ -1,7 +1,7 @@
 {% extends "_base.html" %}
 {% load i18n %}
-{% block content %}
 {% load labelbase_tags %}
+{% block content %}
 <div style="padding-top: 1em;">
 {% if labelbase %}
   <div class="row">
@@ -113,7 +113,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {% labelbaseform labelbase as form %}
+        {% labelbaseform_edit labelbase as form %}
         {{ form.as_p }}
       </div>
       <div class="modal-footer">

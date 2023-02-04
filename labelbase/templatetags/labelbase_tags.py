@@ -8,5 +8,5 @@ def labelbaseform():
     return LabelbaseForm()
 
 @register.simple_tag
-def labelbaseform(instance):
+def labelbaseform_edit(instance):
     return LabelbaseForm(instance=instance)

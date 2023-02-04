@@ -3,15 +3,12 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 
 from userprofile.models import Profile
+from rest_framework.authtoken.models import Token
 
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_profile(sender, instance, **kwargs):
-    instance.profile.save()
-    print ("profile for {} created".format(instance))
+        Profile.objects.create(user=instance) # create user profile
+        Token.objects.create(user=instance) # create API auth token
+ 

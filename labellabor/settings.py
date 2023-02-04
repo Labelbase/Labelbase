@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'bootstrapform',
 
     'rest_framework',
-    'rest_framework_api_key',
+    'rest_framework.authtoken'
 
 ]
 

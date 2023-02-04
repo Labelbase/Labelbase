@@ -49,6 +49,7 @@ class LabelbaseFormView(FormView):
 
     def form_valid(self, form):
         form.user = self.request.user
+        form.save()
         return super().form_valid(form)
 
 

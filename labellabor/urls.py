@@ -10,7 +10,7 @@ from labelbase import api
 from .views import (
     ExampleSecretView, LabelbaseView, HomeView, RegistrationCompleteView, RegistrationView
 )
-
+from django.views.generic import TemplateView
 from userprofile.views import ProfileView
 """
 from django.urls import path
@@ -28,6 +28,10 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 urlpatterns = [
 
     path('api/v1/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
+     path('swagger-ui/', TemplateView.as_view(
+        template_name='swagger-ui.html',
+        extra_context={'schema_url':'openapi-schema'}
+    ), name='swagger-ui'),
 
     path(
         '',

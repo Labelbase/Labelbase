@@ -42,15 +42,12 @@ class LabelbaseView(ListView):
 
 
 
-class LabelbaseFormiew(FormView):
+class LabelbaseFormView(FormView):
     template_name = 'labelbase_new.html'
     form_class = LabelbaseForm
     success_url = '/thanks/'
 
     def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
-        form.send_email()
         return super().form_valid(form)
 
 

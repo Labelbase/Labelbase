@@ -26,6 +26,7 @@ def label(request, labelbase_id, id):
     try:
         label = Label.objects.get(id=id, labelbase_id=labelbase_id)
     except Label.DoesNotExist:
+        print("404")
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':

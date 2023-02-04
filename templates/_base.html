@@ -231,8 +231,8 @@ body {
           <li class="nav-item {% block nav_profile %}{% endblock %}">
             <a class="nav-link" href="{% url 'two_factor:profile' %}">{% trans "Account Security" %}</a></li>
 
-            <li class="nav-item  ">
-              <a class="nav-link" href="">API Key</a>
+            <li class="nav-item  % block nav_apikey %}{% endblock %}">
+              <a class="nav-link" href="{% url 'apikey' %}">API Key</a>
             <li>
             <li class="nav-item  ">
               <a class="nav-link" href="/api-reference/">API Reference</a>

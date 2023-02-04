@@ -48,9 +48,9 @@ class LabelbaseFormView(FormView):
 
 
     def form_valid(self, form):
-        form['user_id'] = self.request.user.id
-        labelbase = form.save()
-        return redirect(labelbase.get_absolute_url())
+        form.instance.user = self.request.user
+        form.save()
+        return redirect(form.instance.get_absolute_url())
 
 
 class RegistrationView(FormView):

@@ -1,0 +1,36 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block title %}API Key{% endblock %}
+{% block nav_apikey %}active{% endblock %}
+
+{% block content %}
+  <h2 style="padding-top: 1em;">API Key</h2>
+
+
+  <h4>Labelbase API </h4>
+  <p>
+     The Labelbase API is used for submitting labels to your Labelbase as well as exporting and managing them.
+  </p>
+  <p>
+    The current version of the Labelbase API is known as v0 and is considered to be ready to build against it.
+  </p>
+  <p>
+    While we don’t expect our public endpoints to change, keep in mind that the API is still under development.
+  </p>
+
+
+  <div class="alert  alert-primary" role="alert">
+  <h4 class="alert-heading">API Key</h4>
+  <p>
+    Your API key is:<br><br>
+    <strong><tt>{{ api_token }}</tt></strong>
+  </p>
+  <hr>
+  <p class="mb-0">
+      API keys work like passwords. Always keep them secret and secure!
+  </p>
+</div>
+
+{% endblock %}
+api_token

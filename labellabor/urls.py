@@ -7,13 +7,14 @@ from two_factor.urls import urlpatterns as tf_urls
 
 from labelbase import api
 
-from .views import LabelbaseView, HomeView, RegistrationCompleteView, RegistrationView
+from .views import (LabelbaseView, HomeView, RegistrationCompleteView,
+    RegistrationView, )
 # ExampleSecretView,
 
 
 from rest_framework.documentation import include_docs_urls
 
-from userprofile.views import ProfileView
+from userprofile.views import ProfileView, APIKeyView
 """
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -30,6 +31,7 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 urlpatterns = [
     path('api/v0/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
     path('api-reference/', include_docs_urls(title='Labelbase API')),
+    path('account/apikey/', APIKeyView.as_view(), name='apikey'),
     path('account/userprofile/', ProfileView.as_view(), name='userprofile'),
     path('labelbase/<int:labelbase_id>/', LabelbaseView.as_view(), name='labelbase'),
     path('account/logout/', LogoutView.as_view(), name='logout'),

@@ -46,6 +46,7 @@ class LabelAPIView(APIView):
         serializer = LabelSerializer(label, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print("OK, PUT {}".format(serializer.data))
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

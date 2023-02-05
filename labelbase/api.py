@@ -15,8 +15,8 @@ from rest_framework.views import APIView
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
-        fields = ('id', 'name', 'fingerprint', 'about')
-        read_only_fields = ('id')
+        fields = ('id', 'name', 'fingerprint', 'about', )
+        read_only_fields = ('id', )
 
 
 
@@ -58,8 +58,8 @@ class LabelbaseAPIView(APIView):
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
-        fields = ('id', 'labelbase', 'type', 'ref', 'label')
-        read_only_fields = ('id', 'labelbase')
+        fields = ('id', 'labelbase', 'type', 'ref', 'label', )
+        read_only_fields = ('id', 'labelbase', )
 
 
 

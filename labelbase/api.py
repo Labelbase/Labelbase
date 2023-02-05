@@ -42,7 +42,7 @@ class LabelAPIView(APIView):
         except Label.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def put(request, labelbase_id, id):
+    def put(self, request, labelbase_id, id, format=None):
         label = self._get_label(request, labelbase_id, id)
         serializer = LabelSerializer(label, data=request.data)
         if serializer.is_valid():
@@ -50,12 +50,12 @@ class LabelAPIView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(request, labelbase_id, id):
+    def get(self, request, labelbase_id, id, format=None):
         label = self._get_label(request, labelbase_id, id)
         serializer = LabelSerializer(label)
         return Response(serializer.data)
 
-    def delete(request, labelbase_id, id):
+    def delete(self, request, labelbase_id, id, format=None):
         label = self._get_label(request, labelbase_id, id)
         label.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

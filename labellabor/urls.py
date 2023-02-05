@@ -33,7 +33,7 @@ urlpatterns = [
 
 urlpatterns = [
     #path('api/v0/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
-    path('api/v0/labelbase/<int:labelbase_id>',
+    path('api/v0/labelbase/<int:labelbase_id>/',
         LabelbaseAPIView.as_view(), name='api_labelbase'),
     path('api/v0/labelbase/<int:labelbase_id>/label/<int:id>/',
         LabelAPIView.as_view(), name='api_label'),

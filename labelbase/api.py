@@ -33,6 +33,7 @@ class LabelAPIView(APIView):
     authentication_classes = [TokenAuthentication]
 
     def _get_label(self, request, labelbase_id, id):
+        print ("{} {} {}  ".format(request, labelbase_id, id))
         try:
             label = Label.objects.get(  id=id,
                                         labelbase_id=labelbase_id,

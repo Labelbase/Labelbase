@@ -13,11 +13,14 @@ from .views import (LabelbaseView, HomeView, RegistrationCompleteView,
 
 
 from rest_framework.documentation import include_docs_urls
+from rest_framework.urlpatterns import format_suffix_patterns
+
 
 from userprofile.views import ProfileView, APIKeyView
+
+
 """
 from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
 
 
 urlpatterns = [
@@ -25,7 +28,6 @@ urlpatterns = [
 
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
 
 """
 
@@ -54,3 +56,4 @@ urlpatterns = [
     #),
 
 ]
+urlpatterns = format_suffix_patterns(urlpatterns)

@@ -11,20 +11,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 
-class IsObjectOwner(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user and request.user.is_authenticated and \
-            obj.user_id == request.user.id
-
-    def has_object_permission(self, request, view, obj):
-        return obj.user_id == request.user.id
-
-And add this permission to your view. For example on a viewset:
-
-class VacationViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsVacationOwner,)
-
-
 
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:

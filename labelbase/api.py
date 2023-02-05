@@ -32,12 +32,11 @@ class LabelAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    def _get_label(self, request, labelbase_id, id):
-        print ("{} {} {}  ".format(request, labelbase_id, id))
+    def _get_label(self, request, labelbase_id, id): 
         try:
             label = Label.objects.get(  id=id,
                                         labelbase_id=labelbase_id,
-                                        labelbase__user_id=request.user.id1)
+                                        labelbase__user_id=request.user.id)
             return label
         except Label.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

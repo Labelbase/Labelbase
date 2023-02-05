@@ -26,9 +26,9 @@ def label(request, labelbase_id, id):
     Retrieve, update or delete a label.
     """
     try:
-        label = Label.objects.get(id=id,
-                                    labelbase_id=labelbase_id, 
-                                    user=self.request.user)
+        label = Label.objects.get(  id=id,
+                                    labelbase_id=labelbase_id,
+                                    user=request.user)
     except Label.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

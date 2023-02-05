@@ -31,7 +31,7 @@ class LabelbaseAPIView(APIView):
         try:
             labelbase = Labelbase.objects.get(id=id, user_id=request.user.id)
             return labelbase
-        except labelbase.DoesNotExist:
+        except Labelbase.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, id):

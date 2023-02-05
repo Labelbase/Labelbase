@@ -21,7 +21,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
-        fields = ('id', 'labelbase', 'type', 'ref', 'label', 'data')
+        fields = ('id', 'labelbase', 'type', 'ref', 'label')
         read_only_fields = ('id', 'labelbase')
 
 class LabelAPIView(APIView):
@@ -32,7 +32,7 @@ class LabelAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    def _get_label(self, request, labelbase_id, id): 
+    def _get_label(self, request, labelbase_id, id):
         try:
             label = Label.objects.get(  id=id,
                                         labelbase_id=labelbase_id,

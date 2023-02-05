@@ -11,12 +11,14 @@ from rest_framework.response import Response
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
-        fields = ['id', 'name', 'fingerprint', 'about']
+        fields = ('id', 'name', 'fingerprint', 'about')
+        read_only_fields = ('id')
 
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
-        fields = ['id', 'labelbase', 'type', 'ref', 'label', 'data']
+        fields = ('id', 'labelbase', 'type', 'ref', 'label', 'data')
+        read_only_fields = ('id', 'labelbase')
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def label(request, labelbase_id, id):
@@ -24,7 +26,9 @@ def label(request, labelbase_id, id):
     Retrieve, update or delete a label.
     """
     try:
-        label = Label.objects.get(id=id, labelbase_id=labelbase_id)
+        label = Label.objects.get(id=id,
+                                    labelbase_id=labelbase_id, 
+                                    user=self.request.user)
     except Label.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

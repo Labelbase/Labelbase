@@ -5,7 +5,7 @@ from django.urls import include, path
 
 from two_factor.urls import urlpatterns as tf_urls
 
-from labelbase.api import LabelAPIView
+from labelbase.api import LabelAPIView, LabelbaseAPIView
 
 from .views import (LabelbaseView, HomeView, RegistrationCompleteView,
     RegistrationView, LabelbaseFormView )
@@ -33,6 +33,8 @@ urlpatterns = [
 
 urlpatterns = [
     #path('api/v0/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
+    path('api/v0/labelbase/<int:labelbase_id>',
+        LabelbaseAPIView.as_view(), name='api_labelbase'),
     path('api/v0/labelbase/<int:labelbase_id>/label/<int:id>/',
         LabelAPIView.as_view(), name='api_label'),
 

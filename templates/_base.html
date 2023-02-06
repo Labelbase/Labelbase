@@ -274,10 +274,10 @@ body {
           {% include "_messages.html" %}
           {% block content %}{% endblock %}
       </main>
-      {% include "footer.html" %}
+
   </div>
 </div>
-
+{% include "footer.html" %}
 
 {% if user.is_authenticated %}
 

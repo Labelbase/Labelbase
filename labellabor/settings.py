@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'cryptography',
 
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+
+    'sekizai',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +83,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'sekizai.context_processors.sekizai',
             ],
         },
     },

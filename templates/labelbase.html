@@ -137,6 +137,39 @@
   </div>
 </div>
 
+
+<div class="alert  alert-primary" role="alert">
+  <h4 class="alert-heading">API Key</h4>
+  <p>
+    Your API key is:<br><br>
+    <strong><tt>{{ api_token }}</tt></strong> <br>
+  </p>
+  <div id="qrcode"></div>
+  <script>
+        var qrcode = new QRCode("qrcode", {
+        text: "{{ api_token }}",
+        width: 145,
+        height: 145,
+        colorDark : "#000000",
+        colorLight : "#cfe2ff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+
+    {% addtoblock "js" %}
+    $(document).ready(function () {
+        $('#bip329labels').DataTable({
+          order: [[0, 'desc']],
+      });
+    });
+    {% endaddtoblock %}  
+  </script>
+
+  <hr>
+  <p class="mb-0">
+      API keys work like passwords. Always keep them secret and secure!
+  </p>
+</div>
+
 {% endif %}
 <!-- end modal -->
 

@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load labelbase_tags %}
+{% load sekizai_tags %}
 
 <!DOCTYPE html>
 <html>
@@ -14,7 +15,8 @@
 
 
   {% block extra_media %}{% endblock %}
-
+  {% block css %}{% endblock %}
+  {% render_block "css" %}
   <style>
 
 /* dashboard */
@@ -194,7 +196,8 @@ body {
 
 
   <div class="container-fluid">
-    <div class="row">
+      <div class="row">
+
       <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="z-index:103">
         <div class="position-sticky pt-3 sidebar-sticky">
           {% if user.is_authenticated %}
@@ -305,7 +308,7 @@ body {
 {% endif %}
 
   {% endblock %}
-
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>

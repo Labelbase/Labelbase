@@ -6,12 +6,21 @@
   <p>
     <form action="" method="POST">
       {% csrf_token %}
-      <table>{{ form.as_table }}</table>
-  </p>
-  <p>
-      <a href="{% url 'two_factor:login' %}" class="btn btn-link">Sign in instead</a>
-      <button class="btn btn-primary" type="submit">Create account</button>
+      <table>
+          {{ form.as_table }}
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <a href="{% url 'two_factor:login' %}" class="btn btn-link">Sign in instead</a>
+          <button class="btn btn-primary" type="submit">Create account</button>
+        </td>
+      </tr>
+
+      </table>
     </form>
-  </p>  
+  </p>
 
 {% endblock %}

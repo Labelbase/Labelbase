@@ -57,3 +57,7 @@ class Label(models.Model):
     ))
     data = encrypt(jsonfield.JSONField())
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        if self.type == "addr":
+            return "https://mempool.space/address/{}".format(self.ref)

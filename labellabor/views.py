@@ -10,6 +10,7 @@ from two_factor.views.utils import class_view_decorator
 from labelbase.models import Label, Labelbase
 from labelbase.forms import LabelForm, LabelbaseForm
 from django.http import HttpResponseRedirect
+from rest_framework.authtoken.models import Token
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -29,6 +30,7 @@ class LabelbaseView(ListView):
         context = super(LabelbaseView, self).get_context_data(**kwargs)
         context['labelbase'] = Labelbase.objects.filter(id=labelbase_id, user_id=self.request.user.id).first()
         context['labelform'] = LabelForm(request=self.request, labelbase_id=labelbase_id)
+        context['api_token'] = Token.objects.get(user_id=self.request.user.id)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -47,7 +49,7 @@ class LabelbaseFormView(FormView):
     form_class = LabelbaseForm
 
     def get(self, request, *args, **kwargs):
-        return redirect(resolve_url('home'))    
+        return redirect(resolve_url('home'))
 
     def form_valid(self, form):
         form.instance.user = self.request.user

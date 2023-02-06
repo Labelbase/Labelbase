@@ -3,15 +3,15 @@
 
 {% block content %}
   <h2 style="padding-top: 1em;">{% block title %}Create your Labelbase account{% endblock %}</h2>
-
-  <form action="" method="POST">
-    {% csrf_token %}
-    <table>{{ form.as_table }}</table>
-    <br>
-    <br>
-    <a href="{% url 'two_factor:login' %}" class="btn btn-link">Sign in instead</a>
-    <button class="btn btn-primary" type="submit">Create account</button>
-  </form>
-
+  <p>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <table>{{ form.as_table }}</table>
+  </p>
+  <p>
+      <a href="{% url 'two_factor:login' %}" class="btn btn-link">Sign in instead</a>
+      <button class="btn btn-primary" type="submit">Create account</button>
+    </form>
+  </p>  
 
 {% endblock %}

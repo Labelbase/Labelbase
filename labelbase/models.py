@@ -58,8 +58,6 @@ class Label(models.Model):
     data = encrypt(jsonfield.JSONField())
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
 
-    class Meta:
-        unique_together = ('type', 'ref', 'label', 'labelbase')
 
     def get_absolute_url(self):
         if self.type == "addr":

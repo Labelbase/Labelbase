@@ -7,8 +7,10 @@
   <form action="" method="POST">
     {% csrf_token %}
     <table>{{ form.as_table }}</table>
+    <br>
+    <br>
     <a href="{% url 'two_factor:login' %}" class="btn btn-link">Sign in instead</a>
-    <button class="btn btn-primary" type="submit">Create account</button> 
+    <button class="btn btn-primary" type="submit">Create account</button>
   </form>
 
 

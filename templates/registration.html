@@ -2,14 +2,16 @@
 {% load i18n %}
 
 {% block content %}
-  <h2 style="padding-top: 1em;">{% block title %}Create your Labelbase account
-{% endblock %}</h2>
+  <h2 style="padding-top: 1em;">{% block title %}Create your Labelbase account{% endblock %}</h2>
 
   <form action="" method="POST">
     {% csrf_token %}
     <table>{{ form.as_table }}</table>
     <button class="btn btn-primary" type="submit">{% trans "Register" %}</button>
   </form>
-{% endblock %}
 
-<a href="{% url 'two_factor:login' %}">Sign in instead</a>
+  <div>
+    <a href="{% url 'two_factor:login' %}">Sign in instead</a>
+  </div>
+
+{% endblock %}

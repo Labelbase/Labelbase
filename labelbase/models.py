@@ -59,7 +59,7 @@ class Label(models.Model):
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('type', 'ref', 'label', 'label')
+        unique_together = ('type', 'ref', 'label', 'labelbase')
 
     def get_absolute_url(self):
         if self.type == "addr":

@@ -61,3 +61,6 @@ class Label(models.Model):
     def get_absolute_url(self):
         if self.type == "addr":
             return "https://mempool.space/address/{}".format(self.ref)
+        if self.type == "tx":
+            return "https://mempool.space/tx/{}".format(self.ref)
+        return ""

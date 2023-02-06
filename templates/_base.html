@@ -257,8 +257,11 @@ body {
                 <a class="nav-link" href="{{ logout_url }}">{% trans "Logout" %}</a>
               </li>
               {% else %}
-              <li class="nav-item"> <a class="nav-link" href="{{ login_url }}">Login</a> or <a class="nav-link"  href="{{ reg_url }}">register</a> to get started.
+              <li class="nav-item"> <a class="nav-link" href="{{ login_url }}">Login</a>
               </li>
+              <li class="nav-item"> <a class="nav-link" href="{{  reg_url }}">Register</a>
+              </li>
+
             {% endif %}
 
             </ul>

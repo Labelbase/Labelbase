@@ -161,14 +161,15 @@
           <strong><tt>{{ api_token }}</tt></strong>
         </p>
         <p>
-          You Labelbase ID is:
+          You Labelbase ID is:<br><br>
           <strong><tt>{{labelbase.id }}</tt></strong>
         </p>
       </div>
 
-      <div id="qrcode"></div>
-      <small>API keys work like passwords. Always keep them secret and secure!</small>
-
+      <p>
+        <div id="qrcode"></div>
+        <small>API keys work like passwords. Always keep them secret and secure!</small>
+      </p>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
       </div>
@@ -191,7 +192,7 @@
           width: 145,
           height: 145,
           colorDark : "#000000",
-          colorLight : "#cfe2ff",
+          colorLight : "#fffff",
           correctLevel : QRCode.CorrectLevel.H
       });
 

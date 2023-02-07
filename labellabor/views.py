@@ -17,8 +17,9 @@ from rest_framework.authtoken.models import Token
 class HomeView(TemplateView):
     template_name = 'home.html'
 
-class LabelbaseView(DeleteView):
+class LabelbaseDeleteView(DeleteView):
     model = Labelbase
+    
 
 class LabelbaseView(ListView):
     template_name = 'labelbase.html'

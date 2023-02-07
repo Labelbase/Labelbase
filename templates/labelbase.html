@@ -158,15 +158,13 @@
       <div class="modal-body">
         <p>
           API Key: <strong><tt>{{ api_token }}</tt></strong>
-        </p>
-        <p>
+        <br>
           Labelbase ID: <strong><tt>{{labelbase.id }}</tt></strong>
-        </p>
-        <p>
+        <br>
           Base Endpoint: <strong><tt>https://labelbase.space/api/</tt></strong>
         </p>
         <center>
-          <div style="padding:1.5em;" id="qrcode"></div>
+          <div style="padding:1.25em;" id="qrcode"></div>
 
           <div class="alert alert-warning" role="alert">
             API keys work like passwords.<br>
@@ -200,14 +198,14 @@
       var qrcode = new QRCode("qrcode", {
           text: JSON.stringify({
               api_key: '{{ api_token }}',
+              api_base_endpoint: 'https://labelbase.space/api/',
               labelbase_id: {{labelbase.id }},
               labelbase_name: '{{labelbase.name }}',
               fingerprint: '{{  labelbase.fingerprint }}',
-              api_base_endpoint: 'https://labelbase.space/api/'
             }),
 
-          width: 180,
-          height: 180,
+          width: 185,
+          height: 185,
           colorDark : "#000000",
           colorLight : "#ffffff",
           correctLevel : QRCode.CorrectLevel.H

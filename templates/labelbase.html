@@ -207,11 +207,13 @@
         </div>
       </div>
 
+      <form method="post" action="{% url 'del_labelbase' %}">{% csrf_token %}
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
-        <a href="#" type="button" class="btn btn-danger" data-bs-dismiss="modal">DELETE</a>
+        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">DELETE"</button>
       </div>
+      </form>
 
     </div>
   </div>

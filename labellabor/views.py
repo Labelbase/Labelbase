@@ -4,6 +4,8 @@ from django.shortcuts import redirect, resolve_url
 from django.views.decorators.cache import never_cache
 from django.views.generic import FormView, TemplateView
 from django.views.generic.list import ListView
+from django.views.generic.edit import DeleteView
+
 from two_factor.views import OTPRequiredMixin
 from two_factor.views.utils import class_view_decorator
 
@@ -15,6 +17,8 @@ from rest_framework.authtoken.models import Token
 class HomeView(TemplateView):
     template_name = 'home.html'
 
+class LabelbaseView(DeleteView):
+    model = Labelbase
 
 class LabelbaseView(ListView):
     template_name = 'labelbase.html'

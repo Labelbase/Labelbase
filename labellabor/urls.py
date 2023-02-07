@@ -7,7 +7,7 @@ from labelbase.api import LabelAPIView, LabelbaseAPIView
 from rest_framework.documentation import include_docs_urls
 from rest_framework.urlpatterns import format_suffix_patterns
 from userprofile.views import ProfileView, APIKeyView
-from .views import (LabelbaseView, HomeView, RegistrationCompleteView,
+from .views import (LabelbaseView, LabelbaseDeleteView, HomeView, RegistrationCompleteView,
     RegistrationView, LabelbaseFormView )
 
 
@@ -18,12 +18,11 @@ urlpatterns = [
         LabelbaseAPIView.as_view(), name='api_labelbase'),
     path('api/labelbase/<int:labelbase_id>/label/<int:id>/',
         LabelAPIView.as_view(), name='api_label'),
-
     path('api-reference/', include_docs_urls(title='Labelbase API')),
     path('account/apikey/', APIKeyView.as_view(), name='apikey'),
     path('account/userprofile/', ProfileView.as_view(), name='userprofile'),
-
     path('labelbase/', LabelbaseFormView.as_view(), name='labelbase_new'),
+    path('labelbase/<int:labelbase_id>/delete/', LabelbaseDeleteView.as_view(),  name='del_labelbase'),
     path('labelbase/<int:labelbase_id>/', LabelbaseView.as_view(), name='labelbase'),
     path('account/logout/', LogoutView.as_view(), name='logout'),
     path('account/register/',RegistrationView.as_view(), name='registration'),
@@ -34,4 +33,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
 
-] 
+]

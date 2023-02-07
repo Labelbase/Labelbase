@@ -198,9 +198,9 @@
       var qrcode = new QRCode("qrcode", {
           text: JSON.stringify({
               api_key: '{{ api_token }}',
-              api_base_endpoint: 'https://labelbase.space/api/',
+              api_base: 'https://labelbase.space/api/',
               labelbase_id: {{labelbase.id }},
-              labelbase_name: '{{labelbase.name }}',
+              name: '{{labelbase.name }}',
               fingerprint: '{{  labelbase.fingerprint }}',
             }),
 

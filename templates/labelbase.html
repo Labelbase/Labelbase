@@ -163,7 +163,7 @@
           Labelbase ID: <strong><tt>{{labelbase.id }}</tt></strong>
         </p>
         <p>
-          Base Endpoint: <strong><tt>https://labelbase.space/api/ </tt></strong>
+          Base Endpoint: <strong><tt>https://labelbase.space/api/</tt></strong>
         </p>
         <center>
           <div style="padding:1.5em;" id="qrcode"></div>
@@ -202,11 +202,12 @@
               api_key: '{{ api_token }}',
               labelbase_id: {{labelbase.id }},
               labelbase_name: '{{labelbase.name }}',
-              fingerprint: '{{  labelbase.fingerprint }}'
+              fingerprint: '{{  labelbase.fingerprint }}',
+              api_base_endpoint: 'https://labelbase.space/api/'
             }),
 
-          width: 185,
-          height: 185,
+          width: 180,
+          height: 180,
           colorDark : "#000000",
           colorLight : "#ffffff",
           correctLevel : QRCode.CorrectLevel.H

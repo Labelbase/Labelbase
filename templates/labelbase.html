@@ -19,7 +19,7 @@
       <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLabelModal">New Label</button>
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="btn btn-primary dropdown-toggle disabled" data-bs-toggle="dropdown" aria-expanded="false">
             Import
           </button>
           <ul class="dropdown-menu">
@@ -28,7 +28,7 @@
           </ul>
         </div>
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="btn btn-primary dropdown-toggle disabled" data-bs-toggle="dropdown" aria-expanded="false">
             Export
           </button>
           <ul class="dropdown-menu">
@@ -42,7 +42,7 @@
           </button>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editLabelbaseModal">Edit</a></li>
-            <li><a class="dropdown-item" href="#">Merge duplicates</a></li>
+            <!--li><a class="dropdown-item" href="#">Merge duplicates</a></li-->
             <li><a class="dropdown-item" href="#">Delete</a></li>
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#connectApiKeyLabelbaseModal">API Connect</a></li>
 
@@ -168,7 +168,7 @@
 
           <div class="alert alert-warning" role="alert">
             API keys work like passwords. Keep them secret!<br>
-            Whoever knows the key can access your labelbase.<br>
+            Whoever knows the key can access your labelbases.<br>
           </div>
         </center>
         <p>
@@ -185,6 +185,33 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal" tabindex="-1" id="deleteLabelbaseModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+
+      <div class="modal-header">
+        <h5 class="modal-title">Delete labelbase?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning" role="alert">
+         <strong>Warning:</strong> This action will permanently delete the labelbase and its labels and cannot be undone. Are you sure you want to proceed?
+        </div>
+      </div>
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+        <a href="#" type="button" class="btn btn-alert" data-bs-dismiss="modal">YES, DELETE</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 
   <script>

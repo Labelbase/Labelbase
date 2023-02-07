@@ -198,12 +198,12 @@
       });
 
       var qrcode = new QRCode("qrcode", {
-          text: {JSON.stringify({
+          text: JSON.stringify({
               api_key: '{{ api_token }}',
               labelbase_id: {{labelbase.id }},
-              labelbase_name: '{{labelbase.name }}'',
+              labelbase_name: '{{labelbase.name }}',
               fingerprint: '{{  labelbase.fingerprint }}'
-            })}
+            }),
 
           width: 145,
           height: 145,

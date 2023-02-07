@@ -2,40 +2,21 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
-
 from two_factor.urls import urlpatterns as tf_urls
-
 from labelbase.api import LabelAPIView, LabelbaseAPIView
-
-from .views import (LabelbaseView, HomeView, RegistrationCompleteView,
-    RegistrationView, LabelbaseFormView )
-# ExampleSecretView,
-
-
 from rest_framework.documentation import include_docs_urls
 from rest_framework.urlpatterns import format_suffix_patterns
-
-
 from userprofile.views import ProfileView, APIKeyView
+from .views import (LabelbaseView, HomeView, RegistrationCompleteView,
+    RegistrationView, LabelbaseFormView )
 
 
-"""
-from django.urls import path
-
-
-urlpatterns = [
-    #path('api/v1/', api.labelbase),
-
-]
-
-
-"""
 
 urlpatterns = [
-    #path('api/v0/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
-    path('api/v0/labelbase/<int:id>/',
+    #path('api/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
+    path('api/labelbase/<int:id>/',
         LabelbaseAPIView.as_view(), name='api_labelbase'),
-    path('api/v0/labelbase/<int:labelbase_id>/label/<int:id>/',
+    path('api/labelbase/<int:labelbase_id>/label/<int:id>/',
         LabelAPIView.as_view(), name='api_label'),
 
     path('api-reference/', include_docs_urls(title='Labelbase API')),
@@ -51,11 +32,6 @@ urlpatterns = [
     path('', include(tf_urls)),
     path('', include('user_sessions.urls', 'user_sessions')),
     path('admin/', admin.site.urls),
-    #path(
-    #    'secret/',
-    #    ExampleSecretView.as_view(),
-    #    name='secret',
-    #),
 
-]
-#urlpatterns = format_suffix_patterns(urlpatterns)
+
+] 

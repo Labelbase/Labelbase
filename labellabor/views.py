@@ -19,7 +19,8 @@ class HomeView(TemplateView):
 
 class LabelbaseDeleteView(DeleteView):
     model = Labelbase
-    
+    success_url = "/"
+
 
 class LabelbaseView(ListView):
     template_name = 'labelbase.html'

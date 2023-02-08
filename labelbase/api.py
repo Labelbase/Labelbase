@@ -22,6 +22,7 @@ class LabelSerializer(serializers.ModelSerializer):
         #exclude = ['labelbase', ]
 
 class LabelbaseSerializer(serializers.ModelSerializer):
+    #user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Labelbase
@@ -29,10 +30,9 @@ class LabelbaseSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'user', ]
 
     def create(self, validated_data):
-        request = self.context.get("request")
         print(validated_data)
         obj = Labelbase(**validated_data)
-        obj.user_id = request.user.ud
+        obj.user_id = self.context.request.user.id
         obj.save()
         return obj
 
@@ -53,9 +53,10 @@ class LabelbaseAPIView(APIView):
             'name': request.data.get('name', ''),
             'fingerprint': request.data.get('fingerprint', ''),
             'about': request.data.get('about', ''),
-            'user': request.user.id, 
+            'user': request.user.id,
+            'request': request,
         }
-        serializer = LabelbaseSerializer(data=data)
+        serializer = LabelbaseSerializer(data=data, context=request)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

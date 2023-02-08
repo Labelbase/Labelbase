@@ -18,7 +18,7 @@ from rest_framework.fields import CurrentUserDefault
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
-        fields = ('id', 'name', 'fingerprint', 'about', )
+        fields = ('id', 'name', 'fingerprint', 'about', 'user' )
         read_only_fields = ('id', 'user')
 
     def create(self, validated_data):
@@ -44,7 +44,8 @@ class LabelbaseAPIView(APIView):
             'name': request.data.get('name', ''),
             'fingerprint': request.data.get('fingerprint', ''),
             'about': request.data.get('about', ''),
-            'user': request.user.id
+            'user': request.user.id,
+            'request': request
         }
         serializer = LabelbaseSerializer(data=data)
         if serializer.is_valid():

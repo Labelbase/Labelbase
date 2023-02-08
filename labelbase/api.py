@@ -28,11 +28,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
         #read_only_fields = ('id', 'user')
 
 
-    def create(self, validated_data):
-        """
-        Create and return a new `Labelbase` instance, given the validated data.
-        """
-        return Labelbase.objects.create(**validated_data)
+
 
     """def create(self, validated_data):
         print(validated_data)
@@ -50,6 +46,9 @@ class LabelbaseAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
     def post(self, request, *args, **kwargs):
         """
         Create the new labelbase.
@@ -62,7 +61,6 @@ class LabelbaseAPIView(APIView):
         }
         serializer = LabelbaseSerializer(data=data)
         if serializer.is_valid():
-            serializer.user_id = request.user.id
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -74,7 +72,6 @@ class LabelbaseAPIView(APIView):
         labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
         serializer = LabelbaseSerializer(labelbase, data=request.data)
         if serializer.is_valid():
-            serializer.user_id = request.user.id
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,5 +1,6 @@
 
 from labelbase.models import Labelbase, Label
+from django.shortcuts import get_object_or_404
 
 from rest_framework import serializers
 from rest_framework import status
@@ -54,7 +55,7 @@ class LabelbaseAPIView(APIView):
         """
         Update labelbase with the given id.
         """
-        labelbase = self._get_labelbase(request, id)
+        labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
         serializer = LabelbaseSerializer(labelbase, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -76,8 +77,6 @@ class LabelbaseAPIView(APIView):
         labelbase = self._get_labelbase(request, id)
         labelbase.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 
 
 class LabelSerializer(serializers.ModelSerializer):

@@ -18,7 +18,7 @@ class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
         fields = ['id', 'labelbase', 'type', 'ref', 'label', ]
-        read_only_fields = ['id', 'labelbase']
+        read_only_fields = ['id', ]
 
 class LabelbaseSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
@@ -108,7 +108,6 @@ class LabelAPIView(APIView):
             'ref': request.data.get('ref', ''),
             'label': request.data.get('label', ''),
         }
-
 
         serializer = LabelSerializer(data=data)
         if serializer.is_valid():

@@ -37,6 +37,7 @@ class LabelbaseAPIView(APIView):
         """
         Create the new labelbase.
         """
+        print (request.data)
         data = {
             'name': request.data.get('name', ''),
             'fingerprint': request.data.get('fingerprint', ''),

@@ -24,9 +24,9 @@ class LabelSerializer(serializers.ModelSerializer):
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
-        fields = ('id', 'name', 'fingerprint', 'about', 'label')
-        read_only_fields = ('id', 'user')
-    label = LabelSerializer(many=True, read_only=True)
+        fields = ('id', 'name', 'fingerprint', 'about', 'labels')
+        #read_only_fields = ('id', 'user')
+    labels = LabelSerializer(many=True, read_only=True)
 
     """def create(self, validated_data):
         print(validated_data)

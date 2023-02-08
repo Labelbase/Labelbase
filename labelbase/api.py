@@ -106,7 +106,7 @@ class LabelAPIView(APIView):
             'type': request.data.get('type', ''),
             'ref': request.data.get('ref', ''),
             'label': request.data.get('label', ''),
-            'user': request.user.id
+            #'user': request.user.id
         }
         serializer = LabelSerializer(data=data)
         if serializer.is_valid():

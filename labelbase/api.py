@@ -23,7 +23,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         obj = Labelbase(**validated_data)
-        obj.user_id = user # CurrentUserDefault()
+        obj.user_id = validated_data.get('user') # CurrentUserDefault()
         obj.save()
         return obj
 

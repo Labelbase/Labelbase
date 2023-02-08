@@ -62,14 +62,6 @@ class LabelbaseAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-
-
-    def perform_create(self, serializer):
-        print ("called LabelbaseAPIView. perform_create ")
-        serializer.validated_data['user'] = self.request.user
-        return super(LabelbaseAPIView, self).perform_create(serializer)
-
-
     def post(self, request, *args, **kwargs):
         """
         Create the new labelbase.
@@ -92,7 +84,7 @@ class LabelbaseAPIView(APIView):
         Update labelbase with the given id.
         """
         labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
-        serializer = LabelbaseSerializer(labelbase, data=request.data)
+        serializer = LabelbaseSerializer(labelbase, data=request.data, context={'request':request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -103,7 +95,7 @@ class LabelbaseAPIView(APIView):
         Retrieve labelbase with the given id.
         """
         labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
-        serializer = LabelbaseSerializer(labelbase)
+        serializer = LabelbaseSerializer(labelbase, context={'request':request})
         return Response(serializer.data)
 
     def delete(self, request, id):

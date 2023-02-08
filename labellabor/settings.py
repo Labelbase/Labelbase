@@ -8,7 +8,7 @@ PROJECT_PATH = BASE_DIR = Path(__file__).resolve().parent.parent
 
 proj_config = RawConfigParser()
 try:
-    assert proj_config.read(PROJECT_PATH+ '/../config.ini') != []
+    assert proj_config.read('{}/../config.ini'.format(PROJECT_PATH)) != []
 except AssertionError:
     from django.core.exceptions import ImproperlyConfigured
     raise ImproperlyConfigured("Configuration file {}{} not found!".format(PROJECT_PATH, '/config.ini'))

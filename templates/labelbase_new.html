@@ -1,11 +1,12 @@
 {% extends "_base.html" %}
 {% load i18n %}
+{% load bootstrap %}
 {% block content %}
 <div style="padding-top: 1em;">
 <h2>New labelbase</h2>
 <form method="post" >
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form|bootstrap }}
     <input type="submit" value="OK">
 </form>
 {% endblock %}

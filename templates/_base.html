@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load labelbase_tags %}
 {% load sekizai_tags %}
-
+{% load bootstrap %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -291,7 +291,7 @@ body {
       </div>
       <div class="modal-body">
         {% labelbaseform as form %}
-        {{ form.as_p }}
+        {{ form|bootstrap }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

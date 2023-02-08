@@ -1,13 +1,13 @@
 {% extends "_base.html" %}
 {% load i18n %}
-
+{% load bootstrap %}
 {% block content %}
   <h2 style="padding-top: 1em;">{% block title %}Create your Labelbase account{% endblock %}</h2>
   <p>
     <form action="" method="POST">
       {% csrf_token %}
       <table>
-          {{ form.as_table }}
+          {{ form|bootstrap }}
       <tr>
         <td>&nbsp;</td>
         <td></td>

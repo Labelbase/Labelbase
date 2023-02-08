@@ -22,9 +22,16 @@ class LabelSerializer(serializers.ModelSerializer):
         #exclude = ['labelbase', ]
 
 class LabelbaseSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(
-        default=serializers.CurrentUserDefault(),
-    )
+    def __init__(self, *args, **kwargs):
+        super(LabelbaseSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get('request')
+        if request:
+            fields = request.query_params.get('fields')
+            self.user = request.user
+        else:
+            self.user = None
+        print (request.user)
+
     class Meta:
         model = Labelbase
         fields = ['id', 'name', 'fingerprint', 'about', 'user', ]
@@ -44,7 +51,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
         obj.user_id = self.user.id
         obj.save()
         return obj
-    
+
 
 
 class LabelbaseAPIView(APIView):

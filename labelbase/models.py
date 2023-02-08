@@ -5,7 +5,7 @@ import jsonfield
 from django_cryptography.fields import encrypt
 
 class Labelbase(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = encrypt(models.CharField(
         max_length=160,
         default="",
@@ -56,7 +56,7 @@ class Label(models.Model):
         blank=True,
     ))
     data = encrypt(jsonfield.JSONField())
-    labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE, null=True, blank=True)
+    labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
 
 
     def get_absolute_url(self):

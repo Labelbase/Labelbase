@@ -17,7 +17,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
         fields = ('id', 'name', 'fingerprint', 'about', 'user')
-        read_only_fields = ('id', )
+        read_only_fields = ('id', 'user')
 
 
 class LabelbaseAPIView(APIView):
@@ -104,8 +104,10 @@ class LabelAPIView(APIView):
         print (request)
         print (labelbase_id)
 
+        labelbase = get_object_or_404(Labelbase, id=labelbase_id, user_id=request.user.id)
+
         data = {
-            'labelbase': Labelbase.objects.get(id=labelbase_id, user_id=request.user.id).id,
+            'labelbase': labelbase.id,
             'type': request.data.get('type', 'addr'),
             'ref': request.data.get('ref', ''),
             'label': request.data.get('label', ''),

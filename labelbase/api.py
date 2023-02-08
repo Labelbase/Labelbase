@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
-        fields = ('id', 'name', 'fingerprint', 'about', )
+        fields = ('id', 'name', 'fingerprint', 'about', 'user')
         read_only_fields = ('id', )
 
 
@@ -38,7 +38,7 @@ class LabelbaseAPIView(APIView):
         """
         Create the new labelbase.
         """
-        print (request.data)
+        print (request)
         data = {
             'name': request.data.get('name', ''),
             'fingerprint': request.data.get('fingerprint', ''),

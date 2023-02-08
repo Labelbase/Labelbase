@@ -18,15 +18,15 @@ class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
         fields = ['id', 'labelbase', 'type', 'ref', 'label', ]
-        read_only_fields = ['id', ]
-        exclude = ['labelbase', ]
+        #read_only_fields = ['id', ]
+        #exclude = ['labelbase', ]
 
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
         fields = ['id', 'name', 'fingerprint', 'about', ]
-        read_only_fields = ['id', 'user', ]
-        exclude = ['user']
+        #read_only_fields = ['id', 'user', ]
+        #exclude = ['user']
 
 
 

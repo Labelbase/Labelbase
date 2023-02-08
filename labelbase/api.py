@@ -29,11 +29,12 @@ class LabelbaseSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'fingerprint', 'about', 'user', ]
         read_only_fields = ['id', 'user', ]
 
-    def create(self, validated_data):
+    """def create(self, validated_data):
         obj = Labelbase.objects.create(**validated_data)
         print(self._dict_['_kwargs']['data']["user"]) # geting #request.data["user"] #  <- mian code
         obj.user_id = self._dict_['_kwargs']['data']["user"]
         return post
+    """
 
 
     """def create(self, validated_data):
@@ -51,6 +52,11 @@ class LabelbaseAPIView(APIView):
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+
+    def perform_create(self, serializer):
+        serializer.validated_data['user'] = self.request.user
+        return super(LabelbaseAPIView, self).perform_create(serializer)    
+
 
     def post(self, request, *args, **kwargs):
         """

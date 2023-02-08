@@ -39,7 +39,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
 
 class LabelbaseAPIView(APIView):
     """
-    Retrieve, update or delete a labelbases.
+    Labelbase
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
@@ -91,7 +91,7 @@ class LabelbaseAPIView(APIView):
 
 class LabelAPIView(APIView):
     """
-    Retrieve, update or delete a label.
+    Label
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]

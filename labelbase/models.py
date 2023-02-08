@@ -54,8 +54,7 @@ class Label(models.Model):
         max_length=160,
         default="",
         blank=True,
-    ))
-    data = encrypt(jsonfield.JSONField())
+    )) 
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
 
 

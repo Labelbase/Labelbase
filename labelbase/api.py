@@ -28,12 +28,12 @@ class LabelbaseSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'user')
     labels = LabelSerializer(many=True, read_only=True)
 
-        """def create(self, validated_data):
-            print(validated_data)
-            obj = Labelbase(**validated_data)
-            obj.user_id = validated_data.get('user') # CurrentUserDefault()
-            obj.save()
-            return obj"""
+    """def create(self, validated_data):
+        print(validated_data)
+        obj = Labelbase(**validated_data)
+        obj.user_id = validated_data.get('user') # CurrentUserDefault()
+        obj.save()
+        return obj"""
 
 
 

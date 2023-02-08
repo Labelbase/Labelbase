@@ -5,7 +5,7 @@ import jsonfield
 from django_cryptography.fields import encrypt
 
 class Labelbase(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     name = encrypt(models.CharField(
         max_length=160,
         default="",

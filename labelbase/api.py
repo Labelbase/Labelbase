@@ -30,8 +30,7 @@ class LabelbaseAPIView(APIView):
     def post(self, request, *args, **kwargs):
         """
         Create the new labelbase.
-        """
-        print (request)
+        """ 
         data = {
             'name': request.data.get('name', ''),
             'fingerprint': request.data.get('fingerprint', ''),

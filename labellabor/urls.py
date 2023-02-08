@@ -10,6 +10,7 @@ from userprofile.views import ProfileView, APIKeyView
 from .views import (LabelbaseView, LabelbaseDeleteView, HomeView, RegistrationCompleteView,
     RegistrationView, LabelbaseFormView )
 
+from django.contrib.auth.decorators import login_required
 
 
 urlpatterns = [
@@ -19,13 +20,13 @@ urlpatterns = [
     path('api/labelbase/<int:labelbase_id>/label/<int:id>/',
         LabelAPIView.as_view(), name='api_label'),
     path('api-reference/', include_docs_urls(title='Labelbase API')),
-    path('account/apikey/', APIKeyView.as_view(), name='apikey'),
-    path('account/userprofile/', ProfileView.as_view(), name='userprofile'),
-    path('labelbase/', LabelbaseFormView.as_view(), name='labelbase_new'),
-    path('labelbase/<pk>/delete/', LabelbaseDeleteView.as_view(),  name='del_labelbase'),
-    path('labelbase/<int:labelbase_id>/', LabelbaseView.as_view(), name='labelbase'),
+    path('account/apikey/', login_required(APIKeyView.as_view()), name='apikey'),
+    path('account/userprofile/', login_required(ProfileView.as_view()), name='userprofile'),
+    path('labelbase/', login_required(LabelbaseFormView.as_view()), name='labelbase_new'),
+    path('labelbase/<pk>/delete/', login_required(LabelbaseDeleteView.as_view()),  name='del_labelbase'),
+    path('labelbase/<int:labelbase_id>/', login_required(LabelbaseView.as_view()), name='labelbase'),
     path('account/logout/', LogoutView.as_view(), name='logout'),
-    path('account/register/',RegistrationView.as_view(), name='registration'),
+    path('account/register/', RegistrationView.as_view(), name='registration'),
     path('account/register/done/', RegistrationCompleteView.as_view(), name='registration_complete'),
     path('', HomeView.as_view(), name='home'),
     path('', include(tf_urls)),

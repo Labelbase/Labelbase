@@ -21,6 +21,12 @@ class LabelbaseDeleteView(DeleteView):
     model = Labelbase
     success_url = "/"
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.user != self.request.user:
+            return redirect(self.success_url)
+        return super().post(request, *args, **kwargs)
+
 
 class LabelbaseView(ListView):
     template_name = 'labelbase.html'

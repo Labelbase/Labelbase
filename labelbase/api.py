@@ -108,7 +108,7 @@ class LabelAPIView(APIView):
             'label': request.data.get('label', ''),
             'user': request.user.id
         }
-        serializer = LabelbaseSerializer(data=data)
+        serializer = LabelSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -131,6 +131,6 @@ class LabelAPIView(APIView):
 
     def delete(self, request, labelbase_id, id):
         label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
-        
+
         label.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

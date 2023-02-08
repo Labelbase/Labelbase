@@ -101,7 +101,7 @@ class LabelAPIView(APIView):
         """
         Create the new label within a labelbase accessed by the given id.
         """
-        print (request)
+        print (request.data)
         print (labelbase_id)
 
         labelbase = get_object_or_404(Labelbase, id=labelbase_id, user_id=request.user.id)
@@ -114,7 +114,13 @@ class LabelAPIView(APIView):
             'label': request.data.get('label', ''),
             'user': request.user.id
         }
+
+        print ( data)
         serializer = LabelSerializer(data=data)
+        print ( serializer)
+        print ( serializer.is_valid())
+        print ( serializer.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

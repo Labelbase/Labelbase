@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{% block title %}{% trans "Login" %}{% endblock %}</h1>
+  <h2 style="padding-top: 1em;">{% block title %}{% trans "Sign in" %}{% endblock %}</h2>
 
   {% if wizard.steps.current == 'auth' %}
     <p>{% blocktrans %}Enter your credentials.{% endblocktrans %}</p>

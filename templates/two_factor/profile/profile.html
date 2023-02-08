@@ -3,7 +3,7 @@
 {% load two_factor_tags %}
 
 {% block content %}
-  <h1>{% block title %}{% trans "Account Security" %}{% endblock %}</h1>
+  <h2 style="padding-top: 1em;">{% block title %}{% trans "Account Security" %}{% endblock %}</h2>
 
   {% if default_device %}
     <p>{% blocktrans with primary=default_device|as_action %}Primary method: {{ primary }}{% endblocktrans %}</p>

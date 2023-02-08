@@ -3,8 +3,7 @@ from labelbase.models import Labelbase, Label
 from django.shortcuts import get_object_or_404
 
 from rest_framework import serializers
-from rest_framework import status
-#from rest_framework.decorators import api_view
+from rest_framework import status 
 from rest_framework.response import Response
 
 from rest_framework.authentication import TokenAuthentication
@@ -76,7 +75,7 @@ class LabelbaseAPIView(APIView):
         """
         labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
         serializer = LabelbaseSerializer(labelbase, context={'request':request})
-        return Response(serializer.data)    
+        return Response(serializer.data)
 
     def delete(self, request, id):
         """

@@ -27,13 +27,6 @@ class LabelbaseAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    def _get_labelbase(self, request, id):
-        try:
-            labelbase = Labelbase.objects.get(id=id, user_id=request.user.id)
-            return labelbase
-        except Labelbase.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
     def post(self, request, *args, **kwargs):
         """
         Create the new labelbase.
@@ -66,7 +59,7 @@ class LabelbaseAPIView(APIView):
         """
         Retrieve labelbase with the given id.
         """
-        labelbase = self._get_labelbase(request, id)
+        labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
         serializer = LabelbaseSerializer(labelbase)
         return Response(serializer.data)
 
@@ -74,7 +67,7 @@ class LabelbaseAPIView(APIView):
         """
         Delete the labelbase with the given id.
         """
-        labelbase = self._get_labelbase(request, id)
+        labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
         labelbase.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -93,6 +86,7 @@ class LabelAPIView(APIView):
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+
 
     def _get_label(self, request, labelbase_id, id):
         try:
@@ -121,7 +115,8 @@ class LabelAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, labelbase_id, id):
-        label = self._get_label(request, labelbase_id, id)
+        label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
+
         serializer = LabelSerializer(label, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -129,11 +124,13 @@ class LabelAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, labelbase_id, id):
-        label = self._get_label(request, labelbase_id, id)
+        label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
+
         serializer = LabelSerializer(label)
         return Response(serializer.data)
 
     def delete(self, request, labelbase_id, id):
-        label = self._get_label(request, labelbase_id, id)
+        label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
+        
         label.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

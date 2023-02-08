@@ -46,7 +46,7 @@ class LabelbaseAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer, *args, **kwargs):
         serializer.save(user=self.request.user)
 
     def post(self, request, *args, **kwargs):

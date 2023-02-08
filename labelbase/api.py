@@ -14,19 +14,26 @@ from rest_framework.views import APIView
 
 from rest_framework.fields import CurrentUserDefault
 
+class LabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Label
+        fields = ('id', 'labelbase', 'type', 'ref', 'label', )
+        read_only_fields = ('id', )
+
 
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
         fields = ('id', 'name', 'fingerprint', 'about', 'user' )
         read_only_fields = ('id', 'user')
+    labels = LabelSerializer(many=True, read_only=True)
 
-    def create(self, validated_data):
+    """def create(self, validated_data):
         print(validated_data)
         obj = Labelbase(**validated_data)
         obj.user_id = validated_data.get('user') # CurrentUserDefault()
         obj.save()
-        return obj
+        return obj"""
 
 
 
@@ -81,11 +88,6 @@ class LabelbaseAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class LabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Label
-        fields = ('id', 'labelbase', 'type', 'ref', 'label', )
-        read_only_fields = ('id', )
 
 
 class LabelAPIView(APIView):

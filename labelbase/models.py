@@ -22,7 +22,7 @@ class Labelbase(models.Model):
         blank=True
     ))
     def get_absolute_url(self):
-         return reverse('labelbase', args=[self.id])
+         return reverse('edit_labelbase', args=[self.id])
 
 class Label(models.Model):
     TYPE_TX = 'tx'
@@ -54,7 +54,7 @@ class Label(models.Model):
         max_length=160,
         default="",
         blank=True,
-    )) 
+    ))
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
 
 

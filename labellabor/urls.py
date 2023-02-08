@@ -16,7 +16,7 @@ from .views import (LabelbaseView, LabelbaseDeleteView,
 
 urlpatterns = [
     #path('api/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
-    path('api/v0/labelbase/', LabelbaseAPIView.as_view()),
+    path('api/v0/labelbase', LabelbaseAPIView.as_view()),
     path('api/v0/labelbase/<int:id>/', LabelbaseAPIView.as_view()),
     path('api/v0/labelbase/<int:labelbase_id>/label/', LabelAPIView.as_view()),
     path('api/v0/labelbase/<int:labelbase_id>/label/<int:id>/', LabelAPIView.as_view()),

@@ -108,6 +108,7 @@ class LabelAPIView(APIView):
 
         data = {
             'labelbase': labelbase.id,
+            'labelbase_id': labelbase.id,
             'type': request.data.get('type', 'addr'),
             'ref': request.data.get('ref', ''),
             'label': request.data.get('label', ''),

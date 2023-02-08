@@ -18,8 +18,7 @@ class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
         fields = ['id', 'labelbase', 'type', 'ref', 'label', ]
-        #read_only_fields = ['id', ]
-        #exclude = ['labelbase', ]
+        read_only_fields = ['id', 'labelbase']
 
 class LabelbaseSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
@@ -32,12 +31,10 @@ class LabelbaseSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'user', ]
 
     def create(self, validated_data):
-        print(validated_data)
         obj = Labelbase(**validated_data)
         obj.user_id = self.request.user.id
         obj.save()
         return obj
-
 
 
 class LabelbaseAPIView(APIView):
@@ -103,9 +100,6 @@ class LabelAPIView(APIView):
         """
         Create the new label within a labelbase accessed by the given id.
         """
-        print (request.data)
-        print (labelbase_id)
-
         labelbase = get_object_or_404(Labelbase, id=labelbase_id, user_id=request.user.id)
 
         data = {
@@ -124,7 +118,6 @@ class LabelAPIView(APIView):
 
     def put(self, request, labelbase_id, id):
         label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
-
         serializer = LabelSerializer(label, data=request.data)
         if serializer.is_valid():
             serializer.save()

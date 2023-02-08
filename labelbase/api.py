@@ -24,9 +24,15 @@ class LabelSerializer(serializers.ModelSerializer):
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
-        fields = ('id', 'name', 'fingerprint', 'about', 'labels')
+        fields = ('id', 'name', 'fingerprint', 'about',  )
         #read_only_fields = ('id', 'user')
-    labels = LabelSerializer(many=True, read_only=True)
+     
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Labelbase` instance, given the validated data.
+        """
+        return Labelbase.objects.create(**validated_data)
 
     """def create(self, validated_data):
         print(validated_data)

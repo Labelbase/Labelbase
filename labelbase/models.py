@@ -56,7 +56,7 @@ class Label(models.Model):
         blank=True,
     ))
     data = encrypt(jsonfield.JSONField())
-    labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
+    labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE, null=True, blank=True)
 
 
     def get_absolute_url(self):

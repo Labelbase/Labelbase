@@ -118,7 +118,13 @@ class LabelAPIView(APIView):
 
     def put(self, request, labelbase_id, id):
         label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
-        serializer = LabelSerializer(label, data=request.data)
+        data = {
+            'labelbase': label.labelbase.id, # revents moving the label to another labelbase
+            'type': request.data.get('type', 'addr'),
+            'ref': request.data.get('ref', ''),
+            'label': request.data.get('label', ''),
+        }
+        serializer = LabelSerializer(label, data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

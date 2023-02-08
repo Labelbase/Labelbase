@@ -30,7 +30,7 @@ class LabelbaseAPIView(APIView):
     def post(self, request, *args, **kwargs):
         """
         Create the new labelbase.
-        """ 
+        """
         data = {
             'name': request.data.get('name', ''),
             'fingerprint': request.data.get('fingerprint', ''),
@@ -75,7 +75,7 @@ class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
         fields = ('id', 'labelbase', 'type', 'ref', 'label', )
-        read_only_fields = ('id', 'labelbase', )
+        read_only_fields = ('id' )
 
 
 class LabelAPIView(APIView):

@@ -54,8 +54,9 @@ class LabelbaseAPIView(APIView):
     authentication_classes = [TokenAuthentication]
 
     def perform_create(self, serializer):
+        print ("called LabelbaseAPIView. perform_create ")
         serializer.validated_data['user'] = self.request.user
-        return super(LabelbaseAPIView, self).perform_create(serializer)    
+        return super(LabelbaseAPIView, self).perform_create(serializer)
 
 
     def post(self, request, *args, **kwargs):

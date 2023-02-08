@@ -16,7 +16,9 @@ from .views import (LabelbaseView, LabelbaseDeleteView,
 
 urlpatterns = [
     #path('api/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
+    path('api/labelbase/', LabelbaseAPIView.as_view(), name='api_labelbase'),
     path('api/labelbase/<int:id>/', LabelbaseAPIView.as_view(), name='api_labelbase'),
+    path('api/labelbase/<int:labelbase_id>/label/', LabelAPIView.as_view(), name='api_label'),
     path('api/labelbase/<int:labelbase_id>/label/<int:id>/', LabelAPIView.as_view(), name='api_label'),
     path('api-reference/', include_docs_urls(title='Labelbase API')),
     path('account/apikey/', login_required(APIKeyView.as_view()), name='apikey'),

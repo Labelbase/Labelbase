@@ -25,10 +25,10 @@ class LabelbaseSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(LabelbaseSerializer, self).__init__(*args, **kwargs)
         request = self.context.get('request')
-        
+
     class Meta:
         model = Labelbase
-        fields = ['id', 'name', 'fingerprint', 'about', 'user', ]
+        fields = ['id', 'name', 'fingerprint', 'about',  ]
         read_only_fields = ['id', 'user', ]
 
     def create(self, validated_data):

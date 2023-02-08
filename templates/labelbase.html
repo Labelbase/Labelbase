@@ -125,7 +125,7 @@
 <div class="modal" tabindex="-1" id="editLabelbaseModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <form action="." method="post">
+      <form action="{% url 'edit_labelbase' labelbase.id %}" method="post">
       {% csrf_token %}
       <div class="modal-header">
         <h5 class="modal-title">Edit labelbase</h5>

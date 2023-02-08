@@ -77,13 +77,6 @@ class LabelSerializer(serializers.ModelSerializer):
         model = Label
         fields = ('id', 'labelbase', 'type', 'ref', 'label', )
         read_only_fields = ('id', 'labelbase', )
-    """def create(self, validated_data):
-        print (validated_data )
-        obj = Label(**validated_data)
-        #obj.owner = CurrentUserDefault()
-        obj.labelbase_id = validated_data.get('labelbase_id', )
-        obj.save()
-        return obj"""
 
 
 class LabelAPIView(APIView):
@@ -92,7 +85,6 @@ class LabelAPIView(APIView):
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
-
 
     def post(self, request, labelbase_id, *args, **kwargs):
         """
@@ -105,11 +97,9 @@ class LabelAPIView(APIView):
 
         data = {
             'labelbase': labelbase.id,
-            #'labelbase_id': labelbase.id,
             'type': request.data.get('type', 'addr'),
             'ref': request.data.get('ref', ''),
             'label': request.data.get('label', ''),
-            'user': request.user.id
         }
 
 

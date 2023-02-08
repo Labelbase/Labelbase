@@ -17,16 +17,16 @@ from rest_framework.fields import CurrentUserDefault
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
-        fields = ('id', 'labelbase', 'type', 'ref', 'label', )
-        read_only_fields = ('id', )
-
+        fields = ['id', 'labelbase', 'type', 'ref', 'label', ]
+        read_only_fields = ['id', ]
+        exclude = ['labelbase', ]
 
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
-        fields = ('id', 'name', 'fingerprint', 'about',  )
-        #read_only_fields = ('id', 'user')
-
+        fields = ['id', 'name', 'fingerprint', 'about', ]
+        read_only_fields = ['id', 'user', ]
+        exclude = ['user']
 
 
 
@@ -45,9 +45,6 @@ class LabelbaseAPIView(APIView):
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
-
-    def perform_create(self, serializer, *args, **kwargs):
-        serializer.save(user=self.request.user)
 
     def post(self, request, *args, **kwargs):
         """

@@ -22,7 +22,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
 
 class LabelbaseAPIView(APIView):
     """
-    Retrieve, update or delete a Labelbases.
+    Retrieve, update or delete a labelbases.
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
@@ -35,6 +35,9 @@ class LabelbaseAPIView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, id):
+        """
+        Update labelbase with the given id.
+        """
         labelbase = self._get_labelbase(request, id)
         serializer = LabelbaseSerializer(labelbase, data=request.data)
         if serializer.is_valid():
@@ -43,11 +46,17 @@ class LabelbaseAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, id):
+        """
+        Retrieve labelbase with the given id.
+        """
         labelbase = self._get_labelbase(request, id)
         serializer = LabelbaseSerializer(labelbase)
         return Response(serializer.data)
 
     def delete(self, request, id):
+        """
+        Delete the labelbase with the given id.
+        """
         labelbase = self._get_labelbase(request, id)
         labelbase.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

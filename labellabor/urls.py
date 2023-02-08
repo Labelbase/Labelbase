@@ -6,19 +6,18 @@ from two_factor.urls import urlpatterns as tf_urls
 from labelbase.api import LabelAPIView, LabelbaseAPIView
 from rest_framework.documentation import include_docs_urls
 from rest_framework.urlpatterns import format_suffix_patterns
-from userprofile.views import ProfileView, APIKeyView
-from .views import (LabelbaseView, LabelbaseDeleteView, HomeView, RegistrationCompleteView,
-    RegistrationView, LabelbaseFormView )
-
 from django.contrib.auth.decorators import login_required
+from userprofile.views import ProfileView, APIKeyView
+from .views import (LabelbaseView, LabelbaseDeleteView,
+                    HomeView, RegistrationCompleteView,
+                    RegistrationView, LabelbaseFormView )
+
 
 
 urlpatterns = [
     #path('api/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
-    path('api/labelbase/<int:id>/',
-        LabelbaseAPIView.as_view(), name='api_labelbase'),
-    path('api/labelbase/<int:labelbase_id>/label/<int:id>/',
-        LabelAPIView.as_view(), name='api_label'),
+    path('api/labelbase/<int:id>/', LabelbaseAPIView.as_view(), name='api_labelbase'),
+    path('api/labelbase/<int:labelbase_id>/label/<int:id>/', LabelAPIView.as_view(), name='api_label'),
     path('api-reference/', include_docs_urls(title='Labelbase API')),
     path('account/apikey/', login_required(APIKeyView.as_view()), name='apikey'),
     path('account/userprofile/', login_required(ProfileView.as_view()), name='userprofile'),

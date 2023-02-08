@@ -18,7 +18,7 @@ from rest_framework.fields import CurrentUserDefault
 class LabelbaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labelbase
-        fields = ('id', 'name', 'fingerprint', 'about', 'user')
+        fields = ('id', 'name', 'fingerprint', 'about', )
         read_only_fields = ('id', 'user')
 
      def create(self, validated_data):

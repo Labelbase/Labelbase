@@ -22,6 +22,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'user')
 
     def create(self, validated_data):
+        print(validated_data)
         obj = Labelbase(**validated_data)
         obj.user_id = validated_data.get('user') # CurrentUserDefault()
         obj.save()

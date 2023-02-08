@@ -26,7 +26,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
         model = Labelbase
         fields = ('id', 'name', 'fingerprint', 'about',  )
         #read_only_fields = ('id', 'user')
-     
+
 
     def create(self, validated_data):
         """
@@ -73,6 +73,7 @@ class LabelbaseAPIView(APIView):
         labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
         serializer = LabelbaseSerializer(labelbase, data=request.data)
         if serializer.is_valid():
+            serializer.user_id = request.user.id
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

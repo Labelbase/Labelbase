@@ -76,7 +76,7 @@ class LabelbaseAPIView(APIView):
         """
         labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
         serializer = LabelbaseSerializer(labelbase, context={'request':request})
-        return Response(serializer.data)
+        return Response(serializer.data)    
 
     def delete(self, request, id):
         """

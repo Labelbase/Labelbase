@@ -22,8 +22,9 @@ class LabelSerializer(serializers.ModelSerializer):
         #exclude = ['labelbase', ]
 
 class LabelbaseSerializer(serializers.ModelSerializer):
-    #user = UserSerializer(read_only=True)
-
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
     class Meta:
         model = Labelbase
         fields = ['id', 'name', 'fingerprint', 'about', 'user', ]
@@ -37,13 +38,13 @@ class LabelbaseSerializer(serializers.ModelSerializer):
     """
 
 
-    """def create(self, validated_data):
+    def create(self, validated_data):
         print(validated_data)
         obj = Labelbase(**validated_data)
-        obj.user_id = self.context.request.user.id
+        obj.user_id = self.user.id
         obj.save()
         return obj
-    """
+    
 
 
 class LabelbaseAPIView(APIView):
@@ -52,6 +53,8 @@ class LabelbaseAPIView(APIView):
     """
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+
+
 
     def perform_create(self, serializer):
         print ("called LabelbaseAPIView. perform_create ")

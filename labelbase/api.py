@@ -27,9 +27,9 @@ class LabelbaseAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    def _get_labelbase(self, request, id):
+    def _get_labelbase(self, request, pk):
         try:
-            labelbase = Labelbase.objects.get(id=id, user_id=request.user.id)
+            labelbase = Labelbase.objects.get(pk=pk, user_id=request.user.id)
             return labelbase
         except Labelbase.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -51,30 +51,30 @@ class LabelbaseAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, id):
+    def put(self, request, pk):
         """
         Update labelbase with the given id.
         """
-        labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
+        labelbase = get_object_or_404(Labelbase, pk=pk, user_id=request.user.id)
         serializer = LabelbaseSerializer(labelbase, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, id):
+    def get(self, request, pk):
         """
         Retrieve labelbase with the given id.
         """
-        labelbase = self._get_labelbase(request, id)
+        labelbase = self._get_labelbase(request, pk)
         serializer = LabelbaseSerializer(labelbase)
         return Response(serializer.data)
 
-    def delete(self, request, id):
+    def delete(self, request, pk):
         """
         Delete the labelbase with the given id.
         """
-        labelbase = self._get_labelbase(request, id)
+        labelbase = self._get_labelbase(request, pk)
         labelbase.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

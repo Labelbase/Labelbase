@@ -25,31 +25,16 @@ class LabelbaseSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(LabelbaseSerializer, self).__init__(*args, **kwargs)
         request = self.context.get('request')
-        print (self.context)
-        if request:
-            fields = request.query_params.get('fields')
-            self.user = request.user
-        else:
-            self.user = None
-        print (request.user)
-
+        
     class Meta:
         model = Labelbase
         fields = ['id', 'name', 'fingerprint', 'about', 'user', ]
         read_only_fields = ['id', 'user', ]
 
-    """def create(self, validated_data):
-        obj = Labelbase.objects.create(**validated_data)
-        print(self._dict_['_kwargs']['data']["user"]) # geting #request.data["user"] #  <- mian code
-        obj.user_id = self._dict_['_kwargs']['data']["user"]
-        return post
-    """
-
-
     def create(self, validated_data):
         print(validated_data)
         obj = Labelbase(**validated_data)
-        obj.user_id = self.user.id
+        obj.user_id = self.request.user.id
         obj.save()
         return obj
 
@@ -70,8 +55,6 @@ class LabelbaseAPIView(APIView):
             'name': request.data.get('name', ''),
             'fingerprint': request.data.get('fingerprint', ''),
             'about': request.data.get('about', ''),
-            'user': request.user.id,
-
         }
         serializer = LabelbaseSerializer(data=data, context={'request':request})
         if serializer.is_valid():

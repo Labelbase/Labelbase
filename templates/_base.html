@@ -210,7 +210,7 @@ body {
             <li class="nav-item">
               <a class="nav-link" href="{{ labelbase.get_absolute_url }}">
                 <span data-feather="database" class="align-text-bottom"></span>
-                {% if labelbase.name %}{{ labelbase.name  }}{% endif %} {% if  labelbase.fingerprint %}{{ labelbase.fingerprint  }}{% endif %}
+                {% if labelbase.name %}{{ labelbase.name  }}{% endif %} {% if  labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }}</tt>{% endif %}
               </a>
             </li>
             {% empty %}

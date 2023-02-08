@@ -23,7 +23,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         obj = Labelbase(**validated_data)
-        obj.user = CurrentUserDefault()
+        obj.user_id = user # CurrentUserDefault()
         obj.save()
         return obj
 
@@ -45,7 +45,6 @@ class LabelbaseAPIView(APIView):
             'fingerprint': request.data.get('fingerprint', ''),
             'about': request.data.get('about', ''),
             'user': request.user.id,
-            'request': request
         }
         serializer = LabelbaseSerializer(data=data)
         if serializer.is_valid():

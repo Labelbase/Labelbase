@@ -80,7 +80,7 @@ class LabelbaseAPIView(APIView):
             'user': request.user.id,
 
         }
-        serializer = LabelbaseSerializer(data=data)
+        serializer = LabelbaseSerializer(data=data, context{'request':request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

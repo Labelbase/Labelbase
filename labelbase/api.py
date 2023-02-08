@@ -43,7 +43,7 @@ class LabelbaseAPIView(APIView):
             'name': request.data.get('name', ''),
             'fingerprint': request.data.get('fingerprint', ''),
             'about': request.data.get('about', ''),
-            'user': request.user
+            'user': request.user.id
         }
         serializer = LabelbaseSerializer(data=data)
         if serializer.is_valid():

@@ -107,7 +107,7 @@ class LabelAPIView(APIView):
         labelbase = get_object_or_404(Labelbase, id=labelbase_id, user_id=request.user.id)
 
         data = {
-            'labelbase': labelbase.id,
+            'labelbase_id': labelbase.id,
             'type': request.data.get('type', 'addr'),
             'ref': request.data.get('ref', ''),
             'label': request.data.get('label', ''),

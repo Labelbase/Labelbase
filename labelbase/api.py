@@ -112,12 +112,8 @@ class LabelAPIView(APIView):
             'user': request.user.id
         }
 
-        print ( data)
-        serializer = LabelSerializer(data=data)
-        print ( serializer)
-        print ( serializer.is_valid())
-        print ( serializer.data)
 
+        serializer = LabelSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -25,6 +25,7 @@ class LabelbaseSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(LabelbaseSerializer, self).__init__(*args, **kwargs)
         request = self.context.get('request')
+        print (self.context)
         if request:
             fields = request.query_params.get('fields')
             self.user = request.user

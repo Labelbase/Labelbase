@@ -77,13 +77,13 @@ class LabelSerializer(serializers.ModelSerializer):
         model = Label
         fields = ('id', 'labelbase', 'type', 'ref', 'label', )
         read_only_fields = ('id', 'labelbase', )
-    def create(self, validated_data):
+    """def create(self, validated_data):
         print (validated_data )
         obj = Label(**validated_data)
         #obj.owner = CurrentUserDefault()
         obj.labelbase_id = validated_data.get('labelbase_id', )
         obj.save()
-        return obj
+        return obj"""
 
 
 class LabelAPIView(APIView):
@@ -105,7 +105,7 @@ class LabelAPIView(APIView):
 
         data = {
             'labelbase': labelbase.id,
-            'labelbase_id': labelbase.id,
+            #'labelbase_id': labelbase.id,
             'type': request.data.get('type', 'addr'),
             'ref': request.data.get('ref', ''),
             'label': request.data.get('label', ''),

@@ -23,7 +23,7 @@ class LabelSerializer(serializers.ModelSerializer):
 class LabelbaseSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(LabelbaseSerializer, self).__init__(*args, **kwargs)
-        request = self.context.get('request')
+        self.request = self.context.get('request')
 
     class Meta:
         model = Labelbase
@@ -137,6 +137,5 @@ class LabelAPIView(APIView):
 
     def delete(self, request, labelbase_id, id):
         label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
-
         label.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

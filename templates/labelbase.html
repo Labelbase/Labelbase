@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load labelbase_tags %}
 {% load sekizai_tags %}
+{% load bootstrap %}
 
 {% block content %}
 <div style="padding-top: 1em;">
@@ -109,7 +110,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {{ labelform.as_p }}
+        {{ labelform|bootstrap  }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -132,7 +133,7 @@
       </div>
       <div class="modal-body">
         {% labelbaseform_edit labelbase as form %}
-        {{ form.as_p }}
+        {{ form|bootstrap  }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

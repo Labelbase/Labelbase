@@ -19,7 +19,6 @@ class LabelbaseSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', )
 
 
-
 class LabelbaseAPIView(APIView):
     """
     Retrieve, update or delete a labelbases.
@@ -33,6 +32,22 @@ class LabelbaseAPIView(APIView):
             return labelbase
         except Labelbase.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Create the new labelbase.
+        """
+        data = {
+            'name': request.data.get('name', ''),
+            'fingerprint': request.data.get('fingerprint', ''),
+            'about': request.data.get('about', ''),
+            'user': request.user
+        }
+        serializer = LabelbaseSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, id):
         """
@@ -87,6 +102,22 @@ class LabelAPIView(APIView):
             return label
         except Label.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, labelbase_id, *args, **kwargs):
+        """
+        Create the new label within a labelbase accessed by the given id.
+        """
+        data = {
+            'labelbase_id': Labelbase.objects.get(id=labelbase_id, user_id=request.user.id),
+            'type': request.data.get('type', ''),
+            'ref': request.data.get('ref', ''),
+            'label': request.data.get('label', ''),
+        }
+        serializer = LabelbaseSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, labelbase_id, id):
         label = self._get_label(request, labelbase_id, id)

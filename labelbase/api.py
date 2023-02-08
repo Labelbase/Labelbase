@@ -108,7 +108,7 @@ class LabelAPIView(APIView):
         Create the new label within a labelbase accessed by the given id.
         """
         data = {
-            'labelbase_id': Labelbase.objects.get(id=labelbase_id, user_id=request.user.id),
+            'labelbase_id': Labelbase.objects.get(id=labelbase_id, user_id=request.user.id).id,
             'type': request.data.get('type', ''),
             'ref': request.data.get('ref', ''),
             'label': request.data.get('label', ''),

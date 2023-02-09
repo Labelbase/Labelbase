@@ -50,10 +50,9 @@ class LabelbaseView(ListView):
         labelbase_id = self.kwargs['labelbase_id']
         labelform = LabelForm(request.POST, request=request, labelbase_id=labelbase_id)
         if labelform.is_valid():
-            label = labelform.save()
-            #TODO: Add success massage
+            label = labelform.save() 
             return HttpResponseRedirect(label.labelbase.get_absolute_url())
-        return HttpResponseRedirect("/?error")
+
 
 
 class LabelbaseUpdateView(UpdateView):

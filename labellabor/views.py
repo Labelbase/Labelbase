@@ -71,7 +71,7 @@ class LabelbaseUpdateView(UpdateView):
         labelbase.name = request.POST.get('name', '')
         labelbase.fingerprint = request.POST.get('fingerprint', '')
         labelbase.about = request.POST.get('about', '')
-        return HttpResponseRedirect(label.labelbase.get_absolute_url())
+        return HttpResponseRedirect(labelbase.get_absolute_url())
 
 class LabelbaseFormView(FormView):
     template_name = 'labelbase_new.html'

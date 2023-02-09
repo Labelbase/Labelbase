@@ -55,4 +55,11 @@
       {% trans "Enable Two-Factor Authentication" %}</a>
     </p>
   {% endif %}
+
+  {% if user.profile.labelbases %}
+  {% else %}
+  {% endif %}
+  <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addLabelbaseModal"  href="#" aria-label="Add a new wallet">
+      Create a labelbase
+  </a>
 {% endblock %}

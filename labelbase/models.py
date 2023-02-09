@@ -22,7 +22,7 @@ class Labelbase(models.Model):
         blank=True
     ))
     def get_absolute_url(self):
-         return reverse('edit_labelbase', args=[self.id])
+         return reverse('labelbase', args=[self.id])
 
 class Label(models.Model):
     TYPE_TX = 'tx'

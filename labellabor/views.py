@@ -5,6 +5,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import FormView, TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import DeleteView
+from django.views.generic.edit import UpdateView
 
 from two_factor.views import OTPRequiredMixin
 from two_factor.views.utils import class_view_decorator
@@ -28,7 +29,7 @@ class LabelbaseDeleteView(DeleteView):
         return super().post(request, *args, **kwargs)
 
 
-class LabelbaseView(FormView):
+class LabelbaseView(ListView):
     template_name = 'labelbase.html'
     context_object_name = 'label_list'
 
@@ -55,6 +56,15 @@ class LabelbaseView(FormView):
         return HttpResponseRedirect("/?error")
 
 
+class LabelbaseUpdateView(UpdateView):
+    model = Labelbase
+    fields = ['name', 'fingerprint', 'about']
+    form_class = LabelbaseForm
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
+        return redirect(form.instance.get_absolute_url())
 
 class LabelbaseFormView(FormView):
     template_name = 'labelbase_new.html'

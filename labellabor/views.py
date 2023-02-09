@@ -56,6 +56,31 @@ class LabelbaseView(ListView):
 
 
 
+class LabelUpdateView(UpdateView):
+    model = Label
+    template_name = 'label_edit.html'
+    fields = ['type', 'ref', 'label']
+    """
+    def get_context_data(self, **kwargs):
+        labelbase_id = self.kwargs['labelbase_id']
+        context = super(LabelbaseView, self).get_context_data(**kwargs)
+        context['labelbase'] = get_object_or_404(Labelbase, id=labelbase_id, user_id=self.request.user.id)
+        context['labelform'] = LabelForm(request=self.request, labelbase_id=labelbase_id)
+        context['api_token'] = Token.objects.get(user_id=self.request.user.id)
+        return context
+    """
+    def post(self, request, *args, **kwargs):
+        label_id = self.kwargs['label_id']
+        label = get_object_or_404(Label, id=label_id, labelbase__user_id=self.request.user.id)
+
+        label.type = request.POST.get('type', '')
+        label.ref =  request.POST.get('ref', '')
+        label.label = request.POST.get('label', '')
+        label.save()
+
+        return HttpResponseRedirect(label.labelbase.get_absolute_url())
+
+
 class LabelbaseUpdateView(UpdateView):
     def post(self, request, *args, **kwargs):
         labelbase_id = self.kwargs['labelbase_id']
@@ -65,6 +90,7 @@ class LabelbaseUpdateView(UpdateView):
         labelbase.about = request.POST.get('about', '')
         labelbase.save()
         return HttpResponseRedirect(labelbase.get_absolute_url())
+
 
 class LabelbaseFormView(FormView):
     template_name = 'labelbase_new.html'

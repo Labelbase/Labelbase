@@ -1,0 +1,12 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load bootstrap %}
+{% block content %}
+<div style="padding-top: 1em;">
+<h2>Edit label</h2>
+<form method="post" >
+    {% csrf_token %}
+    {{ labelform|bootstrap }}
+    <input type="submit" value="OK">
+</form>
+{% endblock %}

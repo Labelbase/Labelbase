@@ -157,7 +157,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {% labeluploadform labelbase_id=labelbase.id format='bip0329' as form %}
+        {% bip0329labeluploadform labelbase.id as form %}
         {{ form|bootstrap  }}
       </div>
       <div class="modal-footer">

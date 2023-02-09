@@ -142,7 +142,8 @@
       </div>
     </main>
     {% endcomment %}
-    {% include "footer.html" %}
+    {#% include "footer.html" %#}
+    {% comment %}
 
   {% url 'registration' as reg_url %}
   {% url 'two_factor:login' as login_url %}
@@ -164,4 +165,7 @@
     <li>{% blocktrans trimmed %}At last, you've gained access to the
       <a href="{{ secret_url }}">secret page</a>! :-){% endblocktrans %}</li>
   </ol>
+
+
+  {% endcomment %}
 {% endblock %}

@@ -6,7 +6,7 @@
 <h2>Edit label</h2>
 <form method="post" >
     {% csrf_token %}
-    {{ labelform|bootstrap }}
+    {{ form|bootstrap }}
     <input type="submit" value="OK">
 </form>
 {% endblock %}

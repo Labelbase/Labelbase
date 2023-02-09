@@ -5,10 +5,9 @@
 {% load bootstrap %}
 
 {% block content %}
-<div style="padding-top: 1em;">
 {% if labelbase %}
   <div class="row">
-    <div class="col float-start">
+    <div  style="padding-top: 1em;" class="col float-start">
       <h2>{% block title %}{{ labelbase.name  }} {% endblock %}</h2>
       {% if  labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }} </tt>{% endif %}
       {% if  labelbase.about %}
@@ -17,7 +16,7 @@
     </div>
 
     <div class="col float-end" >
-      <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown">
+      <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown"  style="padding-top: 2em;">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLabelModal">New Label</button>
         <div class="btn-group" role="group">
           <button type="button" class="btn btn-primary dropdown-toggle disabled" data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,7 +58,6 @@
 {% else %}
   <p>There is no such labelbase.</p>
 {% endif %}
-</div>
 
 
 

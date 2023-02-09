@@ -9,7 +9,7 @@ from labelbase.serializers import LabelSerializer
 from django.shortcuts import get_object_or_404
 
 from .forms import UploadFileForm
-
+from tempfile import NamedTemporaryFile
 
 
 

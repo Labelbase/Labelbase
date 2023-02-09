@@ -60,6 +60,11 @@ class LabelbaseUpdateView(UpdateView):
     model = Labelbase
     fields = ['name', 'fingerprint', 'about']
 
+    def get_context_data(self, **kwargs):
+        labelbase_id = self.kwargs['labelbase_id']
+        context = super(LabelbaseView, self).get_context_data(**kwargs)
+        return context
+
     def post(self, request, *args, **kwargs):
         labelbase_id = self.kwargs['labelbase_id']
         labelbase = Labelbase.objects.filter(id=labelbase_id, user_id=self.request.user.id).first()
@@ -68,7 +73,7 @@ class LabelbaseUpdateView(UpdateView):
         labelbase.fingerprint = request.data.get('fingerprint', '')
         labelbase.about = request.data.get('about', '')
         return HttpResponseRedirect(label.labelbase.get_absolute_url())
-        
+
 class LabelbaseFormView(FormView):
     template_name = 'labelbase_new.html'
     form_class = LabelbaseForm

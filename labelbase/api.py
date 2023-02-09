@@ -1,39 +1,13 @@
-
-from labelbase.models import Labelbase, Label
 from django.shortcuts import get_object_or_404
 
-from rest_framework import serializers
-from rest_framework import status 
+from rest_framework import status
 from rest_framework.response import Response
-
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-
-from rest_framework.fields import CurrentUserDefault
-
-class LabelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Label
-        fields = ['id', 'labelbase', 'type', 'ref', 'label', ]
-        read_only_fields = ['id', ]
-
-class LabelbaseSerializer(serializers.ModelSerializer):
-    def __init__(self, *args, **kwargs):
-        super(LabelbaseSerializer, self).__init__(*args, **kwargs)
-        self.request = self.context.get('request')
-
-    class Meta:
-        model = Labelbase
-        fields = ['id', 'name', 'fingerprint', 'about',  ]
-        read_only_fields = ['id', 'user', ]
-
-    def create(self, validated_data):
-        obj = Labelbase(**validated_data)
-        obj.user_id = self.request.user.id
-        obj.save()
-        return obj
+from labelbase.models import Labelbase, Label
+from labelbase.serializers import LabelbaseSerializer, LabelSerializer
 
 
 class LabelbaseAPIView(APIView):

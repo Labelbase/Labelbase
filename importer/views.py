@@ -34,7 +34,7 @@ def upload_labels(request):
             if form.cleaned_data.get('import_type', '') == 'BIP-0329':
                 while True:
                     buf = fp.readline()
-                    if buf in ['', None, '\n']:
+                    if buf in [b'', '', None, '\n']:
                         break
                     data = json.loads(buf)
                     data['labelbase'] = labelbase.id

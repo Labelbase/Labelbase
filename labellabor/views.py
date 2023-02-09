@@ -56,13 +56,13 @@ class LabelbaseView(ListView):
 
 
 class LabelbaseUpdateView(UpdateView):
-    model = Labelbase
-    fields = ['name', 'fingerprint', 'about']
+    #model = Labelbase
+    #fields = ['name', 'fingerprint', 'about']
 
-    def get_context_data(self, **kwargs):
-        labelbase_id = self.kwargs['labelbase_id']
-        context = super(LabelbaseView, self).get_context_data(**kwargs)
-        return context
+    #def get_context_data(self, **kwargs):
+    #    labelbase_id = self.kwargs['labelbase_id']
+    #    context = super(LabelbaseView, self).get_context_data(**kwargs)
+    #    return context
 
     def post(self, request, *args, **kwargs):
         labelbase_id = self.kwargs['labelbase_id']

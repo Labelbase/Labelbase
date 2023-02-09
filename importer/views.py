@@ -33,7 +33,7 @@ def upload_labels(request):
             fp.seek(0)
             if form.cleaned_data.get('import_type', '') == 'BIP-0329':
                 while True:
-                    buf = f.readline()
+                    buf = fp.readline()
                     if buf == '':
                         break
                     data = json.loads(buf)

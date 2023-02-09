@@ -59,12 +59,16 @@ class LabelbaseView(ListView):
 class LabelbaseUpdateView(UpdateView):
     model = Labelbase
     fields = ['name', 'fingerprint', 'about']
-     
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        form.save()
-        return redirect(form.instance.get_absolute_url())
 
+    def post(self, request, *args, **kwargs):
+        labelbase_id = self.kwargs['labelbase_id']
+        labelbase = Labelbase.objects.filter(id=labelbase_id, user_id=self.request.user.id).first()
+
+        labelbase.name = request.data.get('name', '')
+        labelbase.fingerprint = request.data.get('fingerprint', '')
+        labelbase.about = request.data.get('about', '')
+        return HttpResponseRedirect(label.labelbase.get_absolute_url())
+        
 class LabelbaseFormView(FormView):
     template_name = 'labelbase_new.html'
     form_class = LabelbaseForm

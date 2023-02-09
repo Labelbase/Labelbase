@@ -19,11 +19,12 @@
       <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown"  style="padding-top: 2em;">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLabelModal">New Label</button>
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-primary dropdown-toggle disabled" data-bs-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="btn btn-primary dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
             Import
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Dropdown link</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importLabelsModal">Import</a></li>
+
             <li><a class="dropdown-item" href="#">Dropdown link</a></li>
           </ul>
         </div>
@@ -141,6 +142,32 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- modal -->
+<div class="modal" tabindex="-1" id="importLabelsModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="{% url 'import_labels' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Import labels</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% labeluploadform as form %}
+        {{ form|bootstrap  }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">OK</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 
 

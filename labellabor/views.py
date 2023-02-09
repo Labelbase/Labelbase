@@ -59,8 +59,7 @@ class LabelbaseView(ListView):
 class LabelbaseUpdateView(UpdateView):
     model = Labelbase
     fields = ['name', 'fingerprint', 'about']
-    form_class = LabelbaseForm
-
+     
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.save()

@@ -6,6 +6,7 @@ from django.views.generic import FormView, TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import DeleteView
 from django.views.generic.edit import UpdateView
+from django.shortcuts import get_object_or_404
 
 from two_factor.views import OTPRequiredMixin
 from two_factor.views.utils import class_view_decorator
@@ -41,7 +42,7 @@ class LabelbaseView(ListView):
     def get_context_data(self, **kwargs):
         labelbase_id = self.kwargs['labelbase_id']
         context = super(LabelbaseView, self).get_context_data(**kwargs)
-        context['labelbase'] = Labelbase.objects.filter(id=labelbase_id, user_id=self.request.user.id).first()
+        context['labelbase'] = get_object_or_404(Labelbase, id=labelbase_id, user_id=self.request.user.id)
         context['labelform'] = LabelForm(request=self.request, labelbase_id=labelbase_id)
         context['api_token'] = Token.objects.get(user_id=self.request.user.id)
         return context
@@ -56,18 +57,9 @@ class LabelbaseView(ListView):
 
 
 class LabelbaseUpdateView(UpdateView):
-    #model = Labelbase
-    #fields = ['name', 'fingerprint', 'about']
-
-    #def get_context_data(self, **kwargs):
-    #    labelbase_id = self.kwargs['labelbase_id']
-    #    context = super(LabelbaseView, self).get_context_data(**kwargs)
-    #    return context
-
     def post(self, request, *args, **kwargs):
         labelbase_id = self.kwargs['labelbase_id']
-        labelbase = Labelbase.objects.filter(id=labelbase_id, user_id=self.request.user.id).first()
-
+        labelbase = get_object_or_404(Labelbase, id=labelbase_id, user_id=self.request.user.id)
         labelbase.name = request.POST.get('name', '')
         labelbase.fingerprint = request.POST.get('fingerprint', '')
         labelbase.about = request.POST.get('about', '')

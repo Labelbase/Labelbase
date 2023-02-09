@@ -28,7 +28,7 @@ class LabelbaseDeleteView(DeleteView):
         return super().post(request, *args, **kwargs)
 
 
-class LabelbaseView(ListView):
+class LabelbaseView(FormView):
     template_name = 'labelbase.html'
     context_object_name = 'label_list'
 
@@ -52,7 +52,7 @@ class LabelbaseView(ListView):
             label = labelform.save()
             #TODO: Add success massage
             return HttpResponseRedirect(label.labelbase.get_absolute_url())
-        return HttpResponseRedirect("/?error")    
+        return HttpResponseRedirect("/?error")
 
 
 

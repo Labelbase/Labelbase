@@ -47,7 +47,7 @@ def upload_labels(request):
                 return HttpResponseRedirect('/failed/url/')
             fp.close()
             os.unlink(fp.name)
-
+            return HttpResponseRedirect(labelbase.get_absolute_url())
     else:
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})

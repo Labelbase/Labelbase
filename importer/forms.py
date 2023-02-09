@@ -13,4 +13,6 @@ class UploadFileForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(UploadFileForm, self).__init__(*args, **kwargs)
-        self.fields['labelbase_id'].initial = kwargs.pop('labelbase_id')
+        labelbase_id = kwargs.get('labelbase_id', None)
+        if labelbase_id:
+            self.fields['labelbase_id'].initial = labelbase_id

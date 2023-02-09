@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from userprofile.views import ProfileView, APIKeyView
 from .views import (LabelbaseView, LabelbaseDeleteView,
                     HomeView, RegistrationCompleteView,
-                    RegistrationView, LabelbaseFormView )
+                    RegistrationView, LabelbaseFormView, LabelbaseUpdateView )
 
 
 
@@ -25,7 +25,7 @@ urlpatterns = [
     path('account/userprofile/', login_required(ProfileView.as_view()), name='userprofile'),
     path('labelbase/<pk>/delete/', login_required(LabelbaseDeleteView.as_view()),  name='del_labelbase'),
     path('labelbase/<int:labelbase_id>/', login_required(LabelbaseView.as_view()), name='labelbase'),
-    path('labelbase/<int:labelbase_id>/edit/', login_required(LabelbaseView.as_view()), name='edit_labelbase'),
+    path('labelbase/<int:labelbase_id>/edit/', login_required(LabelbaseUpdateView.as_view()), name='edit_labelbase'),
 
     path('labelbase/', login_required(LabelbaseFormView.as_view()), name='labelbase_new'),
     path('account/logout/', LogoutView.as_view(), name='logout'),

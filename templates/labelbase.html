@@ -24,7 +24,7 @@
             Import
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importLabelsModal">Import</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importLabelsModal">Import BIP-0329 Labels</a></li>
 
             <li><a class="dropdown-item" href="#">Dropdown link</a></li>
           </ul>
@@ -153,7 +153,7 @@
       <form action="{% url 'import_labels' %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="modal-header">
-        <h5 class="modal-title">Import labels</h5>
+        <h5 class="modal-title">Import BIP-0329 labels</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

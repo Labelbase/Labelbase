@@ -1,5 +1,6 @@
 from django import template
 from labelbase.forms import LabelbaseForm
+from labelbase.forms import LabelbaseUpdateView
 
 register = template.Library()
 
@@ -9,4 +10,4 @@ def labelbaseform():
 
 @register.simple_tag
 def labelbaseform_edit(instance):
-    return LabelbaseForm(instance=instance)
+    return LabelbaseUpdateView(instance=instance)

@@ -5,4 +5,4 @@ register = template.Library()
 
 @register.simple_tag
 def bip0329labeluploadform(labelbase_id):
-    return UploadFileForm()
+    return UploadFileForm(labelbase_id)

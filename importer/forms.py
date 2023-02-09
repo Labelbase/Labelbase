@@ -12,6 +12,5 @@ class UploadFileForm(forms.Form):
     file = forms.FileField()
 
     def __init__(self, *args, **kwargs):
-        self.format = kwargs.pop('format')
         super(UploadFileForm, self).__init__(*args, **kwargs)
         self.fields['labelbase_id'].initial = kwargs.pop('labelbase_id')

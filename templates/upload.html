@@ -2,8 +2,7 @@
 {% load i18n %}
 {% load bootstrap %}
 {% block content %}
-<div style="padding-top: 1em;">
-<h2>Upload labels</h2>
+<h2 style="padding-top: 1em;">Upload labels</h2>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|bootstrap }}

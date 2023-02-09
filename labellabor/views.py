@@ -50,7 +50,7 @@ class LabelbaseView(ListView):
         labelbase_id = self.kwargs['labelbase_id']
         labelform = LabelForm(request.POST, request=request, labelbase_id=labelbase_id)
         if labelform.is_valid():
-            label = labelform.save() 
+            label = labelform.save()
             return HttpResponseRedirect(label.labelbase.get_absolute_url())
 
 
@@ -68,9 +68,9 @@ class LabelbaseUpdateView(UpdateView):
         labelbase_id = self.kwargs['labelbase_id']
         labelbase = Labelbase.objects.filter(id=labelbase_id, user_id=self.request.user.id).first()
 
-        labelbase.name = request.data.get('name', '')
-        labelbase.fingerprint = request.data.get('fingerprint', '')
-        labelbase.about = request.data.get('about', '')
+        labelbase.name = request.POST.get('name', '')
+        labelbase.fingerprint = request.POST.get('fingerprint', '')
+        labelbase.about = request.POST.get('about', '')
         return HttpResponseRedirect(label.labelbase.get_absolute_url())
 
 class LabelbaseFormView(FormView):

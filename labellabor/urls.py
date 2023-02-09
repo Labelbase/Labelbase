@@ -9,7 +9,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from django.contrib.auth.decorators import login_required
 from userprofile.views import ProfileView, APIKeyView
 from .views import (LabelbaseView, LabelbaseDeleteView,
-                    HomeView, RegistrationCompleteView,
+                    HomeView, RegistrationCompleteView, LabelUpdateView,
                     RegistrationView, LabelbaseFormView, LabelbaseUpdateView )
 from importer.views import upload_labels
 

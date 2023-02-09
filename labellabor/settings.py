@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     'sekizai',
+    'importer',
 ]
 
 MIDDLEWARE = [
@@ -186,6 +187,6 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# https://docs.djangoproject.com/en/4.1/ref/settings/#std-setting-FILE_UPLOAD_HANDLERS 
+# https://docs.djangoproject.com/en/4.1/ref/settings/#std-setting-FILE_UPLOAD_HANDLERS
 FILE_UPLOAD_HANDLERS = ["django.core.files.uploadhandler.MemoryFileUploadHandler",
                         "django.core.files.uploadhandler.TemporaryFileUploadHandler"]

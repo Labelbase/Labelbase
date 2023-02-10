@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     'user_sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.messages',
     'two_factor',
 
     'django_otp',

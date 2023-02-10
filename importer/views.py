@@ -7,6 +7,8 @@ import json
 from labelbase.models import Labelbase, Label
 from labelbase.serializers import LabelSerializer
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
+
 
 from .forms import UploadFileForm
 from tempfile import NamedTemporaryFile
@@ -28,6 +30,7 @@ def upload_labels(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
+            imported_lables = 0
             labelbase = get_object_or_404(Labelbase, id=form.cleaned_data.get('labelbase_id', ''), user_id=request.user.id)
             fp = handle_uploaded_file(request.FILES['file'])
             fp.seek(0)
@@ -41,12 +44,15 @@ def upload_labels(request):
                     serializer = LabelSerializer(data=data)
                     if serializer.is_valid():
                         serializer.save()
+                        imported_lables += 1
             else:
                 fp.close()
                 os.unlink(fp.name)
                 return HttpResponseRedirect('/failed/url/')
             fp.close()
             os.unlink(fp.name)
+            if imported_lables:
+                messages.add_message(request, messages.INFO, "{} labels imported.".format(imported_lables))
             return HttpResponseRedirect(labelbase.get_absolute_url())
     else:
         form = UploadFileForm()

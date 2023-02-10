@@ -10,9 +10,39 @@
 
     <div  style="padding-top: 1em;">
       <a href="{{ form.instance.labelbase.get_absolute_url }}"
-          type="button" class="btn btn-secondary">Back to Labelbase</a>
-
-      <input type="submit"  class="btn btn-primary" value="Save changes">
+          type="button" class="btn btn-link">Back to Labelbase</a>
+      <a href="#" data-bs-toggle="modal" data-bs-target="#deleteLabelModal"
+          type="button" class="btn btn-alert">Delete</a>
+      <input type="submit"  class="btn btn-primary" value="Save">
     </div>
 </form>
+
+
+<div class="modal" tabindex="-1" id="deleteLabelModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete label?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning" role="alert">
+         <strong>Warning:</strong>
+         <br>
+         <br>
+         This action will permanently delete the label and cannot be undone.
+         <br><br>
+         Are you sure you want to proceed?
+        </div>
+      </div>
+      <form method="post" action="{% url 'del_label' form.instance.pk %}">{% csrf_token %}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">DELETE</button>
+      </div>
+      </form>
+    </div>
+  </div
+
+
 {% endblock %}

@@ -19,6 +19,20 @@ from rest_framework.authtoken.models import Token
 class HomeView(TemplateView):
     template_name = 'home.html'
 
+
+
+
+class LabelDeleteView(DeleteView):
+    model = Label
+    success_url = "/"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.user != self.request.user:
+            return redirect(self.success_url)
+        return super().post(request, *args, **kwargs)
+
+
 class LabelbaseDeleteView(DeleteView):
     model = Labelbase
     success_url = "/"
@@ -81,7 +95,7 @@ class LabelUpdateView(UpdateView):
         label.save()
 
         return HttpResponseRedirect(label.labelbase.get_absolute_url())
-    """    
+    """
 
 
 class LabelbaseUpdateView(UpdateView):

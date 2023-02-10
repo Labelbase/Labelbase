@@ -53,20 +53,23 @@ def upload_labels(request):
                     buf = fp.readline()
                     if buf in EOLSTOP:
                         break
-                    buf = str(buf.decode('utf-8'))
-                    sbuf = buf.split(",")
-                    data = {
-                        'type': 'tx',
-                        'ref': sbuf[1],
-                        'label': sbuf[3:],
-                    }
-                    data['labelbase'] = labelbase.id
-                    serializer = LabelSerializer(data=data)
-                    if serializer.is_valid():
-                        serializer.save()
-                        imported_lables += 1
-                    else:
-                        messages.add_message(request, messages.ERROR, "Could not process line {}.".format(buf))
+                    try:
+                        buf = str(buf.decode('utf-8'))
+                        sbuf = buf.split(",")
+                        data = {
+                            'type': 'tx',
+                            'ref': sbuf[1],
+                            'label': " ".join(sbuf[3:]),
+                        }
+                        data['labelbase'] = labelbase.id
+                        serializer = LabelSerializer(data=data)
+                        if serializer.is_valid():
+                            serializer.save()
+                            imported_lables += 1
+                        else:
+                            messages.add_message(request, messages.ERROR, "Could not process line \"{}\".".format(buf))
+                    except Exception as ex:
+                        messages.add_message(request, messages.ERROR, "Could not process line \"{}\", {}.".format(buf, ex))
             else:
                 fp.close()
                 os.unlink(fp.name)

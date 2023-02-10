@@ -12,7 +12,7 @@
       <a href="{{ form.instance.labelbase.get_absolute_url }}"
           type="button" class="btn btn-link">Back to Labelbase</a>
       <a href="#" data-bs-toggle="modal" data-bs-target="#deleteLabelModal"
-          type="button" class="btn btn-alert">Delete</a>
+          type="button" class="btn btn-danger">Delete</a>
       <input type="submit"  class="btn btn-primary" value="Save">
     </div>
 </form>
@@ -30,9 +30,7 @@
          <strong>Warning:</strong>
          <br>
          <br>
-         This action will permanently delete the label and cannot be undone.
-         <br><br>
-         Are you sure you want to proceed?
+         This action will permanently delete the label and cannot be undone. Are you sure you want to proceed?
         </div>
       </div>
       <form method="post" action="{% url 'del_label' form.instance.pk %}">{% csrf_token %}

@@ -57,6 +57,12 @@ class Label(models.Model):
     ))
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
 
+    def get_label_url(self):
+        """
+        Is used by "edit label" functionality.
+        This brings us back to the labelbase once the lable was saved.
+        """
+        return self.labelbase.get_absolute_url()
 
     def get_mempool_url(self):
         if self.type == "addr":

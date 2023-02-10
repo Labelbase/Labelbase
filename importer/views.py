@@ -53,7 +53,7 @@ def upload_labels(request):
                     buf = fp.readline()
                     if buf in EOLSTOP:
                         break
-                    sbuf = buf.split(",")
+                    sbuf = str(buf).split(",")
                     data = {
                         'type': 'tx',
                         'ref': sbuf[1],

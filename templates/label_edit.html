@@ -7,8 +7,9 @@
 <form method="post" action="." >
     {% csrf_token %}
     {{ form|bootstrap }}
-    <a href="{{ from.instance.get_absolute_url }}" type="button" class="btn btn-secondary">Back to Labelbase</a> 
-    <br>
+    <a href="{{ from.instance.labelbase.get_absolute_url }}"
+        type="button" class="btn btn-secondary">Back to Labelbase</a>
+        
     <input type="submit"  class="btn btn-primary" value="Save changes">
 </form>
 {% endblock %}

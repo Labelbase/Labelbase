@@ -69,16 +69,19 @@ class LabelUpdateView(UpdateView):
         context['api_token'] = Token.objects.get(user_id=self.request.user.id)
         return context
     """
-    def post(self, request, *args, **kwargs):
+    """def post(self, request, *args, **kwargs):
         label_id = self.kwargs['label_id']
         label = get_object_or_404(Label, id=label_id, labelbase__user_id=self.request.user.id)
 
         label.type = request.POST.get('type', '')
         label.ref =  request.POST.get('ref', '')
         label.label = request.POST.get('label', '')
+        label.label = request.POST.get('label', '')
+
         label.save()
 
         return HttpResponseRedirect(label.labelbase.get_absolute_url())
+    """    
 
 
 class LabelbaseUpdateView(UpdateView):

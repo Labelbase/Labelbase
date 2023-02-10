@@ -24,8 +24,13 @@
             Import
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importLabelsModal">BIP-0329 Labels</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBip329LabelsModal">BIP-0329 Labels</a></li>
           </ul>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBlueWalletCSVLabelsModal">Import BlueWalle CSV History</a></li>
+          </ul>
+
+
         </div>
         <div class="btn-group" role="group">
           <button type="button" class="btn btn-primary dropdown-toggle disabled" data-bs-toggle="dropdown" aria-expanded="false">
@@ -101,7 +106,7 @@
 <div class="modal" tabindex="-1" id="addLabelModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <form action=".{#% url 'addlabeltolabelbase' labelbase.id %#}" method="post">
+      <form action="." method="post">
       {% csrf_token %}
       <div class="modal-header">
         <h5 class="modal-title">Create a new label</h5>
@@ -146,7 +151,7 @@
 
 
 <!-- modal -->
-<div class="modal" tabindex="-1" id="importLabelsModal">
+<div class="modal" tabindex="-1" id="importBip329LabelsModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <form action="{% url 'import_labels' %}" method="post" enctype="multipart/form-data">
@@ -157,6 +162,32 @@
       </div>
       <div class="modal-body">
         {% bip0329labeluploadform labelbase.id as form %}
+        {{ form|bootstrap  }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">OK</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" tabindex="-1" id="importBlueWalletCSVLabelsModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="{% url 'import_labels' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Import BlueWallet CSV History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+            Import BlueWallet's CSV History and create a 'tx' label for each note text.
+        </p>
+        {% csvBlueWalletlabeluploadform labelbase.id as form %}
         {{ form|bootstrap  }}
       </div>
       <div class="modal-footer">
@@ -216,8 +247,6 @@
 <div class="modal" tabindex="-1" id="deleteLabelbaseModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-
-
       <div class="modal-header">
         <h5 class="modal-title">Delete labelbase and labels?</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -232,15 +261,12 @@
          Are you sure you want to proceed?
         </div>
       </div>
-
       <form method="post" action="{% url 'del_labelbase' labelbase.pk %}">{% csrf_token %}
-
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
         <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">DELETE</button>
       </div>
       </form>
-
     </div>
   </div>
 </div>

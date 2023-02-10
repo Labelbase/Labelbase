@@ -77,10 +77,10 @@
       <tbody>
         {% for label in label_list %}
         <tr>
-          <td><a href="{% url 'edit_label' label.id %}">{{ label.id }}</td>
+          <td><a href="{% url 'edit_label' label.id %}">{{ label.id }}</a></td>
           <td>{{ label.get_type_display }}</td>
-          {% if label.get_absolute_url %}
-          <td><a href="{{ label.get_absolute_url }}">{{ label.ref }}</a></td>
+          {% if label.get_mempool_url %}
+          <td><a href="{{ label.get_mempool_url }}">{{ label.ref }}</a></td>
           {% else %}
           <td>{{ label.ref }}</td>
           {% endif %}

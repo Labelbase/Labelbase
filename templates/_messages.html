@@ -1,5 +1,7 @@
 {% if messages %}
+  <div id="user-messages" style="padding-top: 1em;">
   {% for message in messages %}
     <div class="alert alert-info">{{ message }}</div>
   {% endfor %}
+  </div>
 {% endif %}

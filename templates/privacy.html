@@ -1,0 +1,202 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block title %}Privacy{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+  <style>
+
+
+    .pricing-header {
+      max-width: 810px;
+    }
+  </style>
+  <div class="p-3 pb-md-4 mx-auto text-center">
+    <h1 style="padding-top: 1.6em; padding-bottom: 0.9em; text-transform: uppercase;font-weight:800;">L<span style="height:1.1em; width:1em" data-feather="tag" class="align-text-bottom"></span>belbase</h1>
+    <h2 class="display-6 fw-normal" style="padding-bottom: 0.9em;">All your labels in one place.</h2>
+  </div>
+
+
+
+
+  <div class="pricing-header p-3 pb-md-4 mx-auto text-left">
+    <h2 class="display-8 fw-normal">Privacy Policy</h2>
+    February <p>10<sup>th</sup> 2023
+    </p>
+    <p class="fs-5 text-muted">
+      <ol style="line-height:2em; ">
+<li>We do not use any analytics or tracking tools.</li>
+<li>This website does not use cookies, apart from the login session. However, your IP address may be collected as part of basic webserver logs necessary for systems administration purposes. </li>
+<li>We do not collect or store information, expect the information that is attached directly to labels.  Deleting your label or Labelbase removes every information available in the context of it. </li>
+<li>We do not share any information with third parties including advertisers. See 6. for interated APIs and services.</li>
+<li>We cannot access your funds.</li>
+<li>"Labelbase" uses the following 3<sup>rd</sup> party APIs and services:
+    <ul>
+      <li>There is a hyperlink to "mempool.space". You have to click on the link actively.</li>
+      <li>We have no influence on wallets and services that implement our API.</li>
+      </ul>
+</li>
+
+
+
+
+</ol>
+
+
+    </p>
+
+  </div>
+
+
+
+  {% comment %}
+  <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+    <h2 class="display-4 fw-normal">Pricing</h2>
+
+    <p class="fs-5 text-muted">Labelbase is proud to offer its powerful label management service at an affordable price. Our pricing model is designed to accommodate the needs of both individual users and businesses.</p>
+
+  </div>
+
+  <main class="pricing-header mx-auto text-center">
+
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal"><!--Free-->Early Adopter</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">$0<small class="text-muted fw-light">/mo</small></h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>5 labelbases</li>
+                <li>Unlimited labels</li>
+
+                <li>API usage</li>
+                <li>Best effort support</li>
+
+              </ul>
+              <button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Pro</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">$15<small class="text-muted fw-light">/mo</small></h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>Unlimited labelbases</li>
+                <li>Unlimited labels</li>
+                <li>Priority email support</li>
+              </ul>
+              <button type="button" class="w-100 btn btn-lg btn-primary">Get started</button>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm border-primary">
+            <div class="card-header py-3 text-bg-primary border-primary">
+              <h4 class="my-0 fw-normal">Self-Hosted</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">
+                <small class="text-muted fw-light">Donation</small></h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>30 users included</li>
+                <li>15 GB of storage</li>
+                <li>Phone and email support</li>
+                <li>Run your own</li>
+              </ul>
+              <button type="button" class="w-100 btn btn-lg btn-primary">Donate now</button><!-- -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="display-6 text-center mb-4">Compare plans</h2>
+
+      <div class="table-responsive">
+        <table class="table text-center">
+          <thead>
+            <tr>
+              <th style="width: 34%;"></th>
+              <th style="width: 22%;">Free</th>
+              <th style="width: 22%;">Pro</th>
+              <th style="width: 22%;">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" class="text-start">Public</th>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Private</th>
+              <td></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+          </tbody>
+
+          <tbody>
+            <tr>
+              <th scope="row" class="text-start">Permissions</th>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Sharing</th>
+              <td></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Unlimited members</th>
+              <td></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Extra security</th>
+              <td></td>
+              <td></td>
+              <td>✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+    {% endcomment %}
+    {#% include "footer.html" %#}
+    {% comment %}
+
+  {% url 'registration' as reg_url %}
+  {% url 'two_factor:login' as login_url %}
+  {% url 'two_factor:setup' as setup_url %}
+  {% url 'logout' as logout_url %}
+  {% url 'secret' as secret_url %}
+
+  <h4>{% trans "Next steps:" %}</h4>
+  <ol>
+    <li>{% blocktrans trimmed %}Start by <a href="{{ reg_url }}">registering</a> an
+      account.{% endblocktrans %}</li>
+    <li>{% blocktrans trimmed %}<a href="{{ login_url }}">Login</a> to your account.
+      {% endblocktrans %}</li>
+    <li>{% blocktrans trimmed %}<a href="{{ setup_url }}">Enable</a> two-factor
+      authentication.{% endblocktrans %}</li>
+    <li>{% blocktrans trimmed %}Then, <a href="{{ logout_url }}">logout</a> and
+      <a href="{{ login_url }}">login</a> once more to your account to see
+      two-factor authentication at work.{% endblocktrans %}</li>
+    <li>{% blocktrans trimmed %}At last, you've gained access to the
+      <a href="{{ secret_url }}">secret page</a>! :-){% endblocktrans %}</li>
+  </ol>
+
+
+  {% endcomment %}
+{% endblock %}

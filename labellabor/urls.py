@@ -8,7 +8,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.contrib.auth.decorators import login_required
 from userprofile.views import ProfileView, APIKeyView
-from .views import (LabelbaseView, LabelbaseDeleteView, LabelDeleteView,
+from .views import (LabelbaseView, LabelbaseDeleteView, LabelDeleteView, TermsView,
                     HomeView, RegistrationCompleteView, LabelUpdateView, PrivacyView,
                     RegistrationView, LabelbaseFormView, LabelbaseUpdateView )
 from importer.views import upload_labels
@@ -35,7 +35,7 @@ urlpatterns = [
     path('account/register/', RegistrationView.as_view(), name='registration'),
     path('account/register/done/', RegistrationCompleteView.as_view(), name='registration_complete'),
     path('privacy-policy', PrivacyView.as_view(), name='privacy_policy'),
-    path('terms', PrivacyView.as_view(), name='terms'),
+    path('terms', TermsView.as_view(), name='terms'),
     path('', HomeView.as_view(), name='home'),
     path('', include(tf_urls)),
     path('', include('user_sessions.urls', 'user_sessions')),

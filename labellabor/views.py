@@ -22,6 +22,9 @@ class HomeView(TemplateView):
 class PrivacyView(TemplateView):
     template_name = 'privacy.html'
 
+class TermsView(TemplateView):
+    template_name = 'terms.html'
+
 
 
 

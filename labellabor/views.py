@@ -19,6 +19,9 @@ from rest_framework.authtoken.models import Token
 class HomeView(TemplateView):
     template_name = 'home.html'
 
+class PrivacyView(TemplateView):
+    template_name = 'privacy.html'
+
 
 
 
@@ -74,7 +77,7 @@ class LabelUpdateView(UpdateView):
     model = Label
     template_name = 'label_edit.html'
     fields = ['type', 'ref', 'label']
-    
+
 
 class LabelbaseUpdateView(UpdateView):
     def post(self, request, *args, **kwargs):

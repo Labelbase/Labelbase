@@ -34,6 +34,7 @@ urlpatterns = [
     path('account/logout/', LogoutView.as_view(), name='logout'),
     path('account/register/', RegistrationView.as_view(), name='registration'),
     path('account/register/done/', RegistrationCompleteView.as_view(), name='registration_complete'),
+    path('privacy-policy', PrivacyView.as_view(), name='privacy_policy'),
     path('', HomeView.as_view(), name='home'),
     path('', include(tf_urls)),
     path('', include('user_sessions.urls', 'user_sessions')),

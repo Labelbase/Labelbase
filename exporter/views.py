@@ -13,7 +13,7 @@ def stream_labels_as_jsonl(request, labelbase_id):
 
     def generator():
         for item in get_queryset():
-            yield json.dumps(item:) + '\n'
+            yield json.dumps(item) + '\n'
 
     # Return the data as a streaming response
     response = StreamingHttpResponse(generator(), content_type='application/json')

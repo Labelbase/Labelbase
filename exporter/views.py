@@ -8,7 +8,8 @@ def stream_labels_as_jsonl(request, labelbase_id):
 
     def get_queryset():
         qs = Label.objects.filter(labelbase__user_id=request.user.id,
-                                    labelbase_id=labelbase_id)
+                                    labelbase_id=labelbase_id).values_list(
+                                        'id', 'type', 'ref', 'label')
         return qs.order_by("id")
 
     def generator():

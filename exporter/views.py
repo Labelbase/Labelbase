@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def stream_labels_as_jsonl(request, labelbase_id):
 
-    def get_queryset(self):
+    def get_queryset():
         qs = Label.objects.filter(labelbase__user_id=request.user.id,
                                     labelbase_id=labelbase_id)
         return qs.order_by("id")
@@ -17,5 +17,5 @@ def stream_labels_as_jsonl(request, labelbase_id):
 
     # Return the data as a streaming response
     response = StreamingHttpResponse(generator(), content_type='application/json')
-    response['Content-Disposition'] = 'attachment; filename="data.jsonl"'
+    response['Content-Disposition'] = 'attachment; filename="labelbase-{}.jsonl"'.format(labelbase_id)
     return response

@@ -17,6 +17,6 @@ def stream_labels_as_jsonl(request, labelbase_id):
             yield json.dumps(item) + '\n'
 
     # Return the data as a streaming response
-    response = StreamingHttpResponse(generator(), content_type='application/json')
+    response = StreamingHttpResponse(generator(), content_type='application/jsonl')
     response['Content-Disposition'] = 'attachment; filename="labelbase-{}.jsonl"'.format(labelbase_id)
     return response

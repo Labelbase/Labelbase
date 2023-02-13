@@ -12,6 +12,8 @@ from .views import (LabelbaseView, LabelbaseDeleteView, LabelDeleteView, TermsVi
                     HomeView, RegistrationCompleteView, LabelUpdateView, PrivacyView,
                     RegistrationView, LabelbaseFormView, LabelbaseUpdateView )
 from importer.views import upload_labels
+from exporter.views import stream_labels_as_jsonl
+
 
 
 urlpatterns = [
@@ -27,6 +29,7 @@ urlpatterns = [
     path('labelbase/<int:labelbase_id>/', login_required(LabelbaseView.as_view()), name='labelbase'),
     path('labelbase/<int:labelbase_id>/edit/', login_required(LabelbaseUpdateView.as_view()), name='edit_labelbase'),
     path('labelbase/import/', upload_labels, name='import_labels'),
+    path('labelbase/export/<int:labelbase_id>/', stream_labels_as_jsonl, name='export_labels'),
     path('labelbase/', login_required(LabelbaseFormView.as_view()), name='labelbase_new'),
     #path('labelbase/<int:labelbase_id>/label/<int:label_id>/edit/', login_required(LabelUpdateView.as_view()), name='edit_label'),
     path('label/<int:pk>/edit/', login_required(LabelUpdateView.as_view()), name='edit_label'),

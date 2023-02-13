@@ -1,3 +1,21 @@
-from django.shortcuts import render
+import json
+from django.http import StreamingHttpResponse
+from labelbase.models import Labelbase, Label
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+@login_required
+def stream_labels_as_jsonl(request, labelbase_id):
+
+    def get_queryset(self):
+        qs = Label.objects.filter(labelbase__user_id=request.user.id,
+                                    labelbase_id=labelbase_id')
+        return qs.order_by("id")
+
+    def generator():
+        for item in get_queryset():
+            yield json.dumps(item) + '\n'
+
+    # Return the data as a streaming response
+    response = StreamingHttpResponse(generator(), content_type='application/json')
+    response['Content-Disposition'] = 'attachment; filename="data.jsonl"'
+    return response

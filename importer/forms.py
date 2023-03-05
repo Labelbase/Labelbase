@@ -3,6 +3,8 @@ from django import forms
 IMPORTER_CHOICES = (
     ('BIP-0329', 'BIP-0329'),
     ('csv-bluewallet', 'BlueWallet .csv'),
+    ('csv-bitbox', 'BitBox .csv'),
+
 )
 
 

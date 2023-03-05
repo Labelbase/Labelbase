@@ -13,7 +13,7 @@ from .views import (LabelbaseView, LabelbaseDeleteView, LabelDeleteView, TermsVi
                     RegistrationView, LabelbaseFormView, LabelbaseUpdateView )
 from importer.views import upload_labels
 from exporter.views import stream_labels_as_jsonl
-
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
@@ -37,6 +37,13 @@ urlpatterns = [
     path('account/logout/', LogoutView.as_view(), name='logout'),
     path('account/register/', RegistrationView.as_view(), name='registration'),
     path('account/register/done/', RegistrationCompleteView.as_view(), name='registration_complete'),
+    path('account/change-password/',
+        auth_views.PasswordChangeView.as_view(
+            template_name='change_password.html',
+            success_url = '/'
+        ),
+        name='change_password'
+    ),
     path('privacy-policy', PrivacyView.as_view(), name='privacy_policy'),
     path('terms', TermsView.as_view(), name='terms'),
     path('', HomeView.as_view(), name='home'),

@@ -47,6 +47,31 @@ def upload_labels(request):
                     if serializer.is_valid():
                         serializer.save()
                         imported_lables += 1
+            # Bitbox App
+            elif form.cleaned_data.get('import_type', '') == 'csv-bitbox':            :
+                while True:
+                    buf = fp.readline()
+                    if buf in EOLSTOP:
+                        break
+                    try:
+                        buf = str(buf.decode('utf-8'))
+                        sbuf = buf.split(",")
+                        # Time,Type,Amount,Unit,Fee,Address,Transaction ID,Note
+                        for elem in [('tx', 6), ('addr', 5)]:
+                            data = {
+                                'type': elem[0],
+                                'ref': sbuf[elem[1]],
+                                'label': " ".join(sbuf[7:]),
+                            }
+                            data['labelbase'] = labelbase.id
+                            serializer = LabelSerializer(data=data)
+                            if serializer.is_valid():
+                                serializer.save()
+                                imported_lables += 1
+                            else:
+                                messages.add_message(request, messages.ERROR, "Could not process line \"{}\".".format(buf))
+                    except Exception as ex:
+                        messages.add_message(request, messages.ERROR, "Could not process line \"{}\", {}.".format(buf, ex))
             # BlueWallet
             elif form.cleaned_data.get('import_type', '') == 'csv-bluewallet':
                 while True:

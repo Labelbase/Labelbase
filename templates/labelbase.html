@@ -27,6 +27,10 @@
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBip329LabelsModal">BIP-0329 Labels</a></li>
 
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBlueWalletCSVLabelsModal">BlueWallet CSV History</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBitboxCSVLabelsModal">BitBox CSV History</a></li>
+
+
+
           </ul>
 
 
@@ -189,7 +193,7 @@
       </div>
       <div class="modal-body">
         <p>
-            Import BlueWallet's CSV History and create a 'tx' label for each note text.
+            Import BlueWallet's CSV History and create a 'tx' label for each record.
         </p>
         {% csvBlueWalletlabeluploadform labelbase.id as form %}
         {{ form|bootstrap  }}
@@ -203,6 +207,33 @@
   </div>
 </div>
 
+
+
+
+<div class="modal" tabindex="-1" id="importBitboxCSVLabelsModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="{% url 'import_labels' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Import BitBox CSV History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+            Import BitBox's CSV History and create an 'addr' and a 'tx' label for each record.
+        </p>
+        {% csvBitBoxLabeluploadform labelbase.id as form %}
+        {{ form|bootstrap  }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">OK</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 
 

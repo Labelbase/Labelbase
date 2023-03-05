@@ -1,11 +1,23 @@
 {% extends "_base.html" %}
 {% load i18n %}
 
-{% block title %}Profile{% endblock %}
 {% block nav_userprofile %}active{% endblock %}
 
 {% block content %}
-  <h2 style="padding-top: 1em;">Profile</h2>
+
+  <div class="row">
+    <div  class="col float-start">
+      <h2 style="padding-top: 1em;">{% block title %}Profile{% endblock %}</h2>
+    </div>
+    <div class="col float-end" >
+      <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown"  style="padding-top: 2em;">
+        <a href="{% url 'change_password' %}" class="btn btn-primary">Change Password</a>
+
+      </div>
+    </div>
+  </div>
+
+
 
 
 {% endblock %}

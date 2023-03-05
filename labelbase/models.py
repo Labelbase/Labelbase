@@ -21,6 +21,7 @@ class Labelbase(models.Model):
         default="",
         blank=True
     ))
+
     def get_absolute_url(self):
          return reverse('labelbase', args=[self.id])
 

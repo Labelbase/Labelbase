@@ -27,7 +27,7 @@
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBip329LabelsModal">BIP-0329 Labels</a></li>
 
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBlueWalletCSVLabelsModal">BlueWallet CSV History</a></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBitboxCSVLabelsModal">BitBox CSV History</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBitboxCSVLabelsModal">BitBox App CSV History</a></li>
 
 
 
@@ -221,7 +221,7 @@
       </div>
       <div class="modal-body">
         <p>
-            Import BitBox's CSV History and create an 'addr' and a 'tx' label for each record.
+            Import BitBox App's CSV History and create an 'addr' and a 'tx' label for each record.
         </p>
         {% csvBitBoxLabeluploadform labelbase.id as form %}
         {{ form|bootstrap  }}

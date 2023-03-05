@@ -48,7 +48,7 @@ def upload_labels(request):
                         serializer.save()
                         imported_lables += 1
             # Bitbox App
-            elif form.cleaned_data.get('import_type', '') == 'csv-bitbox':            :
+            elif form.cleaned_data.get('import_type', '') == 'csv-bitbox':            
                 while True:
                     buf = fp.readline()
                     if buf in EOLSTOP:

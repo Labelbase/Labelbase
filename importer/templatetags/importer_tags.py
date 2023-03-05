@@ -17,3 +17,11 @@ def csvBlueWalletlabeluploadform(labelbase_id):
     form.fields['labelbase_id'].initial = labelbase_id
     form.fields['import_type'].initial = 'csv-bluewallet'
     return form
+
+
+@register.simple_tag
+def csvBitBoxLabeluploadform(labelbase_id):
+    form =  UploadFileForm()
+    form.fields['labelbase_id'].initial = labelbase_id
+    form.fields['import_type'].initial = 'csv-bitbox'
+    return form

@@ -21,42 +21,6 @@
     <p class="pricing-header mx-auto text-center fs-5 text-muted"> Labelbase supports BIP-329, a format for unifying label data.</p>
   </div>
 
-
-
-
-  <div class="pricing-header p-3 pb-md-4 mx-auto text-left">
-    <h2 class="display-8 fw-normal">Frequently Asked Questions</h2>
-    <p>
-    </p>
-    <h3 class="display-10 fw-normal">How to import labels from my wallet into Labelbase?</h3>
-    <p class="fs-5 text-muted">
-      To import data from various wallet's export format into Labelbase and then export it as BIP-329 labels, you would need to follow these steps:
-
-      <ol>
-        <li>
-          Export data from your wallet: The first step is to export your data from your wallet. The format of this export will depend on the wallet you are using, but it may include private keys, public keys, or other information.
-        </li>
-        <li>
-          Import data into Labelbase: Next, you'll need to import the exported data into Labelbase. You can do this by using the import feature within your Labelbase. Choose the appropriate option based on the file format you want to import.
-          Even through we do not store your uploaded files, <br>DO NOT UPLOAD ANY PRIVATE KEY MATERIAL TO LABELBASE.
-        </li>
-        <li>
-          Modify and edit labels: Once your labels are imported into Labelbase, you can modify and edit your labels as needed. This may include changing the names of your addresses, grouping them into different categories, or adding additional information.
-        </li>
-        <li>
-          Export as BIP-329 labels: Finally, you'll need to export your labels from Labelbase as BIP-329 labels. This will typically involve downloading a file in the BIP-329 format, which you can then import into your wallet.
-        </li>
-        <li>
-          Use Labelbase through the API: Alternatively, you can use Labelbase through the API in your wallet. This will allow you to access your labels directly from within your wallet, without the need to export and import files. To do this, your wallet needs to integrate the Labelbase API into the wallet.
-        </li>
-      </ol>
-
-    </p>
-
-  </div>
-
-
-
   {% if request.user.is_superuser %}
   <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
     <h2 class="display-4 fw-normal">Pricing</h2>
@@ -65,6 +29,113 @@
 
   </div>
 
+  <main class="pricing-header mx-auto text-center">
+
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <img src="https://growwwkit.com/wp-content/uploads/2020/04/Create.jpg"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
+            <div class="card-body">
+              <p style="font-weight: 700;">Do you know where that coin came frome?</p>
+              <!--button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button-->
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <img src="https://growwwkit.com/wp-content/uploads/2020/04/Yelling.jpg"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
+            <div class="card-body">
+              <p style="font-weight: 700;">Who sends data to labelbase?</p>
+              <!--button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button-->
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm border-primary">
+            <div class="card-header py-3 text-bg-primary border-primary">
+              <h4 class="my-0 fw-normal">Self-Hosted</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">
+                <small class="text-muted fw-light">Donation</small></h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>30 users included</li>
+                <li>15 GB of storage</li>
+                <li>Phone and email support</li>
+                <li>Run your own</li>
+              </ul>
+              <button type="button" class="w-100 btn btn-lg btn-primary">Donate now</button><!-- -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="display-6 text-center mb-4">Compare plans</h2>
+
+      <div class="table-responsive">
+        <table class="table text-center">
+          <thead>
+            <tr>
+              <th style="width: 34%;"></th>
+              <th style="width: 22%;">Free</th>
+              <th style="width: 22%;">Pro</th>
+              <th style="width: 22%;">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" class="text-start">Public</th>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Private</th>
+              <td></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+          </tbody>
+
+          <tbody>
+            <tr>
+              <th scope="row" class="text-start">Permissions</th>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Sharing</th>
+              <td></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Unlimited members</th>
+              <td></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">Extra security</th>
+              <td></td>
+              <td></td>
+              <td>✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+  {% comment %}
   <main class="pricing-header mx-auto text-center">
 
       <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
@@ -179,6 +250,7 @@
         </table>
       </div>
     </main>
+{% endcomment %}
     {% endif %}
     {#% include "footer.html" %#}
     {% comment %}

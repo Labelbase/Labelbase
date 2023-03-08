@@ -21,7 +21,7 @@
     <p class="pricing-header mx-auto text-center fs-5 text-muted"> Labelbase supports BIP-329, a format for unifying label data.</p>
   </div>
 
-  {% if request.user.is_superuser %}
+
 
 
   <main class="pricing-header mx-auto text-center">
@@ -58,10 +58,10 @@
             <img src="/static/Handshake.png"
               class="card-img-top"
               alt="..."
-              style="padding: 0.25em;">
+              style="padding: 0.25em; padding-bottom: 1em;">
             <div class="card-body">
 
-              <p>Create an early adopter account</p>
+              <p>Free early adopter account!</p>
               <a href="{{  reg_url }}" type="button" class="w-100 btn btn-lg btn-primary">Get started</a>
             </div>
           </div>
@@ -71,6 +71,8 @@
 
 
     </main>
+
+    {% if request.user.is_superuser %}
 
   {% comment %}
   <main class="pricing-header mx-auto text-center">
@@ -188,7 +190,7 @@
       </div>
     </main>
 {% endcomment %}
-    {% endif %}
+    {% endif %} <!-- admin -->
     {#% include "footer.html" %#}
     {% comment %}
 

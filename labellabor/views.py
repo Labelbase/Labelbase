@@ -26,6 +26,9 @@ class TermsView(TemplateView):
     template_name = 'terms.html'
 
 
+class FaqView(TemplateView):
+    template_name = 'faq.html'
+
 
 
 class LabelDeleteView(DeleteView):

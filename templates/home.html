@@ -57,7 +57,7 @@
 
 
 
-  {% comment %}
+  {% if request.user.is_superuser %}
   <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
     <h2 class="display-4 fw-normal">Pricing</h2>
 
@@ -179,7 +179,7 @@
         </table>
       </div>
     </main>
-    {% endcomment %}
+    {% endif %}
     {#% include "footer.html" %#}
     {% comment %}
 

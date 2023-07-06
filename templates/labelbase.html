@@ -9,10 +9,10 @@
 {% if labelbase %}
   <div class="row">
     <div  class="col float-start">
-      <h2 style="padding-top: 1em;">{% block title %}{{ labelbase.name  }} {% endblock %}</h2>
-      {% if  labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }} </tt>{% endif %}
-      {% if  labelbase.about %}
-      <p>{{  labelbase.about}} </p>
+      <h2 style="padding-top: 1em;">{% block title %}{{ labelbase.name }} {% endblock %}</h2>
+      {% if labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }} </tt>{% endif %}
+      {% if labelbase.about %}
+      <p>{{ labelbase.about}}</p>
       {% endif %}
     </div>
 

@@ -9,6 +9,5 @@ from rest_framework.authtoken.models import Token
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance) # create user profile
-        Token.objects.create(user=instance) # create API auth token
- 
+        Profile.objects.create(user=instance)  # create user profile
+        Token.objects.create(user=instance)  # create API auth token

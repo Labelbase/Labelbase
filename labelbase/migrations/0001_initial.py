@@ -8,7 +8,6 @@ import jsonfield.fields
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -17,24 +16,96 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Labelbase',
+            name="Labelbase",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', django_cryptography.fields.encrypt(models.CharField(blank=True, default='', max_length=160))),
-                ('fingerprint', django_cryptography.fields.encrypt(models.CharField(blank=True, default='', max_length=8))),
-                ('about', django_cryptography.fields.encrypt(models.CharField(blank=True, default='', max_length=200))),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    django_cryptography.fields.encrypt(
+                        models.CharField(blank=True, default="", max_length=160)
+                    ),
+                ),
+                (
+                    "fingerprint",
+                    django_cryptography.fields.encrypt(
+                        models.CharField(blank=True, default="", max_length=8)
+                    ),
+                ),
+                (
+                    "about",
+                    django_cryptography.fields.encrypt(
+                        models.CharField(blank=True, default="", max_length=200)
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Label',
+            name="Label",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('tx', 'tx'), ('addr', 'addr'), ('pubkey', 'pubkey'), ('input', 'input'), ('output', 'output'), ('xpub', 'xpub')], default='addr', max_length=16)),
-                ('ref', django_cryptography.fields.encrypt(models.CharField(blank=True, default='', max_length=160))),
-                ('label', django_cryptography.fields.encrypt(models.CharField(blank=True, default='', max_length=160))),
-                ('data', django_cryptography.fields.encrypt(jsonfield.fields.JSONField(default=dict))),
-                ('labelbase', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='labelbase.labelbase')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            ("tx", "tx"),
+                            ("addr", "addr"),
+                            ("pubkey", "pubkey"),
+                            ("input", "input"),
+                            ("output", "output"),
+                            ("xpub", "xpub"),
+                        ],
+                        default="addr",
+                        max_length=16,
+                    ),
+                ),
+                (
+                    "ref",
+                    django_cryptography.fields.encrypt(
+                        models.CharField(blank=True, default="", max_length=160)
+                    ),
+                ),
+                (
+                    "label",
+                    django_cryptography.fields.encrypt(
+                        models.CharField(blank=True, default="", max_length=160)
+                    ),
+                ),
+                (
+                    "data",
+                    django_cryptography.fields.encrypt(
+                        jsonfield.fields.JSONField(default=dict)
+                    ),
+                ),
+                (
+                    "labelbase",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="labelbase.labelbase",
+                    ),
+                ),
             ],
         ),
     ]

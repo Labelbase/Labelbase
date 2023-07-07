@@ -14,6 +14,7 @@ class LabelbaseAPIView(APIView):
     """
     Labelbase
     """
+
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
@@ -22,11 +23,11 @@ class LabelbaseAPIView(APIView):
         Create the new labelbase.
         """
         data = {
-            'name': request.data.get('name', ''),
-            'fingerprint': request.data.get('fingerprint', ''),
-            'about': request.data.get('about', ''),
+            "name": request.data.get("name", ""),
+            "fingerprint": request.data.get("fingerprint", ""),
+            "about": request.data.get("about", ""),
         }
-        serializer = LabelbaseSerializer(data=data, context={'request':request})
+        serializer = LabelbaseSerializer(data=data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -37,7 +38,9 @@ class LabelbaseAPIView(APIView):
         Update labelbase with the given id.
         """
         labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
-        serializer = LabelbaseSerializer(labelbase, data=request.data, context={'request':request})
+        serializer = LabelbaseSerializer(
+            labelbase, data=request.data, context={"request": request}
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -48,7 +51,7 @@ class LabelbaseAPIView(APIView):
         Retrieve labelbase with the given id.
         """
         labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
-        serializer = LabelbaseSerializer(labelbase, context={'request':request})
+        serializer = LabelbaseSerializer(labelbase, context={"request": request})
         return Response(serializer.data)
 
     def delete(self, request, id):
@@ -60,12 +63,11 @@ class LabelbaseAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
-
 class LabelAPIView(APIView):
     """
     Label
     """
+
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
@@ -73,13 +75,15 @@ class LabelAPIView(APIView):
         """
         Create the new label within a labelbase accessed by the given id.
         """
-        labelbase = get_object_or_404(Labelbase, id=labelbase_id, user_id=request.user.id)
+        labelbase = get_object_or_404(
+            Labelbase, id=labelbase_id, user_id=request.user.id
+        )
 
         data = {
-            'labelbase': labelbase.id,
-            'type': request.data.get('type', 'addr'),
-            'ref': request.data.get('ref', ''),
-            'label': request.data.get('label', ''),
+            "labelbase": labelbase.id,
+            "type": request.data.get("type", "addr"),
+            "ref": request.data.get("ref", ""),
+            "label": request.data.get("label", ""),
         }
 
         serializer = LabelSerializer(data=data)
@@ -89,12 +93,14 @@ class LabelAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, labelbase_id, id):
-        label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
+        label = get_object_or_404(
+            Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id
+        )
         data = {
-            'labelbase': label.labelbase.id, # revents moving the label to another labelbase
-            'type': request.data.get('type', 'addr'),
-            'ref': request.data.get('ref', ''),
-            'label': request.data.get('label', ''),
+            "labelbase": label.labelbase.id,  # revents moving the label to another labelbase
+            "type": request.data.get("type", "addr"),
+            "ref": request.data.get("ref", ""),
+            "label": request.data.get("label", ""),
         }
         serializer = LabelSerializer(label, data=data)
         if serializer.is_valid():
@@ -103,12 +109,16 @@ class LabelAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, labelbase_id, id):
-        label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
+        label = get_object_or_404(
+            Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id
+        )
 
         serializer = LabelSerializer(label)
         return Response(serializer.data)
 
     def delete(self, request, labelbase_id, id):
-        label = get_object_or_404(Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
+        label = get_object_or_404(
+            Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id
+        )
         label.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

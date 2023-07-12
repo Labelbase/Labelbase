@@ -58,7 +58,7 @@ body {
 
 .sidebar .nav-link {
   font-weight: 400;
-  font-size: 1.15rem;
+  font-size: 1rem;
   color: #333;
 }
 
@@ -178,8 +178,10 @@ body {
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    {% if user.is_authenticated %}
     <input style="margin: 4px;" type="text" placeholder="Search your Labelbases" aria-label="Search" class="form-control form-control-dark">
-    
+    {% endif %}
+
     <div class="navbar-nav">
       <div class="nav-item text-nowrap">
       </div>

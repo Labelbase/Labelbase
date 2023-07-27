@@ -7,13 +7,18 @@ from configparser import RawConfigParser
 PROJECT_PATH = BASE_DIR = Path(__file__).resolve().parent.parent
 
 proj_config = RawConfigParser()
+config_file_path = "{}/config.ini".format(PROJECT_PATH)
 try:
-    assert proj_config.read("{}/config.ini".format(PROJECT_PATH)) != []
+    if proj_config.read(config_file_path) == []:
+        from .make_config import generate_config_file
+        if not os.path.isfile(config_file_path):
+            print("creating config file, here: {}".format(config_file_path))
+            generate_config_file(config_file_path)
+            assert proj_config.read(config_file_path) == []
 except AssertionError:
     from django.core.exceptions import ImproperlyConfigured
-
     raise ImproperlyConfigured(
-        "Configuration file {}{} not found!".format(PROJECT_PATH, "/config.ini")
+        "Configuration file {} not found!".format(config_file_path)
     )
 
 
@@ -25,7 +30,7 @@ SECRET_KEY = proj_config.get("internal", "secret_key")
 CRYPTOGRAPHY_SALT = proj_config.get("internal", "crypto_salt")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = proj_config.get("internal", "debug")
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
@@ -46,19 +51,22 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True,
+    send_default_pii=False,
 )
+sentry_sdk.set_tag("version", "1.23.1")
+LOGGING = {}
 
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    #   'django.contrib.sessions',
+    #   'django.contrib.sessions', # NOTE: We use "user_sessions"
     "user_sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "two_factor",
+    "two_factor.plugins.phonenumber",
     "django_otp",
     "django_otp.plugins.otp_static",
     "django_otp.plugins.otp_totp",
@@ -82,6 +90,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+
 
 ROOT_URLCONF = "labellabor.urls"
 
@@ -110,9 +120,6 @@ WSGI_APPLICATION = "labellabor.wsgi.application"
 
 TWO_FACTOR_REMEMBER_COOKIE_AGE = 60 * 60 * 24 * 14
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 
 DATABASES = {
     "default": {
@@ -121,10 +128,12 @@ DATABASES = {
         "USER": proj_config.get("database", "user"),
         "OPTIONS": {"charset": "utf8mb4"},
         "PASSWORD": proj_config.get("database", "password"),
-        "HOST": proj_config.get("database", "host"),
-        "PORT": "",
+        #'HOST': 'de',  # This should match the service name defined in the docker-compose.yml for the MySQL container.
+        'HOST': proj_config.get("database", "localhost"),
+        'PORT': 3306,
     }
 }
+print(DATABASES)
 
 TWO_FACTOR_WEBAUTHN_RP_NAME = "labelbase.space"
 

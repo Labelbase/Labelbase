@@ -80,8 +80,6 @@ class Label(models.Model):
         )
     )
 
-
-
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
@@ -92,8 +90,9 @@ class Label(models.Model):
         return self.labelbase.get_absolute_url()
 
     def get_mempool_url(self):
+        mempool_endpoint = self.labelbase.user.profile.mempool_endpoint
         if self.type == "addr":
-            return "https://mempool.space/address/{}".format(self.ref)
+            return "{}/address/{}".format(mempool_endpoint, self.ref)
         if self.type == "tx":
-            return "https://mempool.space/tx/{}".format(self.ref)
+            return "{}/tx/{}".format(mempool_endpoint, self.ref)
         return ""

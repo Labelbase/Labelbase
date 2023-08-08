@@ -22,6 +22,10 @@ class Labelbase(models.Model):
 
 
 class Label(models.Model):
+    """
+    Reference:
+    https://github.com/bitcoin/bips/blob/master/bip-0329.mediawiki
+    """
     TYPE_TX = "tx"
     TYPE_ADDR = "addr"
     TYPE_PUBKEY = "pubkey"
@@ -56,6 +60,28 @@ class Label(models.Model):
             blank=True,
         )
     )
+    origin = encrypt(
+        models.CharField(
+            help_text=("Optional key origin information referencing the wallet "
+                       "associated with the label. The origin property should "
+                       "only appear where type is 'tx'.")
+            max_length=160,
+            default="",
+            blank=True,
+        )
+    )
+    spendable = encrypt(
+        models.BooleanField(
+            help_text=("One of true or false, denoting if an output should be "
+                       "spendable by the wallet. The spendable property only "
+                       "where type is 'output'.")
+            max_length=160,
+            default=False,
+        )
+    )
+
+
+
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
 
     def get_absolute_url(self):

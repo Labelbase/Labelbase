@@ -128,8 +128,7 @@ DATABASES = {
         "USER": proj_config.get("database", "user"),
         "OPTIONS": {"charset": "utf8mb4"},
         "PASSWORD": proj_config.get("database", "password"),
-        #'HOST': 'de',  # This should match the service name defined in the docker-compose.yml for the MySQL container.
-        'HOST': proj_config.get("database", "localhost"),
+        'HOST': 'localhost', 
         'PORT': 3306,
     }
 }

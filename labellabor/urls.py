@@ -72,7 +72,8 @@ urlpatterns = [
         login_required(LabelbaseUpdateView.as_view()),
         name="edit_labelbase"
     ),
-    path("labelbase/import/",
+    path(
+        "labelbase/import/",
         upload_labels,
         name="import_labels"
     ),

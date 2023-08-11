@@ -27,7 +27,6 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
-    # path('api/labelbase/<int:labelbase_id>/label/<int:id>/', api.label),
     path(
         "api/v0/labelbase/",
         LabelbaseAPIView.as_view()
@@ -75,7 +74,7 @@ urlpatterns = [
     ),
     path("labelbase/import/",
         upload_labels,
-        name="import_labels"
+        name="import_labels",
     ),
     path(
         "labelbase/export/<int:labelbase_id>/",
@@ -85,13 +84,8 @@ urlpatterns = [
     path(
         "labelbase/",
         login_required(LabelbaseFormView.as_view()),
-        name="labelbase_new"
+        name="labelbase_new",
     ),
-    # path(
-    #    'labelbase/<int:labelbase_id>/label/<int:label_id>/edit/',
-    #     login_required(LabelUpdateView.as_view()),
-    #     name='edit_label'
-    #),
     path(
         "label/<int:pk>/edit/",
         login_required(LabelUpdateView.as_view()),
@@ -100,7 +94,7 @@ urlpatterns = [
     path(
         "label/<int:pk>/delete/",
         login_required(LabelDeleteView.as_view()),
-        name="del_label",
+        name="del_label"
     ),
     path(
         "account/logout/",
@@ -110,11 +104,12 @@ urlpatterns = [
     path(
         "account/register/",
         RegistrationView.as_view(),
-        name="registration"),
+        name="registration"
+    ),
     path(
         "account/register/done/",
         RegistrationCompleteView.as_view(),
-        name="registration_complete",
+        name="registration_complete"
     ),
     path(
         "account/change-password/",
@@ -122,7 +117,7 @@ urlpatterns = [
             template_name="change_password.html",
             success_url="/"
         ),
-        name="change_password",
+        name="change_password"
     ),
     path(
         "privacy-policy",
@@ -147,7 +142,8 @@ urlpatterns = [
     path(
         "",
         HomeView.as_view(),
-        name="home"),
+        name="home"
+    ),
     path(
         "",
         include(tf_urls)

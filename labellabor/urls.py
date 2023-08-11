@@ -60,36 +60,36 @@ urlpatterns = [
     path(
         "labelbase/<pk>/delete/",
         login_required(LabelbaseDeleteView.as_view()),
-        name="del_labelbase",
+        name="del_labelbase"
     ),
     path(
         "labelbase/<int:labelbase_id>/",
         login_required(LabelbaseView.as_view()),
-        name="labelbase",
+        name="labelbase"
     ),
     path(
         "labelbase/<int:labelbase_id>/edit/",
         login_required(LabelbaseUpdateView.as_view()),
-        name="edit_labelbase",
+        name="edit_labelbase"
     ),
     path("labelbase/import/",
         upload_labels,
-        name="import_labels",
+        name="import_labels"
     ),
     path(
         "labelbase/export/<int:labelbase_id>/",
         stream_labels_as_jsonl,
-        name="export_labels",
+        name="export_labels"
     ),
     path(
         "labelbase/",
         login_required(LabelbaseFormView.as_view()),
-        name="labelbase_new",
+        name="labelbase_new"
     ),
     path(
         "label/<int:pk>/edit/",
         login_required(LabelUpdateView.as_view()),
-        name="edit_label",
+        name="edit_label"
     ),
     path(
         "label/<int:pk>/delete/",
@@ -121,8 +121,8 @@ urlpatterns = [
     ),
     path(
         "privacy-policy",
-         PrivacyView.as_view(),
-         name="privacy_policy"
+        PrivacyView.as_view(),
+        name="privacy_policy"
     ),
     path(
         "terms",

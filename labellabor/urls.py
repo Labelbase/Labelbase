@@ -1,11 +1,9 @@
-from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 from two_factor.urls import urlpatterns as tf_urls
 from labelbase.api import LabelAPIView, LabelbaseAPIView
 from rest_framework.documentation import include_docs_urls
-from rest_framework.urlpatterns import format_suffix_patterns
 from django.contrib.auth.decorators import login_required
 from userprofile.views import ProfileView, APIKeyView
 from .views import (
@@ -88,7 +86,11 @@ urlpatterns = [
         login_required(LabelbaseFormView.as_view()),
         name="labelbase_new"
     ),
-    # path('labelbase/<int:labelbase_id>/label/<int:label_id>/edit/', login_required(LabelUpdateView.as_view()), name='edit_label'),
+    # path(
+    #    'labelbase/<int:labelbase_id>/label/<int:label_id>/edit/',
+    #     login_required(LabelUpdateView.as_view()),
+    #     name='edit_label'
+    #),
     path(
         "label/<int:pk>/edit/",
         login_required(LabelUpdateView.as_view()),

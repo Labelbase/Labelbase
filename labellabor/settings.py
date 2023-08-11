@@ -1,6 +1,7 @@
 import os
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 from pathlib import Path
-
 from configparser import RawConfigParser
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,8 +38,7 @@ else:
     ALLOWED_HOSTS = [proj_config.get("internal", "allowed_host")]
 
 
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
+
 
 sentry_sdk.init(
     dsn="https://3b833ae08ccc4ff68793e961fff4921c@o4504646963232768.ingest.sentry.io/4504646967361536",
@@ -128,7 +128,7 @@ DATABASES = {
         "USER": proj_config.get("database", "user"),
         "OPTIONS": {"charset": "utf8mb4"},
         "PASSWORD": proj_config.get("database", "password"),
-        'HOST': 'localhost', 
+        'HOST': 'localhost',
         'PORT': 3306,
     }
 }

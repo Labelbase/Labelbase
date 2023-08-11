@@ -16,6 +16,7 @@ from labelbase.forms import LabelForm, LabelbaseForm
 from django.http import HttpResponseRedirect
 from rest_framework.authtoken.models import Token
 
+
 class AboutView(TemplateView):
     template_name = "about.html"
 

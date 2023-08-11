@@ -1,10 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-import tempfile
 import os
 import json
-from labelbase.models import Labelbase, Label
+from labelbase.models import Labelbase
 from labelbase.serializers import LabelSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib import messages

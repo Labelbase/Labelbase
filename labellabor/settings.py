@@ -91,8 +91,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
-
 ROOT_URLCONF = "labellabor.urls"
 
 LOGIN_URL = "two_factor:login"
@@ -132,7 +130,6 @@ DATABASES = {
         'PORT': 3306,
     }
 }
-print(DATABASES)
 
 TWO_FACTOR_WEBAUTHN_RP_NAME = "labelbase.space"
 

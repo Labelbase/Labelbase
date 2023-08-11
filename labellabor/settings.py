@@ -37,9 +37,6 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = [proj_config.get("internal", "allowed_host")]
 
-
-
-
 sentry_sdk.init(
     dsn="https://3b833ae08ccc4ff68793e961fff4921c@o4504646963232768.ingest.sentry.io/4504646967361536",
     integrations=[

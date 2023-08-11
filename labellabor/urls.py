@@ -75,7 +75,8 @@ urlpatterns = [
     ),
     path("labelbase/import/",
         upload_labels,
-        name="import_labels"),
+        name="import_labels"
+    ),
     path(
         "labelbase/export/<int:labelbase_id>/",
         stream_labels_as_jsonl,
@@ -126,26 +127,31 @@ urlpatterns = [
     path(
         "privacy-policy",
          PrivacyView.as_view(),
-         name="privacy_policy"),
+         name="privacy_policy"
+    ),
     path(
         "terms",
         TermsView.as_view(),
-        name="terms"),
+        name="terms"
+    ),
     path(
         "faq",
         FaqView.as_view(),
-        name="faq"),
+        name="faq"
+    ),
     path(
         "about",
         AboutView.as_view(),
-        name="about"),
+        name="about"
+    ),
     path(
         "",
         HomeView.as_view(),
         name="home"),
     path(
         "",
-        include(tf_urls)),
+        include(tf_urls)
+    ),
     path(
         "",
         include("user_sessions.urls", "user_sessions")

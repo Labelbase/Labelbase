@@ -62,9 +62,9 @@ class Label(models.Model):
     )
     origin = encrypt(
         models.CharField(
-            help_text=("""Optional key origin information referencing the wallet
-                        associated with the label. The origin property should
-                        only appear where type is 'tx'.""")
+            help_text=("Optional key origin information referencing the wallet \
+                        associated with the label. The origin property should \
+                        only appear where type is 'tx'.")
             max_length=160,
             default="",
             blank=True,
@@ -72,9 +72,9 @@ class Label(models.Model):
     )
     spendable = encrypt(
         models.BooleanField(
-            help_text=("""One of true or false, denoting if an output should be
-                       spendable by the wallet. The spendable property only
-                       where type is 'output'.""")
+            help_text=("One of true or false, denoting if an output should be \
+                       spendable by the wallet. The spendable property only \
+                       where type is 'output'.")
             max_length=160,
             default=False,
         )

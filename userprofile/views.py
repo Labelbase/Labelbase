@@ -10,7 +10,7 @@ class ProfileView(TemplateView):
 class APIKeyView(TemplateView):
     """ """
     template_name = "apikey.html"
-    
+
     def get_context_data(self, **kwargs):
         context = super(APIKeyView, self).get_context_data(**kwargs)
         context["api_token"] = Token.objects.get(user_id=self.request.user.id)

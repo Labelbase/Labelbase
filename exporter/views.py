@@ -1,6 +1,6 @@
 import json
 from django.http import StreamingHttpResponse
-from labelbase.models import Labelbase, Label
+from labelbase.models import Label
 from django.contrib.auth.decorators import login_required
 
 
@@ -33,7 +33,7 @@ def stream_labels_as_jsonl(request, labelbase_id):
         or Microsoft Edge.
 
     Keep in mind that Chrome's download protection is in place to help keep
-    your computer safe, so only download files from sources that you trust. 
+    your computer safe, so only download files from sources that you trust.
     If you are unsure whether a file is safe, it's always a good idea to scan
     it with an antivirus program before downloading.
     """

@@ -46,12 +46,16 @@ class LabelbaseAPIView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, id):
+    def get(self, request, id=None):
         """
-        Retrieve labelbase with the given id.
+        Retrieve labelbase with the given id or return all.
         """
-        labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
-        serializer = LabelbaseSerializer(labelbase, context={"request": request})
+        if id is None:
+            labelbases = Labelbase.objects.filter(user_id=request.user.id)
+            serializer = LabelbaseSerializer(labelbases, context={"request": request})
+        else:
+            labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
+            serializer = LabelbaseSerializer(labelbase, context={"request": request})
         return Response(serializer.data)
 
     def delete(self, request, id):
@@ -108,12 +112,15 @@ class LabelAPIView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, labelbase_id, id):
-        label = get_object_or_404(
-            Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id
-        )
-
-        serializer = LabelSerializer(label)
+    def get(self, request, labelbase_id, id=None):
+        if id is None:
+            labels = Label.objects.filter(labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
+            serializer = LabelSerializer(labels)
+        else:
+            label = get_object_or_404(
+                Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id
+            )
+            serializer = LabelSerializer(label)
         return Response(serializer.data)
 
     def delete(self, request, labelbase_id, id):

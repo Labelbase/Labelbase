@@ -31,7 +31,7 @@ SECRET_KEY = proj_config.get("internal", "secret_key")
 CRYPTOGRAPHY_SALT = proj_config.get("internal", "crypto_salt")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = proj_config.get("internal", "debug")
+DEBUG = proj_config.getboolean("internal", "debug")
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:

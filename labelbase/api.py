@@ -52,7 +52,7 @@ class LabelbaseAPIView(APIView):
         """
         if id is None:
             labelbases = Labelbase.objects.filter(user_id=request.user.id)
-            serializer = LabelbaseSerializer(labelbases, context={"request": request})
+            serializer = LabelbaseSerializer(labelbases, context={"request": request}, many=True)
         else:
             labelbase = get_object_or_404(Labelbase, id=id, user_id=request.user.id)
             serializer = LabelbaseSerializer(labelbase, context={"request": request})
@@ -115,7 +115,7 @@ class LabelAPIView(APIView):
     def get(self, request, labelbase_id, id=None):
         if id is None:
             labels = Label.objects.filter(labelbase_id=labelbase_id, labelbase__user_id=request.user.id)
-            serializer = LabelSerializer(labels)
+            serializer = LabelSerializer(labels, many=True)
         else:
             label = get_object_or_404(
                 Label, id=id, labelbase_id=labelbase_id, labelbase__user_id=request.user.id

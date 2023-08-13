@@ -90,7 +90,7 @@
           <td>{{ label.ref }}</td>
           {% endif %}
           <td>{{ label.origin }}</td>
-          {% if label.spendable is None
+          {% if label.spendable is None %}
             <td></td>
           {% else %}
             <td>{{ label.spendable }}</td>

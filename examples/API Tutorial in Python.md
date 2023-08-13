@@ -25,7 +25,7 @@ base_url = 'https://labelbase.space/api/v0/'
 
 # Define headers containing the API key
 headers = {
-    'Authorization': f'Token {api_key}'
+    'Authorization': f'Token {api_key}'  # Authentication scheme is 'Token' not 'Bearer' or 'JWT'
 }
 ```
 

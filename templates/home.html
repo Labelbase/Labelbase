@@ -13,7 +13,7 @@
     <h1 style="padding-top: 1.6em; padding-bottom: 0.9em; text-transform: uppercase;font-weight:800;">L<span style="height:1.1em; width:1em" data-feather="tag" class="align-text-bottom"></span>belbase</h1>
     <h2 class="display-6 fw-normal" style="padding-bottom: 0.9em;">All your labels in one place.</h2>
     <p class="lb-header mx-auto text-center fs-5 text-muted">Labelbase is a label management service for Bitcoin transactions and addresses.</p>
-    <p class="lb-header mx-auto text-center fs-5 text-muted">Labelbase provides features for adding labels, importing and exporting labels, and offers a <a href="/api-reference/">public API</a> for integration with wallets and existing workflows.<br>
+    <p class="lb-header mx-auto text-center fs-5 text-muted">Labelbase provides features for adding labels, importing and exporting labels, and offers a public API for integration with wallets and existing workflows.<br>
       This ensures that you always have access to the most up-to-date information.</p>
     <p class="lb-header mx-auto text-center fs-5 text-muted"> Labelbase supports BIP-329, a format for unifying label data.</p>
   </div>
@@ -24,6 +24,7 @@
   <main class="lb-header mx-auto text-center">
 
       <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+
         <div class="col">
           <div class="card mb-4 rounded-3 shadow-sm">
             <img src="/static/utxo_source.png"
@@ -33,10 +34,11 @@
 
             <div class="card-body">
               <p style="font-weight: 700;">Do you know where that coin came from? No?!</p><p><a href="https://en.bitcoin.it/wiki/Privacy">Learn more</a></p>
-              <!--button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button-->
+                <!-- Instead of "learn more" change to "why is this important?" -->
             </div>
           </div>
         </div>
+
         <div class="col">
           <div class="card mb-4 rounded-3 shadow-sm">
             <img src="/static/API_who.png"
@@ -50,6 +52,7 @@
             </div>
           </div>
         </div>
+
         <div class="col">
           <div class="card mb-4 rounded-3 shadow-sm border-primary">
             <img src="/static/Handshake.png"
@@ -64,129 +67,66 @@
           </div>
         </div>
       </div>
-
-
-
     </main>
 
     {% if request.user.is_superuser %}
 
-  {% comment %}
+
+
+
+
+
+
+
   <main class="lb-header mx-auto text-center">
 
       <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+
         <div class="col">
           <div class="card mb-4 rounded-3 shadow-sm">
-            <div class="card-header py-3">
-              <h4 class="my-0 fw-normal"><!--Free-->Early Adopter</h4>
-            </div>
+            <img src="/static/Encryption.png"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
             <div class="card-body">
-              <h1 class="card-title pricing-card-title">$0<small class="text-muted fw-light">/mo</small></h1>
-              <ul class="list-unstyled mt-3 mb-4">
-                <li>5 labelbases</li>
-                <li>Unlimited labels</li>
+              <p style="font-weight: 700;">Your labels are encrypted.</p><p><a href="/privacy-policy/">Privacy Policy</a></p>
 
-                <li>API usage</li>
-                <li>Best effort support</li>
-
-              </ul>
-              <button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button>
             </div>
           </div>
         </div>
+
         <div class="col">
           <div class="card mb-4 rounded-3 shadow-sm">
-            <div class="card-header py-3">
-              <h4 class="my-0 fw-normal">Pro</h4>
-            </div>
+            <img src="/static/FAQ.png"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
             <div class="card-body">
-              <h1 class="card-title pricing-card-title">$15<small class="text-muted fw-light">/mo</small></h1>
-              <ul class="list-unstyled mt-3 mb-4">
-                <li>Unlimited labelbases</li>
-                <li>Unlimited labels</li>
-                <li>Priority email support</li>
-              </ul>
-              <button type="button" class="w-100 btn btn-lg btn-primary">Get started</button>
+              <p style="font-weight: 700;">Need more answers?</p><p><a href="/faq/">View FAQs</a></p>
             </div>
           </div>
         </div>
+
+
         <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm border-primary">
-            <div class="card-header py-3 text-bg-primary border-primary">
-              <h4 class="my-0 fw-normal">Self-Hosted</h4>
-            </div>
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <img src="/static/API_usage.png"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
             <div class="card-body">
-              <h1 class="card-title pricing-card-title">
-                <small class="text-muted fw-light">Donation</small></h1>
-              <ul class="list-unstyled mt-3 mb-4">
-                <li>30 users included</li>
-                <li>15 GB of storage</li>
-                <li>Phone and email support</li>
-                <li>Run your own</li>
-              </ul>
-              <button type="button" class="w-100 btn btn-lg btn-primary">Donate now</button><!-- -->
+              <p style="font-weight: 700;">How to send data to Labelbase?</p><p><a href="/api-reference/">API Reference</a></p>
             </div>
           </div>
         </div>
-      </div>
 
-      <h2 class="display-6 text-center mb-4">Compare plans</h2>
-
-      <div class="table-responsive">
-        <table class="table text-center">
-          <thead>
-            <tr>
-              <th style="width: 34%;"></th>
-              <th style="width: 22%;">Free</th>
-              <th style="width: 22%;">Pro</th>
-              <th style="width: 22%;">Enterprise</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row" class="text-start">Public</th>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-            </tr>
-            <tr>
-              <th scope="row" class="text-start">Private</th>
-              <td></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-            </tr>
-          </tbody>
-
-          <tbody>
-            <tr>
-              <th scope="row" class="text-start">Permissions</th>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-            </tr>
-            <tr>
-              <th scope="row" class="text-start">Sharing</th>
-              <td></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-            </tr>
-            <tr>
-              <th scope="row" class="text-start">Unlimited members</th>
-              <td></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-              <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-            </tr>
-            <tr>
-              <th scope="row" class="text-start">Extra security</th>
-              <td></td>
-              <td></td>
-              <td>✓</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </main>
-{% endcomment %}
+
+
     {% endif %} <!-- admin -->
     {#% include "footer.html" %#}
     {% comment %}

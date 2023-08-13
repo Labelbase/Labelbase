@@ -70,11 +70,12 @@ class Label(models.Model):
         )
     )
     spendable = encrypt(
-        models.NullBooleanField(
+        models.BooleanField(
             help_text=("One of true or false, denoting if an output should be "
                        "spendable by the wallet. The spendable property only "
                        "where type is 'output'."),
             default=None,
+            null=True
         )
     )
 

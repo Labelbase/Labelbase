@@ -8,7 +8,7 @@ Welcome to the Labelbase API integration Python tutorial! In this guide, we'll w
 
 Below is a step-by-step guide that walks you through the process of using the Labelbase API to manage labelbases and labels. I've included explanations, code snippets, and comments to assist you in understanding each step.
 
-Please note that you need to replace 'your_key_here' with your actual API key.
+Please note that you need to replace 'your_key_here' with [your actual API key](https://labelbase.space/account/apikey/).
 
 
 

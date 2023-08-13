@@ -89,7 +89,7 @@ class LabelAPIView(APIView):
             "ref": request.data.get("ref", ""),
             "label": request.data.get("label", ""),
             "origin": request.data.get("origin", ""),
-            "spendable": request.data.get("spendable", ""),
+            "spendable": request.data.get("spendable", "null"),
 
         }
 

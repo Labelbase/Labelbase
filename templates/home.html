@@ -62,23 +62,29 @@
             <div class="card-body">
 
               <p></p>
-              <a href="{{  reg_url }}" type="button" class="w-100 btn btn-lg btn-primary">Get started</a>
+              <a href="{{ reg_url }}" type="button" class="w-100 btn btn-lg btn-primary">Get started</a>
             </div>
           </div>
         </div>
       </div>
+
+
+      <!-- Centered "Getting Started" CTA Block -->
+       <div class="row justify-content-center">
+           <div class="col-lg-6">
+               <div class="card mb-4 rounded-3 shadow-sm">
+                   <div class="card-body">
+                       <p style="font-weight: 700;">Getting Started with Labelbase</p>
+                       <p> </p>
+                       <a href="{{ reg_url }}" type="button" class="w-100 btn btn-lg btn-primary">Get started</a>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+
     </main>
-
-    {% if request.user.is_superuser %}
-
-
-
-
-
-
-
-
-  <main class="lb-header mx-auto text-center">
+    <main class="lb-header mx-auto text-center">
 
       <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
 
@@ -90,7 +96,7 @@
               style="padding: 0.25em;">
 
             <div class="card-body">
-              <p style="font-weight: 700;">Your labels are encrypted.<br>&nbsp;</p><p><a href="/privacy-policy/">Privacy Policy</a></p>
+              <p style="font-weight: 700;">Your labels are encrypted.<br>&nbsp;</p><p><a href="/privacy-policy">Privacy Policy</a></p>
 
             </div>
           </div>
@@ -104,7 +110,7 @@
               style="padding: 0.25em;">
 
             <div class="card-body">
-              <p style="font-weight: 700;">Need more answers?<br>&nbsp;</p><p><a href="/faq/">View the FAQ</a></p>
+              <p style="font-weight: 700;">Need more answers?<br>&nbsp;</p><p><a href="/faq">View the FAQ</a></p>
             </div>
           </div>
         </div>
@@ -127,7 +133,6 @@
     </main>
 
 
-    {% endif %} <!-- admin -->
     {#% include "footer.html" %#}
     {% comment %}
 

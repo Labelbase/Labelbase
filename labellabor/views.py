@@ -20,6 +20,8 @@ from rest_framework.authtoken.models import Token
 class AboutView(TemplateView):
     template_name = "about.html"
 
+class EncryptionView(TemplateView):
+    template_name = "encryption.html"
 
 class HomeView(TemplateView):
     template_name = "home.html"

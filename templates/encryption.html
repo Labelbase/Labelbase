@@ -1,0 +1,47 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block title %}Encryption{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+  <style>
+
+
+    .lb-header {
+      max-width: 810px;
+    }
+  </style>
+  <div class="p-3 pb-md-4 mx-auto text-center">
+    <h1 style="padding-top: 1.6em; padding-bottom: 0.9em; text-transform: uppercase;font-weight:800;">L<span style="height:1.1em; width:1em" data-feather="tag" class="align-text-bottom"></span>belbase</h1>
+    <h2 class="display-6 fw-normal" style="padding-bottom: 0.9em;">All your labels in one place.</h2>
+  </div>
+
+
+
+  <main class="lb-header mx-auto text-center">
+
+    <!-- Centered "Getting Started" CTA Block -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card mb-4 rounded-3 shadow-sm">
+                  <img src="/static/Encryption.png"
+                class="card-img-top"
+                alt="..."
+                style="padding: 0.25em;">
+                <div class="card-body">
+                    <p style="font-weight: 700;">Your labels are encrypted.<br>&nbsp;</p><p><a href="/privacy-policy">Privacy Policy</a></p>
+
+                    <a href="{{ reg_url }}" type="button" class="w-100 btn btn-lg btn-primary">Get started</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    </main>
+
+{% endblock %}

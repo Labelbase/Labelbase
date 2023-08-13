@@ -20,6 +20,7 @@ from .views import (
     LabelbaseUpdateView,
     FaqView,
     AboutView,
+    EncryptionView
 )
 from importer.views import upload_labels
 from exporter.views import stream_labels_as_jsonl
@@ -139,6 +140,11 @@ urlpatterns = [
         "about",
         AboutView.as_view(),
         name="about"
+    ),
+    path(
+        "encryption",
+        EncryptionView.as_view(),
+        name="encryption"
     ),
     path(
         "",

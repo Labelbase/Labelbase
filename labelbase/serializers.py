@@ -11,6 +11,8 @@ class LabelSerializer(serializers.ModelSerializer):
             "type",
             "ref",
             "label",
+            "origin",
+            "spendable",
         ]
         read_only_fields = [
             "id",

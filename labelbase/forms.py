@@ -5,7 +5,7 @@ from .models import Label, Labelbase
 class LabelForm(forms.ModelForm):
     class Meta:
         model = Label
-        fields = ["labelbase", "type", "ref", "label"]
+        fields = ["labelbase", "type", "ref", "label", "origin", "spendable"]
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")

@@ -73,6 +73,8 @@
           <th scope="col">type</th>
           <th scope="col">label</th>
           <th scope="col">ref</th>
+          <th scope="col">origin</th>
+          <th scope="col">spendable</th>
         </tr>
       </thead>
 
@@ -87,6 +89,8 @@
           {% else %}
           <td>{{ label.ref }}</td>
           {% endif %}
+          <td>{{ label.origin }}</td>
+          <td>{{ label.spendable }}</td>
         </tr>
         {% endfor %}
       </tbody>

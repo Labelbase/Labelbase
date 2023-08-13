@@ -88,6 +88,9 @@ class LabelAPIView(APIView):
             "type": request.data.get("type", "addr"),
             "ref": request.data.get("ref", ""),
             "label": request.data.get("label", ""),
+            "origin": request.data.get("origin", ""),
+            "spendable": request.data.get("spendable", ""),
+
         }
 
         serializer = LabelSerializer(data=data)
@@ -105,6 +108,8 @@ class LabelAPIView(APIView):
             "type": request.data.get("type", "addr"),
             "ref": request.data.get("ref", ""),
             "label": request.data.get("label", ""),
+            "origin": request.data.get("origin", ""),
+            "spendable": request.data.get("spendable", ""),
         }
         serializer = LabelSerializer(label, data=data)
         if serializer.is_valid():

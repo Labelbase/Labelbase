@@ -95,7 +95,7 @@ class LabelbaseView(ListView):
 class LabelUpdateView(UpdateView):
     model = Label
     template_name = "label_edit.html"
-    fields = ["type", "ref", "label"]
+    fields = ["type", "ref", "label", "origin", "spendable"]
 
 
 class LabelbaseUpdateView(UpdateView):

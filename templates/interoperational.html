@@ -1,0 +1,65 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block title %}Encryption{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+  <style>
+
+
+    .lb-header {
+      max-width: 810px;
+    }
+  </style>
+  <div class="p-3 pb-md-4 mx-auto text-center">
+    <h1 style="padding-top: 1.6em; padding-bottom: 0.9em; text-transform: uppercase;font-weight:800;">L<span style="height:1.1em; width:1em" data-feather="tag" class="align-text-bottom"></span>belbase</h1>
+    <h2 class="display-6 fw-normal" style="padding-bottom: 0.9em;">All your labels in one place.</h2>
+  </div>
+
+
+
+  <main class="lb-header mx-auto text-center">
+    <!--
+    "Use your labels here, use your labels there – Dave doesn't care."
+
+    "Use this wallet today, use that wallet tomorrow – Dave doesn't care."
+    -->
+    <!-- Centered "Getting Started" CTA Block -->
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card mb-4 rounded-3 shadow-sm">
+                  <img src="/static/Choices.png"
+                class="card-img-top"
+                alt="..."
+                style="padding: 0.25em;">
+                <div class="card-body">
+                    <p style="font-weight: 700;">The essence of BIP-329<br>&nbsp;</p>
+
+                    <p><i>"Use your labels here, use your labels there – Dave doesn't care."</i></p>
+                    <p>
+                      BIP-329 introduces a uniform layout, for exporting and importing labels linked to Bitcoin wallet transactions, addresses, and public keys.
+                    </p>
+                    <p>
+                      With existing methods lacking consistency in label transfer between wallets, user inconvenience and privacy vulnerabilities arise.
+                    </p>
+                    <p>
+                      BIP-329 offers an elegant JSON structure, enabling seamless label migration and averting vendor lock-in. It encompasses wallet metadata too.
+                    </p>
+                    <p>
+                    Labelbase leverages this standard to provide a service that synchronizes your labels across diverse wallets and systems.
+                      <br><br>
+                      <a href="{{ reg_url }}" type="button" class="w-100 btn btn-lg btn-primary">Get started</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    </main>
+
+{% endblock %}

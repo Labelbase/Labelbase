@@ -23,6 +23,9 @@ class AboutView(TemplateView):
 class EncryptionView(TemplateView):
     template_name = "encryption.html"
 
+class InteroperationalView(TemplateView):
+    template_name = "interoperational.html"
+
 class HomeView(TemplateView):
     template_name = "home.html"
 

@@ -7,7 +7,6 @@
 <form method="post" action="." >
     {% csrf_token %}
     {{ form|bootstrap }}
-
     <div  style="padding-top: 1em;">
       <a href="{{ form.instance.labelbase.get_absolute_url }}"
           type="button" class="btn btn-link">Back to Labelbase</a>
@@ -16,6 +15,50 @@
       <input type="submit"  class="btn btn-primary" value="Save">
     </div>
 </form>
+
+{% if request.user.is_superuser %}
+  {% if form.instance.type == "tx" %}
+
+    <style>
+      .connector {
+        margin-bottom: 0.5rem;
+        height: 2.5rem;
+        border-bottom: 2px solid #ccc;
+        position: relative;
+      }
+      .float-left {
+        float: left;
+      }
+      .float-right {
+        float: right;
+      }
+    </style>
+
+    <div class="row" style="padding-top: 3rem;">
+      <div class="col-md-4">
+        <h3 class="mb-4">Inputs</h3>
+        <div class="connector"></div>
+        <p><span class="float-left">Input #1</span> <button class="btn btn-outline-primary btn-sm float-right">Label input</button></p>
+        <div class="connector"></div>
+        <p><span class="float-left">Input #2</span> <button class="btn btn-outline-primary btn-sm float-right">Add Label</button></p>
+      </div>
+      <div class="col-md-4">
+        <h4 class="mb-4">Transaction Details</h4>
+        <!-- Transaction details content goes here -->
+      </div>
+      <div class="col-md-4">
+        <h4 class="mb-4">Outputs</h4>
+        <div class="connector"></div>
+        <p><span class="float-left">Output #1</span> <button class="btn btn-outline-primary btn-sm float-right">Label Output</button></p>
+        <div class="connector"></div>
+        <p><span class="float-left">Output #2</span> <button class="btn btn-outline-primary btn-sm float-right">Label Output</button></p>
+        <div class="connector"></div>
+        <p><span class="float-left">Output #3</span> <button class="btn btn-outline-primary btn-sm float-right">Label Output</button></p>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+
 
 
 <div class="modal" tabindex="-1" id="deleteLabelModal">

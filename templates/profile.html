@@ -1,23 +1,294 @@
 {% extends "_base.html" %}
 {% load i18n %}
-
+{% load sekizai_tags %}
 {% block nav_userprofile %}active{% endblock %}
 
 {% block content %}
 
-  <div class="row">
-    <div  class="col float-start">
-      <h2 style="padding-top: 1em;">{% block title %}Profile{% endblock %}</h2>
-    </div>
-    <div class="col float-end" >
-      <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown"  style="padding-top: 2em;">
-        <a href="{% url 'change_password' %}" class="btn btn-primary">Change Password</a>
-
-      </div>
-    </div>
-  </div>
 
 
 
+<div style="padding-top: 1em;">
+  <h2 style="padding-top: 1em;">{% block title %}Profile Settings{% endblock %}</h2>
+
+<ul class="nav nav-tabs" style="padding-top: 2rem; ">
+  <li class="nav-item">
+    <a class="nav-link  active" aria-current="page"  href="{#% url 'edit_label' label.id #%}">API  </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link   " aria-current="page"  href="{#% url 'edit_label' label.id #%}">Import  </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link   " aria-current="page"  href="{#% url 'edit_label' label.id #%}">Export  </a>
+  </li>
+
+
+  <li class="nav-item">
+    <a class="nav-link   " aria-current="page"  href="{#% url 'edit_label' label.id #%}">Mempool  </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link   " aria-current="page"  href="{#% url 'edit_label' label.id #%}">Fix & manage  </a>
+  </li>
+
+
+
+
+
+  <!--li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+  </li-->
+</ul>
+
+<div style="padding-top: 2rem; ">
+
+{% block profile_content %}
+{% endblock %}
+</div>
+
+
+
+<div  class="container">
+
+
+          <h4>API  </h4>
+          <table class="table">
+              <tbody>
+                  <tr>
+                      <td><b>Auto Cleanup</b></td>
+                      <td>
+                        <small>Automatically remove records pushed with emtpy "label" texts</small></td>
+                      <td>
+                          <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="function1Switch">
+                          </div>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td><b>Auto Replace</b></td>
+                      <td>
+                        <small>Automatically replace doublicated records</small></td>
+                      <td>
+                          <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="function1Switch">
+                              <label class="form-check-label" for="function1Switch">On/Off</label>
+                          </div>
+                      </td>
+                  </tr>
+                  <tr>
+                    <td>Function 2</td>
+                      <td>Automatically merge entries with identical attributes</td>
+                      <td>
+                          <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="function2Switch">
+                              <label class="form-check-label" for="function2Switch">On/Off</label>
+                          </div>
+                      </td>
+                  </tr>
+                  <!-- Add more rows for additional functions/features -->
+              </tbody>
+
+              <tr>
+                <td>Function 2</td>
+                  <td>Automatically merge entries with identical attributes</td>
+                  <td>
+                      <div class="form-check form-switch">
+                          <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.merge_identical %}checked="checked"{% endif %} id="merge_identical">
+                      </div>
+                  </td>
+              </tr>
+          </table>
+
+          <h4>Import</h4>
+          <table class="table">
+              <tbody>
+                  <tr>
+                      <td><b>Auto Cleanup</b></td>
+                      <td>
+                        <small>Do not export doublicates</small></td>
+                      <td>
+                          <div class="form-check form-switch">
+                              <input class="form-check-input user-setting" type="checkbox" id="function1Switch">
+                              <label class="form-check-label" for="function1Switch">x/Off</label>
+                          </div>
+                      </td>
+                  </tr>
+
+
+              <tr>
+                <td>Function 2</td>
+                  <td>Automatically merge entries with identical attributes</td>
+                  <td>
+                      <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="function2Switch">
+                          <label class="form-check-label" for="function2Switch">On/Off</label>
+                      </div>
+                  </td>
+              </tr>
+          </table>
+
+          <h4>Export  </h4>
+          <table class="table">
+              <tbody>
+                  <tr>
+                      <td><b>Auto Cleanup</b></td>
+                      <td>
+                        <small>Do not export doublicates</small></td>
+                      <td>
+                          <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="function1Switch">
+                              <label class="form-check-label" for="function1Switch">On/Off</label>
+                          </div>
+                      </td>
+                  </tr>
+
+
+              <tr>
+                <td>Function 2</td>
+                  <td>Automatically merge entries with identical attributes</td>
+                  <td>
+                      <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="function2Switch">
+                          <label class="form-check-label" for="function2Switch">On/Off</label>
+                      </div>
+                  </td>
+              </tr>
+          </table>
+
+          <h4>Fix & manage  </h4>
+          <table class="table">
+              <tbody>
+                  <tr>
+                      <td><b>Auto Cleanup</b></td>
+                      <td>
+                        <small>Do not export doublicates</small></td>
+                      <td>
+                          <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="function1Switch">
+                              <label class="form-check-label" for="function1Switch">On/Off</label>
+                          </div>
+                      </td>
+                  </tr>
+
+
+              <tr>
+                <td>Function 2</td>
+                  <td>Automatically merge entries with identical attributes</td>
+                  <td>
+                      <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="function2Switch">
+                          <label class="form-check-label" for="function2Switch"></label>
+                      </div>
+                  </td>
+              </tr>
+          </table>
+
+
+
+          <h4>Callouts  & Messages </h4>
+          <p>In this section, customize which callout and messages are shown.
+          <table class="table">
+              <tbody>
+                  <tr>
+                      <td>
+                        <b>Format Requirement for UTXO Value Tracking</b>
+
+                        <br>
+                        <br>
+
+
+                        <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item active" aria-current="page"> "Labelbase"</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"> Fiat Finances</li>
+                          </ol>
+                        </nav>
+
+
+                        <div class="bd-callout bd-callout-warning">
+                          <strong>Important Information:</strong>
+
+                          If you wish to track the value you exchanged for a UTXO, please include it in the supported format (e.g., CHF 615.00, EUR 1999.99, or USD 1000), using one of the supported currencies.
+                          Ensure that you operate your Labelbase in the appropriate 'Operation mode' and input or transmit your labels accordingly to avoid losing information.</p>
+                        </div>
+
+                      </td>
+                      <td>
+                          <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="function1Switch">
+                              <label class="form-check-label" for="function1Switch">On/Off</label>
+                          </div>
+                      </td>
+                  </tr>
+
+                  <tr>
+                      <td>
+                        
+
+                        <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item active" aria-current="page"> "Labelbase"</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"> Fiat Finances</li>
+                          </ol>
+                        </nav>
+
+
+                        <div class="bd-callout bd-callout-info">
+
+                          <strong>Format Requirement for UTXO Value Tracking:</strong>
+                          If you wish to track the value you exchanged for a UTXO, please include it in the supported format (e.g., CHF 615.00, EUR 1999.99, or USD 1000), using one of the supported currencies.
+                          Ensure that you operate your Labelbase in the appropriate 'Operation mode' and input or transmit your labels accordingly to avoid losing information.
+                        </div>
+
+                      </td>
+                      <td>
+                          <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="function1Switch">
+                              <label class="form-check-label" for="function1Switch">On/Off</label>
+                          </div>
+                      </td>
+                  </tr>
+
+          </table>
+ </div>
+
+
+{% csrf_token %}
+ <script>
+   {% addtoblock "js" %}
+   $(document).ready(function () {
+
+     var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+     console.log("csrftoken" + csrftoken)
+
+     $('.user-setting').change(function () {
+         console.log("changed settings")
+         var toggleId = $(this).attr('id');
+         var toggleCheckbox = $(this);
+         console.log(toggleId)
+         var previousValue = toggleCheckbox.prop('checked'); // Capture the previous value
+
+         // Make an AJAX request to store the user profile settings
+         $.ajax({
+             type: 'POST',
+             url: '.',
+             headers: { 'X-CSRFToken': csrftoken },
+             data: { toggleId: toggleId, toggleValue: toggleCheckbox.prop('checked') },
+             success: function (response) {
+                 console.log(response.message);
+             },
+             error: function (xhr, status, error) {
+                 console.error(error);
+                 // Revert to previous setting on error
+                 toggleCheckbox.prop('checked', previousValue);
+             }
+         });
+     });
+    });
+
+    {% endaddtoblock %}
+</script>
 
 {% endblock %}

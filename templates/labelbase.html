@@ -6,61 +6,8 @@
 {% load bootstrap %}
 
 {% block content %}
-{% if labelbase %}
-  <div class="row">
-    <div  class="col float-start">
-      <h2 style="padding-top: 1em;">{% block title %}{{ labelbase.name }} {% endblock %}</h2>
-      {% if labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }} </tt>{% endif %}
-      {% if labelbase.about %}
-      <p>{{ labelbase.about}}</p>
-      {% endif %}
-    </div>
 
-    <div class="col float-end" >
-      <div class="btn-group float-end" role="group" aria-label="Button group with nested dropdown"  style="padding-top: 2em;">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLabelModal">New Label</button>
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-primary dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
-            Import
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBip329LabelsModal">BIP-0329 Labels</a></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBlueWalletCSVLabelsModal">BlueWallet CSV History</a></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBitboxCSVLabelsModal">BitBox App CSV History</a></li>
-          </ul>
-        </div>
-        <a href="{% url 'export_labels' labelbase.id %}" class="btn btn-primary">Export</a>
-
-        {% comment %}
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-primary dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
-            Export
-          </button>
-
-          <ul class="dropdown-menu">
-          <!--  <li><a class="dropdown-item" href="#">Dropdown link</a></li>
-            <li><a class="dropdown-item" href="#">Dropdown link</a></li>-->
-          </ul>
-
-        </div>
-        {% endcomment %}
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Labelbase
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editLabelbaseModal">Edit</a></li>
-            <!--li><a class="dropdown-item" href="#">Merge duplicates</a></li-->
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#connectApiKeyLabelbaseModal">API Connect</a></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteLabelbaseModal">Delete Labelbase and Labels</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-{% else %}
-  <p>There is no such labelbase.</p>
-{% endif %}
+{% include "_labelbase_header_info_menu.html" %}
 
 
 {% if labelbase %}
@@ -71,36 +18,19 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">type</th>
-          <th scope="col">label</th>
           <th scope="col">ref</th>
+          <th scope="col">label</th>
           <th scope="col">origin</th>
           <th scope="col">spendable</th>
         </tr>
       </thead>
 
       <tbody>
-        {% for label in label_list %}
-        <tr>
-          <td><a href="{% url 'edit_label' label.id %}">{{ label.id }}</a></td>
-          <td>{{ label.get_type_display }}</td>
-          <td>{{ label.label }}</td>
-          {% if label.get_mempool_url %}
-          <td><a href="{{ label.get_mempool_url }}">{{ label.ref }}</a></td>
-          {% else %}
-          <td>{{ label.ref }}</td>
-          {% endif %}
-          <td>{{ label.origin }}</td>
-          {% if label.spendable is None %}
-            <td></td>
-          {% else %}
-            <td>{{ label.spendable }}</td>
-          {% endif %}
-        </tr>
-        {% endfor %}
       </tbody>
     </table>
     {% else %}
       <p>There are no labels in this labelbase.</p>
+      <p>You can create new labels by using the 'New Label' button on the top right, or <a href="#" data-bs-toggle="modal" data-bs-target="#importLabelbaseModal">import your existing labels</a>.</p>
     {% endif %}
 </div>
 {% endif %}
@@ -113,7 +43,7 @@
       <form action="." method="post">
       {% csrf_token %}
       <div class="modal-header">
-        <h5 class="modal-title">Create a new label</h5>
+        <h5 class="modal-title">Create New Label</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -140,58 +70,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {% labelbaseform_edit labelbase as form %}
-        {{ form|bootstrap  }}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">OK</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-<!-- modal -->
-<div class="modal" tabindex="-1" id="importBip329LabelsModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <form action="{% url 'import_labels' %}" method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="modal-header">
-        <h5 class="modal-title">Import BIP-0329 labels</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        {% bip0329labeluploadform labelbase.id as form %}
-        {{ form|bootstrap  }}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">OK</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal" tabindex="-1" id="importBlueWalletCSVLabelsModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <form action="{% url 'import_labels' %}" method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="modal-header">
-        <h5 class="modal-title">Import BlueWallet CSV History</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>
-            Import BlueWallet's CSV History and create a 'tx' label for each record.
-        </p>
-        {% csvBlueWalletlabeluploadform labelbase.id as form %}
-        {{ form|bootstrap  }}
+        {% labelbaseform_edit labelbase as edit_form %}
+        {{ edit_form|bootstrap  }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -204,31 +84,6 @@
 
 
 
-
-<div class="modal" tabindex="-1" id="importBitboxCSVLabelsModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <form action="{% url 'import_labels' %}" method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="modal-header">
-        <h5 class="modal-title">Import BitBox CSV History</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>
-            Import BitBox App's CSV History and create an 'addr' and a 'tx' label for each record.
-        </p>
-        {% csvBitBoxLabeluploadform labelbase.id as form %}
-        {{ form|bootstrap  }}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">OK</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
 
 
 
@@ -259,7 +114,8 @@
           </div>
         </center>
         <p>
-          Our API reference can be found <a href="/api-reference/">here</a>.
+          Our API reference can be found here: <br>
+          <a href="https://labelbase.space/api-reference/">https://labelbase.space/api-reference/</a>
         </p>
       </div>
 
@@ -306,9 +162,52 @@
   <script>
     {% addtoblock "js" %}
     $(document).ready(function () {
-        $('#bip329labels').DataTable({
-          order: [[0, 'desc']],
+
+      const dt_table = $('#bip329labels').dataTable({
+        order: [[0, "asc"]],
+        columns: [
+            {
+                data: 'id',
+                orderable: true,
+                searchable: true
+            },
+            {
+                data: 'type',
+                orderable: true,
+                searchable: true
+            },
+            {
+                data: 'ref',
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: 'label',
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: 'origin',
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: 'spendable',
+                orderable: true,
+                searchable: true,
+            }
+        ],
+        searching: true,
+        processing: false,
+        serverSide: true,
+        stateSave: true,
+        responsive: true,
+        ajax: {
+              url: "{% url 'labelbase_label_data' labelbase.pk %}?tag={{ request.GET.tag }}",
+              type: 'GET'
+          },
       });
+
 
       var qrcode = new QRCode("qrcode", {
           text: JSON.stringify({

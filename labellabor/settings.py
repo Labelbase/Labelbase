@@ -22,7 +22,6 @@ except AssertionError:
         "Configuration file {} not found!".format(config_file_path)
     )
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -51,7 +50,34 @@ sentry_sdk.init(
     send_default_pii=False,
 )
 sentry_sdk.set_tag("version", "1.23.1")
-LOGGING = {}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': './labelbase.log',
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 5,  # Keep 5 backup files
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'labelbase': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 # Application definition
 INSTALLED_APPS = [
@@ -75,6 +101,8 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "sekizai",
     "importer",
+    "finances",
+    "background_task",
 ]
 
 MIDDLEWARE = [
@@ -170,8 +198,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "static/"
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

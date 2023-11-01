@@ -7,6 +7,7 @@ from labelbase.models import Labelbase
 from labelbase.serializers import LabelSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+import decimal
 
 
 from .forms import UploadFileForm
@@ -27,6 +28,7 @@ def upload_labels(request):
     """
     Used to import labels manually using files.
     """
+
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -50,6 +52,9 @@ def upload_labels(request):
                     if serializer.is_valid():
                         serializer.save()
                         imported_lables += 1
+            elif form.cleaned_data.get("import_type", "") == "BIP-0329-7z-enc":
+                # TODO: Implement
+                pass
             # Bitbox App
             elif form.cleaned_data.get("import_type", "") == "csv-bitbox":
                 while True:
@@ -83,6 +88,53 @@ def upload_labels(request):
                             messages.ERROR,
                             'Could not process line "{}", {}.'.format(buf, ex),
                         )
+            # Pocket Accointing
+            elif form.cleaned_data.get("import_type", "") == "pocket-accointing":
+                fp.close()
+                csv_file_path = fp.name
+                mempool_api = labelbase.get_mempool_api()
+                from .pocket import validate_csv_format, parse_csv_to_json
+                if validate_csv_format(csv_file_path):
+                    for item in parse_csv_to_json(csv_file_path):
+                        #label = "Got {} {} for {} {} in tx=\"{}\" ref=\"{} #Pocket\" ".format(item[0].get('outSellAmount'), item[1].get('inBuyAsset') , item[2].get('inBuyAmount'), item[2].get('inBuyAsset') , item[0].get('operationId'), item[1].get('operationId'))
+
+                        label = "Got {} {} for {:.2f} {} with reference: {} #Pocket".format(item[0].get('outSellAmount'), item[1].get('inBuyAsset'), decimal.Decimal(item[2].get('inBuyAmount')), item[2].get('inBuyAsset'), item[1].get('operationId'))
+                        txid = item[0].get('operationId')
+                        tx = mempool_api.get_transaction(txid)
+                        potential_utxos = []
+                        vouts = tx.get("vout", [])
+                        for i in range(len(vouts)):
+                            if vouts[i].get('value', 0) == decimal.Decimal(item[0].get('outSellAmount'))*100000000:
+                                potential_utxos.append("{}:{}".format(txid, i ))
+                        data = {}
+                        if len(potential_utxos) == 1:
+                            # label UTXO/output of tx
+                            data = {
+                                "type": "output",
+                                "ref": potential_utxos[0],
+                                "label": label,
+                            }
+                        if len(potential_utxos) > 1:
+                            # mark tx, add warning tag
+                            data = {
+                                "type": "tx",
+                                "ref": txid,
+                                "label": "{} {}".format(label, "#W001_UTXO_NOT_FOUND"),
+                            }
+                        if data:
+                            data["labelbase"] = labelbase.id
+                            serializer = LabelSerializer(data=data)
+                            if serializer.is_valid():
+                                serializer.save()
+                                imported_lables += 1
+                            else:
+                                messages.add_message(
+                                    request,
+                                    messages.ERROR,
+                                    'Could not process record "{}".'.format(item),
+                                )
+                else:
+                    print("ERROR") # TODO
             # BlueWallet
             elif form.cleaned_data.get("import_type", "") == "csv-bluewallet":
                 while True:

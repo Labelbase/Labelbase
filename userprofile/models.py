@@ -11,6 +11,19 @@ class Profile(models.Model):
         blank=True,
     )
 
+    merge_identical = models.BooleanField(default=False)
+
+    # modules
+    # show "Fiat Finances"
+    # show "stats and kpis"
+    # show COMMUNITY
+    # show RESOURCES
+    # use tags
+    #
+    # last login block_height
+
+
+
     def labelbases(self):
         return Labelbase.objects.filter(user_id=self.user_id)
 

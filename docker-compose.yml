@@ -1,0 +1,53 @@
+version: "3.7"
+
+services:
+  db:
+    container_name: db
+    image: mysql:8
+    stop_grace_period: 1m
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=iheWkAtR4AAJ8aTt9B61pK6XmZvZrv
+      - MYSQL_DATABASE=labelbase
+      - MYSQL_USER=ulabelbase
+      - MYSQL_PASSWORD=vrZvZmX6Kp16B9tTa8JAA4RtAkWEhi
+    volumes:
+      - ./db:/var/lib/mysql
+      - ./db:/run/mysqld
+    networks:
+      - compose_network
+  django:
+    build: .
+    command: bash -c "sleep 15 && python manage.py collectstatic --noinput && python manage.py makemigrations --noinput && python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+      - ./db:/run/mysqld
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - compose_network
+  bgt:
+    build:
+      context: .
+    container_name: bgt
+    restart: always
+    command: bash -c "sleep 15 && python manage.py process_tasks  >> labelbase.log 2>&1"
+    depends_on:
+      - db
+      - django
+    environment:
+      - PYTHONUNBUFFERED=0
+    volumes:
+      - .:/app
+      - ./db:/run/mysqld
+
+volumes:
+  mysql_data:
+
+networks:
+  compose_network:

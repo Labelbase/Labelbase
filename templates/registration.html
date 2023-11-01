@@ -2,25 +2,38 @@
 {% load i18n %}
 {% load bootstrap %}
 {% block content %}
-  <h2 style="padding-top: 1em;">{% block title %}Create your Labelbase account{% endblock %}</h2>
-  <p>
+
+<style>
+  .lb-header {
+    max-width: 810px;
+  }
+</style>
+<div class="p-3 pb-md-4 mx-auto text-center">
+  <h1 style="padding-top: 1.6em; padding-bottom: 0.8em; text-transform: uppercase;font-weight:800;">
+    L<span style="height:1.1em; width:1em" data-feather="tag" class="align-text-bottom"></span>belbase
+  </h1>
+</div>
+
+
+<div class="lb-header p-3 pb-md-4 mx-auto text-left">
+  <h2 class="display-8 fw-normal">{% block title %}Create your Labelbase account{% endblock %}</h2>
+  <p class="fs-5 text-muted">
     <form action="" method="POST">
       {% csrf_token %}
       <table>
           {{ form|bootstrap }}
-      <tr>
-        <td>&nbsp;</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td colspan="2" style="text-align: center;">
-          <a href="{% url 'two_factor:login' %}" class="btn btn-link">Sign in instead</a>
-          <button class="btn btn-primary" type="submit">Create your account</button>
-        </td>
-      </tr>
-
+          <tr>
+            <td>&nbsp;</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align: center;">
+              <a href="{% url 'two_factor:login' %}" class="btn btn-link">Sign in instead</a>
+              <button class="btn btn-primary" type="submit">Create your account</button>
+            </td>
+          </tr>
       </table>
     </form>
   </p>
-
+</div>
 {% endblock %}

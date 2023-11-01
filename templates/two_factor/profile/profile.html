@@ -3,8 +3,8 @@
 {% load two_factor_tags %}
 
 {% block content %}
-  <h2 style="padding-top: 1em;">{% block title %}{% trans "Account Security" %}{% endblock %}</h2>
 
+  <h2 style="padding-top: 1em;">{% block title %}{% trans "Account Security" %}{% endblock %}</h2>
   {% if default_device %}
     <p>{% blocktrans with primary=default_device|as_action %}Primary method: {{ primary }}{% endblocktrans %}</p>
 
@@ -54,13 +54,22 @@
     <p><a href="{% url 'two_factor:setup' %}" class="btn btn-primary">
       {% trans "Enable Two-Factor Authentication" %}</a>
     </p>
+
+    <h2>{% trans "Password" %}</h2>
+    <p>
+      <div class="btn-group " role="group" >
+        <a href="{% url 'change_password' %}" class="btn btn-primary">Change Password</a>
+      </div>
+    </p>
+
   {% endif %}
 
   {% if user.profile.labelbases %}
   {% else %}
 
-  <p>
-    You don't have any labelbases yet. Let's get started.
+
+  <p style="padding-top: 2.1em;">
+      You don't have any Labelbases yet. Let's get started.
   </p>
   <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addLabelbaseModal"  href="#" aria-label="Add a new wallet">
       Create a Labelbase

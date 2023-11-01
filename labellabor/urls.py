@@ -5,9 +5,13 @@ from two_factor.urls import urlpatterns as tf_urls
 from labelbase.api import LabelAPIView, LabelbaseAPIView
 from rest_framework.documentation import include_docs_urls
 from django.contrib.auth.decorators import login_required
-from userprofile.views import ProfileView, APIKeyView
+
+from userprofile.views import ProfileView
+from userprofile.views import APIKeyView
+
 from .views import (
     LabelbaseView,
+    LabelbaseMergeView,
     LabelbaseDeleteView,
     LabelDeleteView,
     TermsView,
@@ -22,11 +26,18 @@ from .views import (
     AboutView,
     EncryptionView,
     InteroperationalView,
+    ExportLabelsView,
+    FixAndMergeLabelsView,
+    LabelbaseDatatableView,
+    LabelbasePortfolioView,
 )
+
 from importer.views import upload_labels
 from exporter.views import stream_labels_as_jsonl
 from django.contrib.auth import views as auth_views
 
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path(
@@ -70,6 +81,22 @@ urlpatterns = [
         name="labelbase"
     ),
     path(
+        "labelbase/<int:labelbase_id>/data/",
+        login_required(LabelbaseDatatableView.as_view()),
+        name="labelbase_label_data"),
+
+
+    path(
+        "labelbase/<int:labelbase_id>/merge/",
+        login_required(LabelbaseMergeView.as_view()),
+        name="labelbase_merge"
+    ),
+    path(
+        "labelbase/<int:labelbase_id>/portfolio/",
+        login_required(LabelbasePortfolioView.as_view()),
+        name="labelbase_portfolio"
+    ),
+    path(
         "labelbase/<int:labelbase_id>/edit/",
         login_required(LabelbaseUpdateView.as_view()),
         name="edit_labelbase"
@@ -85,6 +112,18 @@ urlpatterns = [
         name="export_labels"
     ),
     path(
+        "labelbase/<int:labelbase_id>/dyanmic-export/",
+        login_required(ExportLabelsView.as_view()),
+        name="labelbase_dynamic_export"
+    ),
+    path(
+        "labelbase/<int:labelbase_id>/fix-and-manage/",
+        login_required(FixAndMergeLabelsView.as_view()),
+        name="labelbase_fix_and_manage"
+    ),
+
+
+    path(
         "labelbase/",
         login_required(LabelbaseFormView.as_view()),
         name="labelbase_new"
@@ -93,6 +132,11 @@ urlpatterns = [
         "label/<int:pk>/edit/",
         login_required(LabelUpdateView.as_view()),
         name="edit_label"
+    ),
+    path(
+        "label/<int:pk>/edit/<str:action>/",
+        login_required(LabelUpdateView.as_view()),
+        name="edit_label_with_action"
     ),
     path(
         "label/<int:pk>/delete/",
@@ -165,8 +209,11 @@ urlpatterns = [
         "",
         include("user_sessions.urls", "user_sessions")
     ),
-    path(
-        "admin/",
-        admin.site.urls
-    ),
+
+
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG:
+    urlpatterns.append(path("admin/", admin.site.urls))

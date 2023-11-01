@@ -1,77 +1,207 @@
 {% extends "_base.html" %}
 {% load i18n %}
+{% load sekizai_tags %}
 {% load bootstrap %}
 {% block content %}
 <div style="padding-top: 1em;">
-<h2>Edit Label</h2>
-<form method="post" action="." >
-    {% csrf_token %}
-    {{ form|bootstrap }}
-    <div  style="padding-top: 1em;">
-      <a href="{{ form.instance.labelbase.get_absolute_url }}"
-          type="button" class="btn btn-link">Back to Labelbase</a>
-      <a href="#" data-bs-toggle="modal" data-bs-target="#deleteLabelModal"
-          type="button" class="btn btn-danger ">Delete</a>
-      <input type="submit"  class="btn btn-primary" value="Save">
-    </div>
-</form>
+  <h2 style="padding-top: 1em;">Edit Label #{{ label.id}}</h2>
 
-{% if request.user.is_superuser %}
+<ul class="nav nav-tabs" style="padding-top: 2rem; ">
+  <li class="nav-item">
+    <a class="nav-link {% if action == "update" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}">Edit Label</a>
+  </li>
+
   {% if form.instance.type == "tx" %}
+  <li class="nav-item">
+    <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}labeling/">Transaction Labeling</a>
+  </li>
 
-    <style>
-      .connector {
-        margin-bottom: 0.5rem;
-        height: 2.5rem;
-        border-bottom: 2px solid #ccc;
-        position: relative;
-      }
-      .float-left {
-        float: left;
-      }
-      .float-right {
-        float: right;
-      }
+  <li class="nav-item">
+    <a class="nav-link {% if action == "detail" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}labeling/">Transaction Detail</a>
+  </li>
+  {% endif %}
+
+
+  {% if form.instance.type == "xpub" %}
+  <li class="nav-item">
+    <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}labeling/">Derived Addresses Labeling</a>
+  </li>
+  {% endif %}
+
+  {% if form.instance.type == "output" or form.instance.type == "addr" %}
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Fiat Finance</a>
+  </li>
+  {% endif %}
+{% if form.instance.type == "output" %}
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin History</a>
+  </li>
+
+    {% endif %}
+
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Label History</a>
+    </li>
+</ul>
+
+<div style="padding-top: 2rem; ">
+
+<!--div class="bd-callout bd-callout-warning">
+  <strong>Heads up!</strong> There are multiple records for this transaction output. <a href="">Review & merge</a>
+</div-->
+
+{% if form.instance.type == "addr" %}
+<div class="bd-callout bd-callout-warning">
+  <strong>Heads up!</strong> There are multiple transaction outputs sent to this address. For privacy reasons, do not reuse addresses.
+</div>
+{% endif %}
+
+{% block label_edit_content %}
+{% endblock %}
+
+
+
+
+
+<style>
+        .timeline {
+            position: relative;
+            padding-left: 20px; /* Adjust the distance from the left */
+            padding-top: 5px;
+        }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 0px;
+            left: 10px;
+            width: 4px;
+            height: 100%;
+            background: #000; /* Line color */
+        }
+        .timeline-item {
+            position: relative;
+            list-style: none;
+            margin-bottom: 20px; /* Adjust the distance between timeline items */
+        }
+        .timeline-bullet {
+            position: absolute;
+            margin-top: 8px;
+            top: 0;
+            left: -16px; /* Adjust the distance between the bullet and the line */
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #000; /* Bullet color */
+        }
+        .timeline-bullet-inner {
+            position: absolute;
+            margin-top: 11px;
+            top: 0;
+            left: -13px; /* Adjust the distance between the bullet and the line */
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #fff; /* Bullet color */
+
+        }
+        /*
+        @keyframes pulsate {
+           0% {
+               transform: scale(1);
+               background-color:#fff;
+           }
+           50% {
+               transform: scale(1.3);
+               background-color:yellow;
+           }
+           100% {
+               transform: scale(1);
+               background-color:#fff;
+           }
+       }*/
+
+        .timeline-panel {
+          margin-left: 21px; /* Adjust the space between the bullet and the text */
+          padding-bottom: 10px; /* Adjust the space between the bullet and the text */
+
+        }
+
+        .timeline-bullet-last {
+          margin-top: -20px;
+
+        }
+
+        .timeline-bullet-inner-last {
+            margin-top: -17px;
+        /*      animation: pulsate 5s infinite;
+              background-color: #fff; *//* Bullet color */
+        }
+
+        .timeline-title {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
     </style>
 
-    <div class="row" style="padding-top: 3rem; padding-bottom: 3rem;">
-      <h3 class="mb-4">Transaction Labeling</h3>
-      <div class="col-md-4">
-        <h4 class="mb-4">Inputs</h4>
-        <div class="connector">
-          <p><span class="float-left">Input #1</span> <button class="btn btn-outline-primary btn-sm float-right">New Label</button></p>
-        </div>
-        <div class="connector">
-          <p><span class="float-left">Input #2</span> <button class="btn btn-outline-primary btn-sm float-right">New Label</button></p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <h4 class="mb-4">Transaction Details</h4>
-        <!-- Transaction details content goes here -->
-        <div class="connector">
-          <p>
-            <span class="float-left d-block d-md-none">{{ form.instance.ref|slice:"0:12" }}…{{  form.instance.ref|slice:"-"|slice:"-12:" }}</span>
-            <span class="float-left d-none d-md-block d-lg-none">{{ form.instance.ref|slice:"0:4" }}…{{  form.instance.ref|slice:"-"|slice:"-4:" }}</span>
-            <span class="float-left d-none d-lg-block">{{ form.instance.ref|slice:"0:12" }}…{{  form.instance.ref|slice:"-"|slice:"-6:" }}</span>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="timeline-bullet"></div>
+                        <div class="timeline-bullet-inner"></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <span class="timeline-title">Event 3</span>
+                                <p><small class="text-muted"><i class="bi bi-clock"></i> October 23, 2023 10:00 AM</small></p>
+                            </div>
+                            <div class="timeline-body">
+                                <p>Event 3 description goes here.</p>
+                            </div>
+                        </div>
+                    </li>
 
-            <button class="btn btn-outline-primary btn-sm float-right">New Label</button></p>
+                    <li class="timeline-item">
+                        <div class="timeline-bullet"></div>
+                        <div class="timeline-bullet-inner"></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <span class="timeline-title">Event 2</span>
+                                <p><small class="text-muted"><i class="bi bi-clock"></i> October 23, 2023 11:30 AM</small></p>
+                            </div>
+                            <div class="timeline-body">
+                                <p>Event 2 description goes here.</p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="timeline-item">
+                        <div class="timeline-bullet"></div>
+                        <div class="timeline-bullet-inner"></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <span class="timeline-title">Event 1</span>
+                                <p><small class="text-muted"><i class="bi bi-clock"></i> October 23, 2023 11:30 AM</small></p>
+                            </div>
+                            <div class="timeline-body">
+                                <p>Event 1 description goes here.</p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Add more timeline items as needed -->
+                    <li class="timeline-item ">
+                        <div class="timeline-bullet timeline-bullet-last"></div>
+                        <!--div class="timeline-bullet-inner timeline-bullet-inner-last"></div-->
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <h4 class="mb-4">Outputs</h4>
-        <div class="connector">
-          <p><span class="float-left">Output #1</span> <button class="btn btn-outline-primary btn-sm float-right">New Label</button></p>
-        </div>
-        <div class="connector">
-          <p><span class="float-left">Output #2</span> <button class="btn btn-outline-primary btn-sm float-right">New Label</button></p>
-        </div>
-        <div class="connector">
-          <p><span class="float-left">Output #3</span> <button class="btn btn-outline-primary btn-sm float-right">New Label</button></p>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-{% endif %}
+
+</div>
+
+
 
 
 
@@ -98,6 +228,13 @@
       </form>
     </div>
   </div
+
+
+  <script>
+  {% addtoblock "js" %}
+
+      {% endaddtoblock %}
+</script>
 
 
 {% endblock %}

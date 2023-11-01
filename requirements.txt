@@ -4,7 +4,7 @@ cffi==1.15.1
 charset-normalizer==2.0.12
 coreapi==2.3.3
 coreschema==0.0.4
-cryptography==41.0.3
+cryptography==41.0.4
 Django==3.2.20
 django-appconf==1.0.5
 django-bootstrap-form==3.4
@@ -38,5 +38,9 @@ six==1.16.0
 sqlparse==0.4.4
 typing_extensions==4.1.1
 uritemplate==4.1.1
-urllib3==1.26.14
+urllib3==1.26.18
 zipp==3.6.0
+bip329==0.0.3
+pymempool==0.0.5
+django-datatables-view==1.20.0
+django-money==3.3

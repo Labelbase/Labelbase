@@ -1,0 +1,85 @@
+{% if labelbase %}
+  <div class="row">
+    <div  class="col float-start">
+      <h2 style="padding-top: 1em;">{% block title %}{{ labelbase.name }} {% endblock %}</h2>
+      {% if labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }} </tt>{% endif %}
+      {% if labelbase.about %}
+      <p>{{ labelbase.about}}</p>
+      {% endif %}
+    </div>
+    <div class="col float-end" >
+      <div class="btn-group float-end" role="group" style="padding-top: 2em;">
+        <button type="button" class="rounded-start  btn btn-sm btn-outline-secondary "
+                data-bs-toggle="modal"  data-bs-target="#addLabelModal">New Label</button>
+        <!--button type="button" class="rounded-start d-md-none btn btn-sm btn-outline-secondary "          data-bs-toggle="modal"  data-bs-target="#addLabelModal">New</button-->
+        {% comment %}
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
+            Import
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBip329LabelsModal">BIP-0329 Labels</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBlueWalletCSVLabelsModal">BlueWallet CSV History</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBitboxCSVLabelsModal">BitBox App CSV History</a></li>
+          </ul>
+        </div>
+        <a href="{% url 'export_labels' labelbase.id %}" class="btn btn-sm btn-outline-secondary">Export</a>
+        {% endcomment %}
+      <div class="btn-group" role="group">
+      <!--button type="button" class="d-md-none btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Labels
+      </button-->
+      <button type="button" class="{#d-none d-md-block #} btn btn-sm btn-outline-secondary dropdown-toggle rounded-end me-2" data-bs-toggle="dropdown" aria-expanded="false">
+          Label Actions
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+            <a class="dropdown-item" href="#">
+              Delete Labels with Empty "label" Text
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#">
+                Delete All Labels
+            </a>
+        </li>
+    </ul>
+  </div>
+
+<div class="btn-group" role="group">
+<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-start rounded-end" data-bs-toggle="dropdown" aria-expanded="false">
+Labelbase
+</button>
+<ul class="dropdown-menu">
+<li>
+    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editLabelbaseModal">
+        <i class="bi bi-pencil"></i> Edit Labelbase
+    </a>
+</li>
+<li>
+    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exportLabelbaseModal">
+        <i class="bi bi-pencil"></i> Export BIP-329 Labels
+    </a>
+</li>
+
+
+<li>
+    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#connectApiKeyLabelbaseModal">
+        <i class="bi bi-link"></i> Connect API Key
+    </a>
+</li>
+<li>
+    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteLabelbaseModal">
+        <i class="bi bi-trash"></i> Delete Labelbase and Labels
+    </a>
+</li>
+</ul>
+</div>
+
+
+      </div>
+    </div>
+  </div>
+{% else %}
+  <p>There is no such labelbase.</p>
+{% endif %}

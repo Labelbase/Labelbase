@@ -5,3 +5,4 @@ labelbase.log
 bgt.log
 db/
 *.pyc
+static/

@@ -5,7 +5,7 @@ charset-normalizer==2.0.12
 coreapi==2.3.3
 coreschema==0.0.4
 cryptography==41.0.3
-Django==3.2.20
+Django==3.2.23
 django-appconf==1.0.5
 django-bootstrap-form==3.4
 django-classy-tags==2.0.0

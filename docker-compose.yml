@@ -1,53 +1,70 @@
 version: "3.7"
 
 services:
-  db:
-    container_name: db
-    image: mysql:8
+  labelbase_mysql:
+    build:
+      context: ./mysql
     stop_grace_period: 1m
     restart: always
-    ports:
-      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=iheWkAtR4AAJ8aTt9B61pK6XmZvZrv
       - MYSQL_DATABASE=labelbase
       - MYSQL_USER=ulabelbase
       - MYSQL_PASSWORD=vrZvZmX6Kp16B9tTa8JAA4RtAkWEhi
-    volumes:
-      - ./db:/var/lib/mysql
-      - ./db:/run/mysqld
-    networks:
-      - compose_network
-  django:
-    build: .
-    command: bash -c "sleep 15 && python manage.py collectstatic --noinput && python manage.py makemigrations --noinput && python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - .:/app
-      - ./db:/run/mysqld
     ports:
+      - "3306:3306"
+    volumes:
+      #- ./db/mysql-data:/var/lib/mysql
+      - db_data:/var/lib/mysql
+      - db_data:/run/mysqld
+    networks:
+      - compose_network
+  labelbase_django:
+    build:
+      context: ./django
+      dockerfile: Dockerfile
+    expose:
       - "8000:8000"
+    volumes:
+      - ./django:/app
+      - db_data:/var/lib/mysql
+      - db_data:/run/mysqld
+      - web_static:/app/static/
     depends_on:
-      - db
+      - labelbase_mysql
     restart: always
     networks:
       - compose_network
-  bgt:
+    #command: >
+    #  bash -c "
+    #    python manage.py make_config &&
+    #    python manage.py makemigrations --noinput &&
+    #    python manage.py migrate --noinput &&
+    #    python manage.py collectstatic --noinput &&
+    #    python manage.py process_tasks & &&
+    #    gunicorn labellabor.wsgi:application -b 0.0.0.0:8000
+    #  "
+    command: /app/run.sh
+  labelbase_nginx:
     build:
-      context: .
-    container_name: bgt
-    restart: always
-    command: bash -c "sleep 15 && python manage.py process_tasks  >> labelbase.log 2>&1"
-    depends_on:
-      - db
-      - django
-    environment:
-      - PYTHONUNBUFFERED=0
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
     volumes:
-      - .:/app
-      - ./db:/run/mysqld
-
+      - ./django:/app
+      - web_static:/app/static/:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      #- ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - labelbase_django
+    networks:
+      - compose_network
 volumes:
-  mysql_data:
+  db_data:
+  tmp:
+  web_static:
 
 networks:
   compose_network:
+  #  driver: bridge

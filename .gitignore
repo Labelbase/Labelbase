@@ -5,4 +5,4 @@ labelbase.log
 bgt.log
 db/
 *.pyc
-static/
+__pycache__

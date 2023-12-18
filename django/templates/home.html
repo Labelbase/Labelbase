@@ -1,0 +1,317 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}Labelbase{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+
+  <div class="p-3 pb-md-4 mx-auto text-center">
+    <h1 style="padding-top: 1.6em; padding-bottom: 0.9em; ">
+      <img src="{% static 'Labelbase_blackheader.png' %}">
+    </h1>
+    <h2 class="display-8 fw-bold text-muted" style="padding-bottom: 0.9em;">Finally, all your labels in one place.</h2>
+
+    <p class="lb-header mx-auto text-center fs-5 text-muted">Labelbase is a label management service for Bitcoin transactions and addresses.</p>
+    <p class="lb-header mx-auto text-center fs-5 text-muted">Labelbase provides features for adding labels, importing and exporting labels, and offers a public API for integration with wallets and existing workflows.<br>
+      This ensures that you always have access to the most up-to-date information.</p>
+    <p class="lb-header mx-auto text-center fs-5 text-muted"> Labelbase supports BIP-329, a format for unifying label data.</p>
+  </div>
+
+
+
+
+  <main class="lb-header mx-auto text-center">
+
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+
+        <div class="col">
+          <div class="mb-4">
+            <img  src="{% static 'utxo_source.png' %}"
+                  class="card-img-top"
+                  style="padding: 0.25em;">
+
+            <div class="card-body">
+              <p style="font-weight: 700;">Do you know where that coin came from? No?!</p><p><a href="https://en.bitcoin.it/wiki/Privacy">Learn more</a></p>
+                <!-- Instead of "learn more" change to "why is this important?" -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="mb-4">
+            <img src="/static/API_who.png"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
+            <div class="card-body">
+              <p style="font-weight: 700;">Who sends data to Labelbase?<br>&nbsp;</p><p><a href="#">Supported wallets</a></p>
+              <!--button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button-->
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="mb-4">
+            <img src="/static/Choices.png"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
+            <div class="card-body">
+              <p style="font-weight: 700;">Seamless interoperability based on BIP-329</p><p><a href="/interoperational">Learn more</a></p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--
+
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm border-primary">
+            <img src="/static/Handshake.png"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em; padding-bottom: 1em;">
+            <div class="card-body">
+              <p>&nbsp;</p>
+              <a href="{{ reg_url }}" type="button" class="w-100 btn btn-lg btn-primary">Get started</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      -->
+
+
+
+
+
+
+    </main>
+    <main class="lb-header mx-auto text-center">
+
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+
+        <div class="col">
+          <div class="mb-4">
+            <img src="/static/Encryption.png"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
+            <div class="card-body">
+              <p style="font-weight: 700;">Your labels are encrypted.<br>&nbsp;</p><p><a href="/encryption">Learn more</a></p>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="mb-4">
+            <img src="/static/FAQ.png"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
+            <div class="card-body">
+              <p style="font-weight: 700;">Need more answers?<br>&nbsp;</p><p><a href="/faq">View the FAQ</a></p>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col">
+          <div class="mb-4">
+            <img src="/static/API_usage.png"
+              class="card-img-top"
+              alt="..."
+              style="padding: 0.25em;">
+
+            <div class="card-body">
+              <p style="font-weight: 700;">How to send data to Labelbase?<br>&nbsp;</p><p><a href="/api-reference/">API Reference</a></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {% if request.user.is_authenticated %}
+      {% else %}
+
+      <div class="text-center mt-5">
+        <p class="lb-header mx-auto text-center fs-5 text-muted">
+            Ready to take control of your Bitcoin labels?<br><br>
+            <!--
+             Sign up for Labelbase today and experience seamless label management, enhanced privacy, and simplified workflows.
+             -->
+            Get started with Labelbase today and experience seamless label management, enhanced privacy, and simplified workflows.<br><br>
+        </p>
+        <a href="{{ reg_url }}" type="button" class="btn btn-lg btn-primary" style="margin-bottom:2rem;">Get started</a>
+
+      </div>
+      {% endif %}
+      </main>
+
+      <!-- start feature list -->
+      <div class="container px-4 py-5  " id="icon-grid">
+        <h3 class="pb-2 border-bottom">What can you do with Labelbase?</h3>
+        <!-- What can you do with Labelbase? -->
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h4 class="fw-bold mb-0 fs-4 text-body-emphasis ">Store your labels</h4>
+              <p>Labelbase provides a secure storage service for all your BIP-329 labels, ensuring easy retrieval and management.</p>
+            </div>
+          </div>
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h4 class="fw-bold mb-0 fs-4 text-body-emphasis">Protect your labels</h4>
+              <p>Employing robust encryption, Labelbase safeguards your labels, ensuring the confidentiality and security of your sensitive data.</p>
+            </div>
+          </div>
+
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Sync your labels</h3>
+              <p>Labelbase seamlessly synchronizes your Bitcoin labels across multiple platforms and services, ensuring consistent access and management.</p>
+            </div>
+          </div>
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Import your labels</h3>
+              <p>Efficiently import and integrate label data from various wallet export formats into Labelbase, streamlining the process of label management.</p>
+            </div>
+          </div>
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Export your labels</h3>
+              <p>Labelbase allows you to export your Bitcoin labels in the BIP-329 format, facilitating smooth integration into different wallets and systems.</p>
+            </div>
+          </div>
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Encrypt your labels</h3>
+              <p>Labelbase enables you to export your Bitcoin labels in the BIP-329 format, encrypted using a passphrase, as a 7z archive for offline storage or secure transfer.</p>
+            </div>
+          </div>
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Access your labels anywhere</h3>
+              <p>Enjoy the convenience of accessing your Bitcoin labels from any location, ensuring seamless management and organization.</p>
+            </div>
+          </div>
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Stay organized</h3>
+              <p>Labelbase simplifies label management, enabling you to stay organized and in control of your Bitcoin transactions and associated data.</p>
+            </div>
+          </div>
+
+          <div class="col d-flex align-items-start">
+              <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Extend Labeling</h3>
+                <p>Effortlessly expand your labeling capabilities by loading transactions and extending label inputs and outputs.</p>
+              </div>
+          </div>
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Seamless label editing</h3>
+              <p>Effortlessly modify and edit your Bitcoin transaction labels within Labelbase, empowering you to refine and update information as needed.</p>
+            </div>
+          </div>
+
+          <div class="col d-flex align-items-start">
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">High-Performance Optimization</h3>
+                <p>Effortlessly handle large label sets, with rapid access and convenient shortcuts. Labelbase is meticulously optimized for peak performance, guaranteeing a seamless and efficient label management experience without compromising speed or functionality.</p>
+            </div>
+        </div>
+
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Fix & merge your labels</h3>
+              <p>Easily rectify any discrepancies or merge duplicate labels within Labelbase, ensuring accurate and streamlined Bitcoin transaction management.</p>
+            </div>
+          </div>
+
+        <div class="col d-flex align-items-start">
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Privacy First</h3>
+                <p>With a strong emphasis on data security and user confidentiality, Labelbase prioritizes privacy as a core feature, ensuring the utmost protection of your sensitive label and transaction data.</p>
+            </div>
+        </div>
+
+        <div class="col d-flex align-items-start">
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Mobile First</h3>
+                <p>Enjoy seamless label management on the go with Labelbase's mobile-first approach, enabling users to access and manage their Bitcoin labels conveniently from their smartphones and tablets.</p>
+            </div>
+        </div>
+
+        <div class="col d-flex align-items-start">
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Self-Hosted</h3>
+                <p>Empower full control over your label management system with Labelbase's self-hosted option, allowing users to host their label management service on their preferred servers for enhanced customization and security.</p>
+            </div>
+        </div>
+
+        <div class="col d-flex align-items-start">
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Cloud-Hosted</h3>
+                <p>Experience the flexibility and accessibility of Labelbase's cloud-hosted solution, providing users with a reliable and efficient label management service hosted on secure and scalable cloud infrastructure.</p>
+            </div>
+        </div>
+
+        <div class="col d-flex align-items-start">
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Customized Email Sending</h3>
+                <p>Personalize email sending with custom server settings. Labelbase enables users to configure preferred SMTP and IMAP options, enhancing control, privacy and security.</p>
+            </div>
+        </div>
+
+
+        </div>
+     </div>
+
+
+     <!-- end feature list -->
+
+{% if request.user.is_authenticated %}
+{% else %}
+     <div class="text-center mt-5">
+       <p class="lb-header mx-auto text-center fs-5 text-muted">
+         Ready to optimize your Bitcoin labeling for optimal efficiency?
+<br><br>
+Discover the power of streamlined label management with Labelbase.
+<br><br>
+Join Labelbase now and unlock the full potential of your Bitcoin experience!
+
+
+       </p>
+       <a href="{{ reg_url }}" type="button" class="btn btn-lg btn-primary" style="margin-bottom:6rem;">Get started</a>
+
+     </div>
+
+{% endif %}
+     <!-- Add: What people are saying -->
+     <!-- Add:
+
+     Our supporters
+     Thank you for your support!
+
+
+          -->
+
+{% endblock %}

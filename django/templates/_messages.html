@@ -1,0 +1,55 @@
+{% load sekizai_tags %}
+
+<div id="user-messages" style="padding-top: .25rem; margin-left: -22px; position: fixed; z-index: 1000;">
+  {% comment %}
+
+  <!-- old message rendering, delete later -->
+  {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show mx-auto " role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+  {% endcomment %}
+</div>
+
+<script type="text/javascript">
+{% addtoblock "js" %}
+
+function show_message(type, message) {
+  var typeClass = '';
+  switch (type) {
+    case 'success':
+      typeClass = 'alert-success';
+      break;
+    case 'error':
+      typeClass = 'alert-danger';
+      break;
+    case 'info':
+      typeClass = 'alert-info';
+      break;
+    default:
+      typeClass = 'alert-info';
+  }
+
+  var alertElement = $('<div/>', {
+    'class': `alert ${typeClass} alert-dismissible fade show mx-auto`,
+    'role': 'alert',
+    'html': `${message}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`
+  });
+
+  $('#user-messages').append(alertElement);
+  setTimeout(function () {
+    alertElement.alert('close');
+  }, 3338);
+
+}
+
+$(document).ready(function () {
+  {% for message in messages %}
+    show_message('{{ message.tags }}', '{{ message|safe }}');
+  {% endfor %}
+});
+
+{% endaddtoblock %}
+</script>

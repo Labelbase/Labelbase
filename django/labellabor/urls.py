@@ -126,12 +126,7 @@ urlpatterns = [
         "labelbase/import/",
         upload_labels,
         name="import_labels"
-    ),
-    path(
-        "labelbase/export/<int:labelbase_id>/",
-        stream_labels_as_jsonl,
-        name="export_labels"
-    ),
+    ), 
     path(
         "labelbase/<int:labelbase_id>/dyanmic-export/",
         login_required(ExportLabelsView.as_view()),
@@ -245,6 +240,4 @@ urlpatterns = [
     ),
 ]
 
-#urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-#if settings.DEBUG:
 urlpatterns.append(path("admin/", admin.site.urls))

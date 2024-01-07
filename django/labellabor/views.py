@@ -594,10 +594,6 @@ class LabelUpdateView(UpdateView):
         return context
 
 
-
-
-
-
 class LabelbaseUpdateView(UpdateView):
     def post(self, request, *args, **kwargs):
         labelbase_id = self.kwargs["labelbase_id"]

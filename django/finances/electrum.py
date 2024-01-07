@@ -62,7 +62,7 @@ def checkup_label(label_id, loop):
         """
         TODO:
 
-        [ ] network endpoint from settings
+        [ ] electrum > network endpoint from settings
         [ ] get_or_create() OutputStat using unspent payload
         """
         elem = Label.objects.get(id=label_id)

@@ -42,7 +42,6 @@ from .views import (
 )
 
 from importer.views import upload_labels
-from exporter.views import stream_labels_as_jsonl
 from django.contrib.auth import views as auth_views
 
 from django.conf import settings
@@ -126,7 +125,7 @@ urlpatterns = [
         "labelbase/import/",
         upload_labels,
         name="import_labels"
-    ), 
+    ),
     path(
         "labelbase/<int:labelbase_id>/dyanmic-export/",
         login_required(ExportLabelsView.as_view()),

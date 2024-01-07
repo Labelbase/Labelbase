@@ -1,0 +1,11 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load bootstrap %}
+{% block content %}
+<h2 style="padding-top: 1em;">Import labels</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <input type="submit" value="OK">
+</form>
+{% endblock %}

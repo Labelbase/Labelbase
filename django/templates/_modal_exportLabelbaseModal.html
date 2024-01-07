@@ -17,17 +17,15 @@
         <div id="export-label-modal-body">
           {% labelbaseform_export as export_form %}
           {{ export_form|bootstrap  }}
-
           <div id="export_enc_warning" class="alert alert-light" role="alert" style="margin-top:1.2rem;">
               <small>Labels are encrypted using our <a href="https://github.com/Labelbase/python-bip329">Python library for BIP-329</a>. <br>
-
                 Always keep your passphrase secret and secure! </small>
 
           </div>
         </div>
         <div id="successMessage" class="alert alert-success d-none" role="alert" style="margin-top:1.2rem;">
             <strong>Success!</strong> Your export has been completed.
-        </div> 
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

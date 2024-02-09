@@ -5,7 +5,7 @@ from uuid_upload_path import upload_to
 
 IMPORTER_CHOICES = (
     ("BIP-0329", "BIP-329 .jsonl"),
-    #("BIP-0329-7z-enc" , "BIP-329 (encrypted) .7z"),
+    #TODO: ("BIP-0329-7z-enc" , "BIP-329 (encrypted) .7z"),
     ("csv-bluewallet", "BlueWallet .csv"),
     ("csv-bitbox", "BitBox .csv"),
     ("pocket-accointing", "Pocket Accointing .csv")

@@ -6,5 +6,5 @@ class FinancesConfig(AppConfig):
     name = "finances"
 
     def ready(self):
-
-         from .signals import perform_tasks_on_login
+        """ """
+        from .signals import perform_tasks_on_login

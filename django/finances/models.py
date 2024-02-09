@@ -14,20 +14,30 @@ logger = logging.getLogger('labelbase')
 
 class OutputStat(models.Model):
     """
-    These fields are unencrypted, and there is no sensitive information stored
-    in them. Additionally, there is no direct link between a user and those
-    objects. Furthermore, those objects are shared among all service users
-    because those fields reflect a global state of a transaction output.
+    These fields are unencrypted. Why?
 
-    If you self-host Labelbase, its all yours.
-    In the cloud version, a single output is hiding in the crowd.
+    Glad you asked.
 
-    Not the perfect solution, but a trade of between
-    performance, efficiency and privacy.
+    Encrypting everything always would be better, but...
+
+    * We use a hash for each output and not the output itself.
+
+    * There is no sensitive information stored in these records.
+
+    * There is no direct link between a user and those objects.
+
+    * Those objects are shared among all service users (one the same server)
+      because those fields reflect a global state of a transaction output.
+
+    * If you self-host Labelbase, its all yours. In the cloud version or if
+       multiple user are sharing an instance, a single output is hiding in
+       the crowd.
+
+    Not the perfect solution, but a trade of between performance, efficiency and privacy.
     """
     type_ref_hash = models.CharField(max_length=64,
         blank=True,
-        help_text="Reflects type + ref, where type is TX")
+        help_text="Reflects type + ref, where type is Output")
     spent = models.BooleanField(
         help_text=(""),
         default=None,

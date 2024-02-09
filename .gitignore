@@ -6,3 +6,4 @@ bgt.log
 db/
 *.pyc
 __pycache__
+django/importer/uploadeddata/*

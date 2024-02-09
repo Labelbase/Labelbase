@@ -1,6 +1,5 @@
 """
-Generate short UUIDs and use them as paths
-for uploaded media files in Django.
+Generate short UUIDs and use them as paths for uploaded media files in Django.
 
 Developed by Dave Hall.
 

@@ -6,17 +6,17 @@ import asyncio
 import threading
 
 from labelbase.models import Label
-# from labelbase.utils import compute_type_ref_hash
 from finances.models import OutputStat, HistoricalPrice
 
 import logging
 logger = logging.getLogger('labelbase')
 
 
+
 async def interact(conn, server_info, method, utxo):
     try:
         await conn.connect(server_info, "s", use_tor=server_info.is_onion,
-                           disable_cert_verify=True, short_term=True)
+                            disable_cert_verify=True, short_term=True)
         txid, index = utxo.split(":")
         try:
             txn = await conn.RPC(method, txid, True)
@@ -29,7 +29,7 @@ async def interact(conn, server_info, method, utxo):
                     blocktime = 0
                     logger.error("Can't get blocktime: {}".format(ex))
                 print(txn.get('vout'))
-                address = txn.get('vout')[int(index)].get('scriptPubKey', {}).get('address')
+                address = txn.get('vout')[int(index)].get('scriptPubKey',{}).get('address')
                 value = txn.get('vout')[int(index)].get('value')*100000000
                 return (txid, index, address, value, blocktime)
             else:
@@ -43,7 +43,7 @@ async def interact(conn, server_info, method, utxo):
 async def interact_addr(conn, server_info, method, addr):
     try:
         await conn.connect(server_info, "s", use_tor=server_info.is_onion,
-                           disable_cert_verify=True, short_term=True)
+                            disable_cert_verify=True, short_term=True)
         try:
             hextx = await conn.RPC(method, addr)
             if hextx is not None:
@@ -74,8 +74,7 @@ def checkup_label(label_id, loop):
             electrum_ports = elem.labelbase.user.profile.electrum_ports
             if not electrum_ports:
                 electrum_ports = "s50002"
-            logger.debug("Processing Label {} using electrum server connection: {} {} {}".format(
-                label_id, electrum_hostname, electrum_hostname, electrum_ports))
+            logger.debug("Processing Label {} using electrum server connection: {} {} {}".format(label_id, electrum_hostname, electrum_hostname, electrum_ports))
             server_info = ServerInfo(electrum_hostname, electrum_hostname, ports=((electrum_ports)))
             conn = StratumClient()
             logger.debug("type_ref_hash: {}".format(elem.type_ref_hash))
@@ -88,8 +87,7 @@ def checkup_label(label_id, loop):
                 txid, index, address, value, blocktime = utxo_resp
                 if blocktime:
                     HistoricalPrice.get_or_create_from_api(timestamp=blocktime)
-                unspents = loop.run_until_complete(interact_addr(
-                    conn, server_info, "blockchain.address.listunspent", address))
+                unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.address.listunspent", address))
                 unspent_utxo = False
                 utxo_value = 0
                 utxo_height = 0
@@ -112,7 +110,7 @@ def checkup_label(label_id, loop):
                         output.confirmed_at_block_time = blocktime
                     if utxo_value:
                         output.value = utxo_value
-                    elif value:  # take value from TX
+                    elif value: # take value from TX
                         output.value = value
                     if unspent_utxo:
                         output.spent = False

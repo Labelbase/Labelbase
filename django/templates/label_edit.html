@@ -1,0 +1,143 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load sekizai_tags %}
+{% load labelbase_tags %}
+
+{% block content %}
+
+<ul class="nav nav-tabs" style="padding-top: 2rem; ">
+  <li class="nav-item">
+    <a class="nav-link {% if action == "update" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}">Label Detail</a>
+  </li>
+
+  {% comment %}<!--
+
+  <li class="nav-item">
+    <a class="nav-link {% if action == "history" %}active" aria-current="page"{% else %}"{% endif %} href="{#% url 'edit_label' label.id %#}">Label History</a>
+  </li>
+  -->{% endcomment %}
+
+
+  {% switch form.instance.type %}
+      {% case "addr" %}
+
+      {% comment %}<!--
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Transaction Output Labeling</a>
+      </li>
+      -->{% endcomment %}
+
+      {% case "tx" %}
+      <li class="nav-item">
+        <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}labeling/">Transaction Labeling</a>
+      </li>
+
+      {% comment %}<!--
+      <li class="nav-item">
+        <a class="nav-link {% if action == "detail" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}labeling/">Transaction Detail</a>
+      </li>
+      -->{% endcomment %}
+      {% case "output" %}
+
+      {% comment %}<!--
+
+      <li class="nav-item">
+        <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}labeling/">Derived Addresses Labeling</a>
+      </li>
+      -->{% endcomment %}
+
+      {% comment %}<!--
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin Value</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin History</a>
+      </li>
+      -->{% endcomment %}
+
+
+      {% case "xpub" %}
+      {% comment %}<!--
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin History</a>
+      </li>
+      -->{% endcomment %}
+
+      {% case "addr" %}
+      {% comment %}<!--
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin Value</a>
+      </li>
+      -->{% endcomment %}
+
+  {% endswitch %}
+
+</ul>
+
+<div style="padding-top: 0rem; padding-bottom: 2.1rem; ">
+
+  {% if  output.spent %}
+
+  <div class="bd-callout bd-callout-warning">
+    <strong>Output spent!</strong> Blockchain records indicate that this output has been spent in another transaction.
+
+  </div>
+  {% endif %}
+
+<!--div class="bd-callout bd-callout-warning">
+  <strong>Heads up!</strong> There are multiple records for this transaction output. <a href="">Review & merge</a>
+</div-->
+
+{% comment %}
+{% if form.instance.type == "addr" %}
+<div class="bd-callout bd-callout-warning">
+  <strong>Heads up!</strong> There are multiple transaction outputs sent to this address. For privacy reasons, do not reuse addresses.
+</div>
+{% endif %}
+{% endcomment %}
+{% block label_edit_content %}
+{% endblock %}
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<div class="modal" tabindex="-1" id="deleteLabelModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete label?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning" role="alert">
+         <strong>Warning:</strong>
+         <br>
+         <br>
+         This action will permanently delete the label and cannot be undone. Are you sure you want to proceed?
+        </div>
+      </div>
+      <form method="post" action="{% url 'del_label' form.instance.pk %}">{% csrf_token %}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">DELETE</button>
+      </div>
+      </form>
+    </div>
+  </div
+
+
+  <script>
+  {% addtoblock "js" %}
+  {% endaddtoblock %}
+</script>
+
+
+{% endblock %}

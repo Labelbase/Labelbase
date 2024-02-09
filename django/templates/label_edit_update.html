@@ -1,0 +1,36 @@
+{% extends "label_edit.html" %}
+{% load bootstrap %}
+{% load i18n %}
+
+{% block label_edit_content %}
+
+<div class="lb-header">
+
+<form method="post" action="." id="bip329editform">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <div class="form-group">
+        <label class="control-label" for="id_id">#</label>
+        <div class="">
+            <input type="text" name="origin" maxlength="160" class="form-control" id="id_id" disabled="" value="{{ form.instance.id }}">
+        </div>
+        <p class="help-block">
+            This is the unique identifier assigned to this label within the current instance.
+
+            It can be utilized to access this label through the API.
+
+            Please note that depending on the 'operational mode' of the labelbase, this ID may be subject to change.
+        </p>
+    </div>
+    <div  style="padding-top: 1em;">
+      <a href="{{ form.instance.labelbase.get_absolute_url }}"
+          type="button" class="btn btn-link">Back to Labelbase</a>
+      <a href="#" data-bs-toggle="modal" data-bs-target="#deleteLabelModal"
+          type="button" class="btn btn-danger ">Delete</a>
+      <input type="submit"  class="btn btn-primary" value="Save">
+    </div>
+</form>
+
+</div><!-- lb-header container -->
+
+{% endblock %}

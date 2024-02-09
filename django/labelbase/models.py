@@ -21,13 +21,28 @@ class Labelbase(models.Model):
     (this should be only choosable when creating a labelbase, not afterwards.)
     ( this affects entries when changing entries - maybe, depending on the change)
 
-    A) Combine Identical Entries: When enabled, if you add a label with the same type and reference as an existing entry, the label attribute of the entries will be combined. This allows you to aggregate information. If the spendable attribute is provided, the last value given will overwrite the value of the "combined" entry.
+    A) Combine Identical Entries: When enabled, if you add a label with the same
+       type and reference as an existing entry, the label attribute of the entries
+       will be combined. This allows you to aggregate information.
+       If the spendable attribute is provided, the last value given will overwrite
+       the value of the "combined" entry.
 
-    B) Create Duplicate Entries: Enabling this option will create duplicate entries for labels with the same type and reference. This is useful when you want to keep separate entries for identical labels (e.g., to track a history). Each duplicate entry retains its own attributes, including spendable. Please note that when labels are exported, they will be sorted in ascending order by their ID, with older entries appearing first and newer entries later. When importing labels into a wallet or system, it may retain only the latest record and overwrite previous ones during the import process.
+    B) Create Duplicate Entries: Enabling this option will create duplicate entries
+       for labels with the same type and reference. This is useful when you want to
+       keep separate entries for identical labels (e.g., to track a history).
+       Each duplicate entry retains its own attributes, including spendable.
+       Please note that when labels are exported, they will be sorted in ascending
+       order by their ID, with older entries appearing first and newer entries later.
+       When importing labels into a wallet or system, it may retain only the latest
+       record and overwrite previous ones during the import process.
 
-    C) Replace Previous Entries: With this option enabled, when you add a label with the same type and reference as an existing entry, the previous entry will be replaced with the new one. The spendable and all other attributes of the new entry will overwrite the value of the previous entry.
+    C) Replace Previous Entries: With this option enabled, when you add a label with
+       the same type and reference as an existing entry, the previous entry will be
+       replaced with the new one. The spendable and all other attributes of the new
+       entry will overwrite the value of the previous entry.
 
-    Choose the operation mode that best suits your needs for managing entries with the same 'type' and 'ref' within this Labelbase.
+    Choose the operation mode that best suits your needs for managing entries with
+    the same 'type' and 'ref' within this Labelbase.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = encrypt(

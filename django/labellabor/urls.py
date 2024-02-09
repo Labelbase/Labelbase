@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 
 from userprofile.views import (ProfileView,
                                 ProfileAvatarUpdateView,
-                                ProfileCurrencyUpdateView)
+                                ProfileCurrencyUpdateView,
+                                ElectrumInfoUpdateView)
 from userprofile.views import APIKeyView
 
 
@@ -77,6 +78,11 @@ urlpatterns = [
         "account/userprofile-avatar/",
         login_required(ProfileAvatarUpdateView.as_view()),
         name="userprofile_avatar",
+    ),
+    path(
+        "account/userprofile-electrum/",
+        login_required(ElectrumInfoUpdateView.as_view()),
+        name="userprofile_electrum",
     ),
     path(
         "account/userprofile-currency/",

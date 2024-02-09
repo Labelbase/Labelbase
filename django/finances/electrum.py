@@ -4,11 +4,12 @@ from connectrum import ElectrumErrorResponse
 import json
 import asyncio
 import threading
-import logging
+
 from labelbase.models import Label
 #from labelbase.utils import compute_type_ref_hash
 from finances.models import OutputStat, HistoricalPrice
 
+import logging
 logger = logging.getLogger('labelbase')
 
 
@@ -60,9 +61,6 @@ async def interact_addr(conn, server_info, method, addr):
 def checkup_label(label_id, loop):
     if label_id and loop:
         """
-        TODO:
-
-        [ ] electrum > network endpoint from settings
         [ ] get_or_create() OutputStat using unspent payload
         """
         elem = Label.objects.get(id=label_id)
@@ -71,8 +69,14 @@ def checkup_label(label_id, loop):
             output = OutputStat(type_ref_hash=elem.type_ref_hash, network=elem.labelbase.network, value=0)
         logger.debug("Output found {}".format(output.id))
         if elem.type == "output" and output.spent is not True:
-            logger.debug("Processing Label {}".format(label_id))
-            server_info = ServerInfo("bitcoin.lu.ke", "bitcoin.lu.ke", ports=(("s50002")))
+            electrum_hostname = elem.labelbase.user.profile.electrum_hostname
+            if not electrum_hostname:
+                electrum_hostname = "bitcoin.lu.ke"
+            electrum_ports = elem.labelbase.user.profile.electrum_ports
+            if not electrum_ports:
+                electrum_ports = "s50002"
+            logger.debug("Processing Label {} using electrum server connection: {} {} {}".format(label_id, electrum_hostname, electrum_hostname, electrum_ports))
+            server_info = ServerInfo(electrum_hostname, electrum_hostname, ports=((electrum_ports)))
             conn = StratumClient()
             logger.debug("type_ref_hash: {}".format(elem.type_ref_hash))
             assert elem.type_ref_hash
@@ -99,8 +103,6 @@ def checkup_label(label_id, loop):
                         utxo_height = unspent.get('height')
                         logger.debug("found {}".format(unspent))
                         break
-
-
                 if output:
                     output.network = elem.labelbase.network
                     if utxo_height:
@@ -119,7 +121,6 @@ def checkup_label(label_id, loop):
                     logger.debug("saved output {}".format(output.id))
         else:
             logger.debug("Label is not an output. Spent is {}".format(output.spent))
-
     else:
         if not label_id:
             logger.error("Can't get label_id! {}".format(label_id))

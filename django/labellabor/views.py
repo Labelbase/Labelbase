@@ -67,6 +67,7 @@ class LabelDeleteView(DeleteView):
     error_url = "/#failed"
 
     def post(self, request, *args, **kwargs):
+        dummy + yummy
         self.object = self.get_object()
         if self.object.labelbase.user != self.request.user:
             return redirect(self.error_url)
@@ -404,6 +405,8 @@ class FixAndMergeLabelsView(View):
         # Fetch all records for the specified Labelbase
         records = Label.objects.filter(labelbase_id=labelbase_id)
 
+
+
         # Create a dictionary to store records grouped by type, ref, and label
         record_groups_type_and_ref = {}
         record_groups_type_and_ref_and_label = {}
@@ -412,6 +415,9 @@ class FixAndMergeLabelsView(View):
         resulting_duplicates_type_and_ref = []
         resulting_duplicates_type_and_ref_and_label = []
         resulting_duplicates_all_identical = []
+        resulting_empty_label_records = []
+        resulting_too_long_label_records = []
+
         all_identical_records = []
 
         # Iterate through the records and group them
@@ -419,6 +425,11 @@ class FixAndMergeLabelsView(View):
             key_type_and_ref = (record.type, record.ref)
             key_type_and_ref_label = (record.type, record.ref, record.label)
             key_all_identical = (record.type, record.ref, record.label, record.origin, record.spendable)
+
+            if record.label in [None, ""]:
+                resulting_empty_label_records.append(record)
+            elif len(record.label) > 255:
+                resulting_too_long_label_records.append(record)
 
             if key_type_and_ref in record_groups_type_and_ref:
                 record_groups_type_and_ref[key_type_and_ref].append(record)
@@ -467,7 +478,9 @@ class FixAndMergeLabelsView(View):
 
         fix_suggestions = len(resulting_duplicates_type_and_ref) + \
                             len(resulting_duplicates_type_and_ref_and_label) + \
-                            len(resulting_duplicates_all_identical)
+                            len(resulting_duplicates_all_identical) + \
+                            len(resulting_empty_label_records) + \
+                            len(resulting_too_long_label_records)
 
         return render(request, self.template_name, {
             "labelbase": labelbase,
@@ -477,7 +490,11 @@ class FixAndMergeLabelsView(View):
 
             "resulting_duplicates_type_and_ref": resulting_duplicates_type_and_ref,
             "resulting_duplicates_type_and_ref_and_label": resulting_duplicates_type_and_ref_and_label,
-            "active_labelbase_id": labelbase_id})
+            "resulting_empty_label_records": resulting_empty_label_records,
+            "resulting_too_long_label_records": resulting_too_long_label_records,
+
+            "active_labelbase_id": labelbase_id,
+            })
 
 
 class ExportLabelsView(View):

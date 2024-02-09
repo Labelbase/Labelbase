@@ -11,6 +11,13 @@
 
 <p class="fs-6 text-muted">
   Update your Electrum server information.
+  <br><br>
+  If you don't run your own Electrum server, here are some community trusted mainnet servers: <br>
+  <ul>
+    <li> electrum.blockstream.info / s50002</li>
+    <li> bitcoin.lu.ke / s50002</li>
+    <li> electrum.emzy.de / s50002</li> 
+  </ul>
   <form action="" method="POST">
     {% csrf_token %}
     <table>
@@ -26,5 +33,7 @@
       </tr>
     </table>
   </form>
+
+
 </p>
 {% endblock %}

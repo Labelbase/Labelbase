@@ -19,12 +19,10 @@ class ElectrumServerInfoForm(forms.ModelForm):
         }
 
 
-
 class ProfileCurrencyForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['my_currency']
-
 
 
 #

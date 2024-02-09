@@ -13,7 +13,6 @@ import logging
 logger = logging.getLogger('labelbase')
 
 
-
 async def interact(conn, server_info, method, utxo):
     try:
         await conn.connect(server_info, "s", use_tor=server_info.is_onion,

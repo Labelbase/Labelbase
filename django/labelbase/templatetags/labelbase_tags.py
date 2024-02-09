@@ -6,7 +6,6 @@ from labelbase.forms import ExportLabelsForm
 register = template.Library()
 
 
-
 @register.simple_tag
 def labelbaseform():
     return LabelbaseForm()
@@ -92,12 +91,15 @@ class SwitchNode(Node):
     def __init__(self, variable, cases):
         self.variable = variable
         self.cases = cases
+
     def __repr__(self):
         return ""
+
     def __iter__(self):
         for tests, nodelist in self.cases:
             for node in nodelist:
                 yield node
+
     def get_nodes_by_type(self, nodetype):
         nodes = []
         if isinstance(self, nodetype):
@@ -105,6 +107,7 @@ class SwitchNode(Node):
         for tests, nodelist in self.cases:
             nodes.extend(nodelist.get_nodes_by_type(nodetype))
         return nodes
+
     def render(self, context):
         try:
             value_missing = False

@@ -115,7 +115,6 @@ class OutputStat(models.Model):
         if current_price:
             performance = ((current_price - old_output_value) / old_output_value) * 100
 
-
         return {
             "value": self.value,
             "type_ref_hash": self.type_ref_hash,
@@ -130,10 +129,6 @@ class OutputStat(models.Model):
             "current_price": current_price,
             "is_tracked": is_tracked,
         }
-
-
-
-
 
     def output_metrics_dict_OLD(self, tracked_fiat_value=0, fiat_currency="USD"):
         """
@@ -167,10 +162,6 @@ class OutputStat(models.Model):
             "performance": performance,
         }
 
-
-
-
-
     @classmethod
     def get_or_create_from_api(cls, type_ref_hash=None,
                                         network='mainnet',
@@ -192,7 +183,6 @@ class OutputStat(models.Model):
         if cached_data:
             print("found cached data {} for type_ref_hash {}".format(cached_data, type_ref_hash))
             return cached_data, False
-
 
         def get_value_and_spent(txid, vout):
             mempool_api = MempoolAPI()
@@ -240,7 +230,6 @@ class HistoricalPrice(models.Model):
     usd_to_aud = models.DecimalField(max_digits=10, decimal_places=4)
     usd_to_jpy = models.DecimalField(max_digits=10, decimal_places=4)
 
-
     def get_currency_price(self, currency):
         """
         Get the price for the specified currency.
@@ -258,13 +247,11 @@ class HistoricalPrice(models.Model):
         price_field = getattr(self, f"{currency_lower}_price")
         return price_field.amount
 
-
     def __str__(self):
         return f"{self.usd_price} @ {self.timestamp}"
 
     class Meta:
         ordering = ['-timestamp']
-
 
     @classmethod
     def get_or_create_from_api(cls, timestamp=-1):

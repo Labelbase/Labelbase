@@ -16,7 +16,6 @@ def reset_task(task, delay_runtime=0):
     task.save()
 
 
-
 def start_recovery():
     from background_task.models import Task
     locked_tasks = Task.objects.filter(locked_by__isnull=False)

@@ -15,8 +15,6 @@ import logging
 logger = logging.getLogger('labelbase')
 
 
-
-
 class Command(BaseCommand):
     help = 'Run tasks that are scheduled to run on the queue'
 

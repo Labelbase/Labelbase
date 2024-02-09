@@ -6,7 +6,6 @@ from labelbase.models import Labelbase
 from labelbase.serializers import LabelSerializer
 
 
-
 from .models import UploadedData
 
 EOLSTOP = [b"", "", None, "\n"]

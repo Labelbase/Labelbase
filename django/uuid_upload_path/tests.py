@@ -18,7 +18,6 @@ class TestCaseBase(TestCase):
         self.assertFalse(value in container)
 
 
-
 class UuidTest(TestCaseBase):
 
     # It's hard to test random data, but more iterations makes the tests

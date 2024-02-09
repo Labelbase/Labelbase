@@ -104,7 +104,6 @@ class IrcListener(bottom.Client):
         # ask for details on all of those users
         self.loop.create_task(self.who_worker())
 
-
     async def reconnect(self, **kwargs):
         # Trigger an event that may cascade to a client_connect.
         # Don't continue until a client_connect occurs, which may be never.
@@ -124,12 +123,10 @@ class IrcListener(bottom.Client):
 
 if __name__ == '__main__':
 
-
     import logging
     logging.getLogger('bottom').setLevel(logging.DEBUG)
     logging.getLogger('connectrum').setLevel(logging.DEBUG)
     logging.getLogger('asyncio').setLevel(logging.DEBUG)
-
 
     bot = IrcListener(ssl=False)
     bot.loop.set_debug(True)

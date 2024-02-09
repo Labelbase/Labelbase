@@ -13,9 +13,6 @@ from userprofile.views import (ProfileView,
 from userprofile.views import APIKeyView
 
 
-
-
-
 from .views import (
     LabelbaseView,
     LabelbaseViewActionView,

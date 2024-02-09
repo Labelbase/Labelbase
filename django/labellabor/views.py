@@ -115,7 +115,6 @@ class LabelbaseDatatableView(BaseDatatableView):
             qs = qs.filter(id__in=res_ids)
         return qs
 
-
     def render_column(self, row, column):
         if column == 'id':
             return f'<tt><a href="{reverse("edit_label", args=[row.id])}">{row.id}</a></tt>'
@@ -184,8 +183,6 @@ class LabelbaseViewActionView(View):
         return HttpResponseRedirect(labelbase.get_absolute_url())
 
 
-
-
 class LabelbaseView(ListView):
     template_name = "labelbase.html"
     context_object_name = "label_list"
@@ -209,7 +206,6 @@ class LabelbaseView(ListView):
         )
         context["api_token"] = Token.objects.get(user_id=self.request.user.id)
         return context
-
 
     def post(self, request, *args, **kwargs):
         labelbase_id = self.kwargs["labelbase_id"]
@@ -314,10 +310,8 @@ class TreeMapsView(ListView):
                 return "labelbase_tree_maps_unspent_outputs.html"
         return "labelbase_tree_maps_unspent_outputs.html"
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
 
         labelbase_id = self.kwargs["pk"]
         labelbase = get_object_or_404(
@@ -357,7 +351,6 @@ class TreeMapsView(ListView):
         return qs.order_by("id")
 
 
-
 class LabelbasePortfolioView(LabelbaseView):
     template_name = "labelbase_portfolio.html"
 
@@ -390,9 +383,6 @@ class LabelbasePortfolioView(LabelbaseView):
         return context
 
 
-
-
-
 class FixAndMergeLabelsView(View):
     template_name = "label_fix_and_merge.html"
 
@@ -404,8 +394,6 @@ class FixAndMergeLabelsView(View):
 
         # Fetch all records for the specified Labelbase
         records = Label.objects.filter(labelbase_id=labelbase_id)
-
-
 
         # Create a dictionary to store records grouped by type, ref, and label
         record_groups_type_and_ref = {}
@@ -473,8 +461,6 @@ class FixAndMergeLabelsView(View):
                 #    print(f"  ID: {record.id}, origin: {record.origin}, spendable: {record.spendable}")
                 resulting_duplicates_all_identical.append({'type': type_val, 'ref': ref_val, 'label': label_val,
                                                     'origin': origin_val, 'spendable': spendable_cal}) # nonsense, but counts
-
-
 
         fix_suggestions = len(resulting_duplicates_type_and_ref) + \
                             len(resulting_duplicates_type_and_ref_and_label) + \

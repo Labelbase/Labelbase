@@ -6,7 +6,6 @@ import configparser
 import time
 
 
-
 def generate_random_string(length):
     # Exclude curly braces '{}' from the pool of characters
     characters = string.ascii_letters + string.digits

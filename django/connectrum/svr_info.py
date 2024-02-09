@@ -96,7 +96,6 @@ class ServerInfo(dict):
         rv.update(d)
         return rv
 
-
     @property
     def protocols(self):
         rv = set(i[0] for i in self['ports'])

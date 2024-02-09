@@ -62,8 +62,6 @@ def bg_runner(proxy_task, task=None, loop=None, *args, **kwargs):
     signals.task_finished.send(Task)
 
 
-
-
 class Tasks(object):
     def __init__(self):
         self._tasks = {}
@@ -97,7 +95,6 @@ class Tasks(object):
         if fn:
             return _decorator(fn)
         return _decorator
-
 
     def run_task(self, task_name, loop, args=None, kwargs=None):
         print("run_task loop {}".format(loop))
@@ -174,7 +171,6 @@ class TaskSchedule(object):
     def action(self):
         return self._action or TaskSchedule.SCHEDULE
 
-
     def __repr__(self):
         return 'TaskSchedule(run_at=%s, priority=%s)' % (self._run_at,
                                                          self._priority)
@@ -247,7 +243,6 @@ class DBTaskRunner(object):
             return False
 
 
-
 @python_2_unicode_compatible
 class TaskProxy(object):
     def __init__(self, name, task_function, schedule, queue, remove_existing_tasks, runner):
@@ -257,7 +252,6 @@ class TaskProxy(object):
         self.schedule = TaskSchedule.create(schedule)
         self.queue = queue
         self.remove_existing_tasks = remove_existing_tasks
-
 
     def __call__(self, *args, **kwargs):
         schedule = kwargs.pop('schedule', None)

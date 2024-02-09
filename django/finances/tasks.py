@@ -6,7 +6,6 @@ from finances.electrum import checkup_label
 logger = logging.getLogger('labelbase')
 
 
-
 @background(schedule={'run_at': 0}, remove_existing_tasks=True)
 def check_all_outputs(user_id, labelbase_id=None, loop=None):
     if labelbase_id:

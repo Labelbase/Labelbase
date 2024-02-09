@@ -82,7 +82,6 @@ class Labelbase(models.Model):
     def is_testnet(self):
         return self.network == self.TESTNET
 
-
     def get_mempool_api(self):
         if self.network != "mainnet":
             mempool_endpoint = \
@@ -90,7 +89,6 @@ class Labelbase(models.Model):
         else:
             mempool_endpoint = self.user.profile.mempool_endpoint
         return MempoolAPI(api_base_url="{}{}".format(mempool_endpoint, "/api/"))
-
 
     def get_absolute_url(self):
         return reverse("labelbase", args=[self.id])
@@ -170,7 +168,6 @@ class Label(models.Model):
 
         val, cur = extract_fiat_value(self.label)
         return output.output_metrics_dict(tracked_fiat_value=val, fiat_currency=cur)
-
 
     def get_absolute_url(self):
         """

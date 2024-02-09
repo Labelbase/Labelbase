@@ -23,7 +23,6 @@ logger = logging.getLogger('connectrum')
 
 class StratumClient:
 
-
     def __init__(self, loop=None):
         '''
             Setup state needed to handle req/resp from a single Stratum server.
@@ -73,7 +72,6 @@ class StratumClient:
         if self.ka_task:
             self.ka_task.cancel()
             self.ka_task = None
-
 
     async def connect(self, server_info, proto_code=None, *,
                             use_tor=False, disable_cert_verify=False,
@@ -190,7 +188,6 @@ class StratumClient:
             # Docs now say "The server may disconnect clients that have sent
             # no requests for roughly 10 minutes" ... so use 5 minutes here
             await asyncio.sleep(5*60)
-
 
     def _send_request(self, method, params=[], is_subscribe = False):
         '''

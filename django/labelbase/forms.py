@@ -8,8 +8,7 @@ class LabelbaseForm(forms.ModelForm):
     class Meta:
         model = Labelbase
         fields = ["name", "fingerprint", "about",  "network"]
-        # We will support "operation_mode" in the future
-
+        # We will re-introdiuce "operation_mode" in the future
 
 
 class LabelForm(forms.ModelForm):

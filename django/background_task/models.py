@@ -357,9 +357,6 @@ class Task(models.Model):
         db_table = 'background_task'
 
 
-
-
-
 class CompletedTaskQuerySet(models.QuerySet):
 
     def created_by(self, creator):

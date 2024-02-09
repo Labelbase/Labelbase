@@ -20,7 +20,7 @@ from background_task.exceptions import InvalidTaskError
 from background_task.settings import app_settings
 from background_task.signals import task_failed
 from background_task.signals import task_rescheduled
-from django.utils.safestring import mark_safe
+
 
 logger = logging.getLogger("labelbase")
 
@@ -58,8 +58,7 @@ class TaskManager(models.Manager):
         if app_settings.BACKGROUND_TASK_RUN_ASYNC:
             currently_failed = self.failed().count()
             currently_locked = self.locked(now).count()
-            count = app_settings.BACKGROUND_TASK_ASYNC_THREADS - \
-            (currently_locked - currently_failed)
+            count = app_settings.BACKGROUND_TASK_ASYNC_THREADS - (currently_locked - currently_failed)
             if count > 0:
                 ready = ready[:count]
             else:
@@ -450,7 +449,7 @@ class CompletedTask(models.Model):
                 # won't kill the process. kill is a bad named system call
                 os.kill(int(self.locked_by), 0)
                 return True
-            except:
+            except Exception as ex:
                 return False
         else:
             return None

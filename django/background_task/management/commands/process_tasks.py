@@ -1,7 +1,7 @@
 import random
 import time
 from django.core.management.base import BaseCommand
-import asyncio 
+import asyncio
 
 from background_task.tasks import tasks, autodiscover
 from background_task.utils import SignalManager

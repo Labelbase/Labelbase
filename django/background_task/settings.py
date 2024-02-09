@@ -60,4 +60,4 @@ class AppSettings(object):
         return prefix
 
 
-app_settings = AppSettings()
+app_settings = AppSettings() # noqa

@@ -36,8 +36,8 @@ class OutputStat(models.Model):
     Not the perfect solution, but a trade of between performance, efficiency and privacy.
     """
     type_ref_hash = models.CharField(max_length=64,
-        blank=True,
-        help_text="Reflects type + ref, where type is Output")
+                                     blank=True,
+                                     help_text="Reflects type + ref, where type is Output")
     spent = models.BooleanField(
         help_text=(""),
         default=None,

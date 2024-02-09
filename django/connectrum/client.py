@@ -153,7 +153,7 @@ class StratumClient:
             self.actual_connection = dict(hostname=hostname, port=int(port),
                                           ssl=bool(use_ssl), tor=bool(proxy))
             self.actual_connection['ip_addr'] = transport.get_extra_info('peername',
-                                                        default=['unknown'])[0]
+                                                                         default=['unknown'])[0]
 
             # always report our version, and get server's version
             await self.get_server_version()
@@ -190,7 +190,7 @@ class StratumClient:
             # no requests for roughly 10 minutes" ... so use 5 minutes here
             await asyncio.sleep(5*60)
 
-    def _send_request(self, method, params=[], is_subscribe = False):
+    def _send_request(self, method, params=[], is_subscribe=False):
         '''
             Send a new request to the server. Serialized the JSON and
             tracks id numbers and optional callbacks.

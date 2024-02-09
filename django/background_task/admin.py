@@ -26,7 +26,7 @@ class TaskAdmin(admin.ModelAdmin):
     display_filter = ['task_name', 'repeat',]
     search_fields = ['task_name', 'task_params', ]
     list_display = ['task_name', 'task_params', 'run_at', 'repeat', 'priority',
-        'attempts', 'has_error', 'locked_by', 'locked_by_pid_running', ]
+                    'attempts', 'has_error', 'locked_by', 'locked_by_pid_running', ]
     actions = [inc_priority, dec_priority]
 
 
@@ -34,7 +34,7 @@ class CompletedTaskAdmin(admin.ModelAdmin):
     display_filter = ['task_name']
     search_fields = ['task_name', 'task_params', ]
     list_display = ['task_name', 'task_params', 'run_at', 'repeat', 'priority',
-        'attempts', 'has_error', 'locked_by', 'locked_by_pid_running', ]
+                    'attempts', 'has_error', 'locked_by', 'locked_by_pid_running', ]
 
 
 admin.site.register(Task, TaskAdmin)

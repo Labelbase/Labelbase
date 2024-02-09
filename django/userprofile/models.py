@@ -27,9 +27,9 @@ class Profile(models.Model):
     electrum_ports = models.CharField(max_length=6, default="s50002", blank=True)
 
     avatar_url = models.CharField(max_length=160,
-                            default="/static/avatar.jpg",
-                            blank=True,
-                            help_text="")
+                                  default="/static/avatar.jpg",
+                                  blank=True,
+                                  help_text="")
     # switches
     merge_identical = models.BooleanField(default=False)
     auto_cleanup = models.BooleanField(default=False)

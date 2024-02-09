@@ -280,7 +280,7 @@ class Task(models.Model):
             backoff = timedelta(seconds=(self.attempts ** 4) + 5)
             self.run_at = timezone.now() + backoff
             logger.warning('Rescheduling task %s for %s later at %s', self,
-                backoff, self.run_at)
+                           backoff, self.run_at)
             task_rescheduled.send(sender=self.__class__, task=self)
             self.locked_by = None
             self.locked_at = None

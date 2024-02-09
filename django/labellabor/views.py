@@ -124,7 +124,7 @@ class LabelbaseDatatableView(BaseDatatableView):
         elif column == 'ref':
             return render_to_string('labelbase_dt_ref.html',
                                     context={'row': row,
-                                        'mempool_url': row.get_mempool_url(),
+                                             'mempool_url': row.get_mempool_url(),
                                     }, request=self.request)
         elif column == 'label':
             if row.label is None:
@@ -257,8 +257,8 @@ class LabelbaseMergeView(LabelbaseView):
             label_ids.append(l.id)
         if label_ids:
             qs = Label.objects.filter(id__in=label_ids,
-                labelbase__user_id=self.request.user.id,
-                labelbase_id=self.kwargs["labelbase_id"])
+                                      labelbase__user_id=self.request.user.id,
+                                      labelbase_id=self.kwargs["labelbase_id"])
         else:
             qs = Label.objects.none()
         return qs.order_by("id")
@@ -468,7 +468,7 @@ class FixAndMergeLabelsView(View):
                         all_identical_records.append(record)
                 #    print(f"  ID: {record.id}, origin: {record.origin}, spendable: {record.spendable}")
                 resulting_duplicates_all_identical.append({'type': type_val, 'ref': ref_val, 'label': label_val,
-                                                    'origin': origin_val, 'spendable': spendable_cal})  # nonsense, but counts
+                                                           'origin': origin_val, 'spendable': spendable_cal})  # nonsense, but counts
 
         fix_suggestions = len(resulting_duplicates_type_and_ref) + \
         len(resulting_duplicates_type_and_ref_and_label) + \
@@ -541,8 +541,8 @@ class ExportLabelsView(View):
                 else:
                     label_writer = BIP329JSONLWriter(temp_file.name, remove_existing=True)
                 labels = Label.objects.filter(labelbase_id=labelbase_id,
-                                        labelbase__user_id=request.user.id,
-                                        type__in=selected_type_attributes
+                                              labelbase__user_id=request.user.id,
+                                              type__in=selected_type_attributes
                                         ).order_by("id")
                 for label in labels:
                     label_entry = {
@@ -599,8 +599,7 @@ class LabelUpdateView(UpdateView):
                 context["res_tx"] = mempool_api.get_transaction(self.object.ref)
 
         if self.object.type == "output":
-            context["output"] = OutputStat.objects.filter(type_ref_hash= \
-                                            self.object.type_ref_hash).last()
+            context["output"] = OutputStat.objects.filter(type_ref_hash=self.object.type_ref_hash).last()
 
         return context
 

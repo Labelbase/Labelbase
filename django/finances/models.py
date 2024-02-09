@@ -86,7 +86,8 @@ class OutputStat(models.Model):
             if obj is None:
                 logger.error("No price info found for {}".format(self.confirmed_at_block_time))
                 return {}
-            print ("obj, created  = {} {}, self.confirmed_at_block_time {}".format(obj, created, self.confirmed_at_block_time))
+            print ("obj, created  = {} {}, self.confirmed_at_block_time {}".format(
+                obj, created, self.confirmed_at_block_time))
 
             # Use tracked fiat value if available, otherwise estimate using past price
             if Decimal(tracked_fiat_value) > Decimal(0):
@@ -164,10 +165,10 @@ class OutputStat(models.Model):
 
     @classmethod
     def get_or_create_from_api(cls, type_ref_hash=None,
-                                        network='mainnet',
-                                        txid=None,
-                                        vout=None,
-                                        force_reload=False):
+                               network='mainnet',
+                               txid=None,
+                               vout=None,
+                               force_reload=False):
 
         obj = None
         created = False
@@ -178,7 +179,7 @@ class OutputStat(models.Model):
             cached_data = None
         else:
             cached_data = cls.objects.filter(type_ref_hash=type_ref_hash,
-                                                    network=network).last()
+                                             network=network).last()
 
         if cached_data:
             print("found cached data {} for type_ref_hash {}".format(cached_data, type_ref_hash))

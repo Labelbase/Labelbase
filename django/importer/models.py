@@ -11,6 +11,7 @@ IMPORTER_CHOICES = (
     ("pocket-accointing", "Pocket Accointing .csv")
 )
 
+
 class UploadedData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)

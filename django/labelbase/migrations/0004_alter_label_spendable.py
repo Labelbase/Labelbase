@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='label',
             name='spendable',
-            field=django_cryptography.fields.encrypt(models.BooleanField(default=None, help_text="One of true or false, denoting if an output should be spendable by the wallet. The spendable property only where type is 'output'.", null=True)),
+            field=django_cryptography.fields.encrypt(models.BooleanField(
+                default=None, help_text="One of true or false, denoting if an output should be spendable by the wallet. The spendable property only where type is 'output'.", null=True)),
         ),
     ]

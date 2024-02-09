@@ -59,7 +59,7 @@ class TaskManager(models.Manager):
             currently_failed = self.failed().count()
             currently_locked = self.locked(now).count()
             count = app_settings.BACKGROUND_TASK_ASYNC_THREADS - \
-                                    (currently_locked - currently_failed)
+            (currently_locked - currently_failed)
             if count > 0:
                 ready = ready[:count]
             else:

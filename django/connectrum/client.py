@@ -21,6 +21,7 @@ import logging
 
 logger = logging.getLogger('connectrum')
 
+
 class StratumClient:
 
     def __init__(self, loop=None):
@@ -74,8 +75,8 @@ class StratumClient:
             self.ka_task = None
 
     async def connect(self, server_info, proto_code=None, *,
-                            use_tor=False, disable_cert_verify=False,
-                            proxy=None, short_term=False, disconnect_callback=None):
+                      use_tor=False, disable_cert_verify=False,
+                      proxy=None, short_term=False, disconnect_callback=None):
         '''
             Start connection process.
             Destination must be specified in a ServerInfo() record (first arg).
@@ -83,7 +84,7 @@ class StratumClient:
         self.server_info = server_info
         self.disconnect_callback = disconnect_callback
         if not proto_code:
-             proto_code,*_ = server_info.protocols
+            proto_code, *_ = server_info.protocols
         self.proto_code = proto_code
 
         logger.debug("Connecting to: %r" % server_info)
@@ -150,7 +151,7 @@ class StratumClient:
 
             # capture actual values used
             self.actual_connection = dict(hostname=hostname, port=int(port),
-                                            ssl=bool(use_ssl), tor=bool(proxy))
+                                          ssl=bool(use_ssl), tor=bool(proxy))
             self.actual_connection['ip_addr'] = transport.get_extra_info('peername',
                                                         default=['unknown'])[0]
 
@@ -417,7 +418,7 @@ class StratumClient:
         sh = sha256(addr.script()).digest()[::-1]
 
         return method.replace('.address.', '.scripthash.'), \
-                    [str(b2a_hex(sh), 'ascii')]+list(params[1:])
+        [str(b2a_hex(sh), 'ascii')]+list(params[1:])
 
     def subscribe(self, method, *params):
         '''

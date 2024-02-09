@@ -10,6 +10,7 @@ from .models import UploadedData
 
 EOLSTOP = [b"", "", None, "\n"]
 
+
 @background(schedule=1)
 def process_uploaded_data(uploaded_data_id, loop=None):
     imported_lables = 0
@@ -73,7 +74,8 @@ def process_uploaded_data(uploaded_data_id, loop=None):
         from .pocket import validate_csv_format, parse_csv_to_json
         if validate_csv_format(csv_file_path):
             for item in parse_csv_to_json(csv_file_path):
-                label = "Got {} {} for {:.2f} {} with reference: {} #Pocket".format(item[0].get('outSellAmount'), item[1].get('inBuyAsset'), decimal.Decimal(item[2].get('inBuyAmount')), item[2].get('inBuyAsset'), item[1].get('operationId'))
+                label = "Got {} {} for {:.2f} {} with reference: {} #Pocket".format(item[0].get('outSellAmount'), item[1].get(
+                    'inBuyAsset'), decimal.Decimal(item[2].get('inBuyAmount')), item[2].get('inBuyAsset'), item[1].get('operationId'))
                 txid = item[0].get('operationId')
                 tx = mempool_api.get_transaction(txid)
                 potential_utxos = []

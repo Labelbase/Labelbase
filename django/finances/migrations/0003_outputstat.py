@@ -17,7 +17,8 @@ class Migration(migrations.Migration):
                 ('type_ref_hash', models.CharField(blank=True, help_text='Reflects type + ref, where type is TX', max_length=64)),
                 ('spent', models.BooleanField(default=None, null=True)),
                 ('value', models.IntegerField()),
-                ('network', models.CharField(choices=[('mainnet', 'Mainnet'), ('testnet', 'Testnet')], default='mainnet', help_text='Choose the network for this labelbase.', max_length=10)),
+                ('network', models.CharField(choices=[('mainnet', 'Mainnet'), ('testnet', 'Testnet')],
+                 default='mainnet', help_text='Choose the network for this labelbase.', max_length=10)),
             ],
         ),
     ]

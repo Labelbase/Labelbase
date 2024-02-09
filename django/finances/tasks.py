@@ -10,7 +10,7 @@ logger = logging.getLogger('labelbase')
 def check_all_outputs(user_id, labelbase_id=None, loop=None):
     if labelbase_id:
         labels = Label.objects.filter(labelbase__id=labelbase_id,
-                                        labelbase__user_id=user_id)
+                                      labelbase__user_id=user_id)
     else:
         labels = Label.objects.filter(labelbase__user_id=user_id)
     logger.debug("found {} labels".format(labels.count()))

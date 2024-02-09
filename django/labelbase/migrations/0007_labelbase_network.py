@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='labelbase',
             name='network',
-            field=models.CharField(choices=[('mainnet', 'Mainnet'), ('testnet', 'Testnet')], default='mainnet', help_text='Choose the network for this labelbase.', max_length=10),
+            field=models.CharField(choices=[('mainnet', 'Mainnet'), ('testnet', 'Testnet')],
+                                   default='mainnet', help_text='Choose the network for this labelbase.', max_length=10),
         ),
     ]

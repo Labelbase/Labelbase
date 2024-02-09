@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger('connectrum')
 
+
 class IrcListener(bottom.Client):
     def __init__(self, irc_nickname=None, irc_password=None, ssl=True):
         self.my_nick = irc_nickname or 'XC%d' % random.randint(1E11, 1E12)
@@ -67,7 +68,7 @@ class IrcListener(bottom.Client):
 
         self.servers.remove(nick)
 
-        logger.debug("Found: '%s' at %s with port list: %s",nick, host, ports)
+        logger.debug("Found: '%s' at %s with port list: %s", nick, host, ports)
         self.results[host.lower()] = ServerInfo(nick, host, ports)
 
         if not self.servers:

@@ -86,7 +86,7 @@ def do_switch(parser, token):
         raise template.TemplateSyntaxError("'%s' must have at least one 'case'." % tag_name)
     return SwitchNode(variable, cases)
 
-    
+
 class SwitchNode(Node):
     def __init__(self, variable, cases):
         self.variable = variable

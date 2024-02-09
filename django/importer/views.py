@@ -9,6 +9,7 @@ from .forms import UploadFileForm
 from .tasks import process_uploaded_data
 from .models import UploadedData
 
+
 @login_required
 def upload_labels(request):
     """

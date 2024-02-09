@@ -33,6 +33,7 @@ from labelbase.utils import compute_type_ref_hash
 from finances.models import OutputStat
 from finances.tasks import check_all_outputs
 
+
 class AboutView(TemplateView):
     template_name = "about.html"
 
@@ -101,7 +102,7 @@ class LabelbaseDatatableView(BaseDatatableView):
         search_tag = self.request.GET.get('tag', None)
 
         qs = Label.objects.filter(labelbase__user_id=self.request.user.id,
-                                    labelbase_id=labelbase_id).order_by("id")
+                                  labelbase_id=labelbase_id).order_by("id")
 
         if search_tag:
             # Due to encryption, we need to use a super slow process here...
@@ -172,6 +173,7 @@ class LabelbaseDatatableView(BaseDatatableView):
 
             return qs.filter(id__in=res_ids)
         return qs
+
 
 class LabelbaseViewActionView(View):
     def get(self, request, *args, **kwargs):
@@ -261,6 +263,7 @@ class LabelbaseMergeView(LabelbaseView):
             qs = Label.objects.none()
         return qs.order_by("id")
 
+
 class StatsAndKPIView(View):
     template_name = "labelbase_stats_and_kpi.html"
 
@@ -298,6 +301,8 @@ def get_context_data(self, **kwargs):
 
 
 """
+
+
 class TreeMapsView(ListView):
     context_object_name = "label_list"
 
@@ -344,8 +349,8 @@ class TreeMapsView(ListView):
                     label_ids.append(l.id)
         if label_ids:
             qs = qs.filter(id__in=label_ids,
-                            labelbase__user_id=self.request.user.id,
-                            labelbase_id=self.kwargs["pk"])
+                           labelbase__user_id=self.request.user.id,
+                           labelbase_id=self.kwargs["pk"])
         else:
             qs = Label.objects.none()
         return qs.order_by("id")
@@ -446,10 +451,12 @@ class FixAndMergeLabelsView(View):
         for key_type_and_ref_and_label, duplicates in record_groups_type_and_ref_and_label.items():
             if len(duplicates) > 1:
                 type_val, ref_val, label_val = key_type_and_ref_and_label
-                print(f"Duplicates for labelbase_id={labelbase_id}, type='{type_val}', ref='{ref_val}', label='{label_val}':")
+                print(
+                    f"Duplicates for labelbase_id={labelbase_id}, type='{type_val}', ref='{ref_val}', label='{label_val}':")
                 for record in duplicates:
                     print(f"  ID: {record.id}, origin: {record.origin}, spendable: {record.spendable}")
-                resulting_duplicates_type_and_ref_and_label.append({'type': type_val, 'ref': ref_val, 'label': label_val})
+                resulting_duplicates_type_and_ref_and_label.append(
+                    {'type': type_val, 'ref': ref_val, 'label': label_val})
 
         for key_all_identical, duplicates in record_groups_all_identical.items():
             if len(duplicates) > 1:
@@ -463,10 +470,10 @@ class FixAndMergeLabelsView(View):
                                                     'origin': origin_val, 'spendable': spendable_cal}) # nonsense, but counts
 
         fix_suggestions = len(resulting_duplicates_type_and_ref) + \
-                            len(resulting_duplicates_type_and_ref_and_label) + \
-                            len(resulting_duplicates_all_identical) + \
-                            len(resulting_empty_label_records) + \
-                            len(resulting_too_long_label_records)
+        len(resulting_duplicates_type_and_ref_and_label) + \
+        len(resulting_duplicates_all_identical) + \
+        len(resulting_empty_label_records) + \
+        len(resulting_too_long_label_records)
 
         return render(request, self.template_name, {
             "labelbase": labelbase,

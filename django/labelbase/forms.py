@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 
 from .models import Label, Labelbase
 
+
 class LabelbaseForm(forms.ModelForm):
     """ """
     class Meta:
@@ -34,7 +35,8 @@ class LabelForm(forms.ModelForm):
 
         # Add the "bip329-attr" class to the labels
         for field_name in self.fields:
-            self.fields[field_name].label = mark_safe(f'<label class="bip329-attr">{self.fields[field_name].label}</label>')
+            self.fields[field_name].label = mark_safe(
+                f'<label class="bip329-attr">{self.fields[field_name].label}</label>')
 
 
 class ExportLabelsForm(forms.Form):
@@ -56,4 +58,5 @@ class ExportLabelsForm(forms.Form):
         # Add the "bip329-attr" class to the labels of checkboxes
         for field_name in ['tx_checkbox', 'addr_checkbox', 'pubkey_checkbox',
                            'input_checkbox', 'output_checkbox', 'xpub_checkbox']:
-            self.fields[field_name].label = mark_safe(f'<label class="bip329-attr">{self.fields[field_name].label}</label>')
+            self.fields[field_name].label = mark_safe(
+                f'<label class="bip329-attr">{self.fields[field_name].label}</label>')

@@ -3,6 +3,7 @@ import decimal
 
 from django.conf import settings
 
+
 def hashtag_to_badge(value):
     hashtags = re.findall(r'#\w+', value)
     for tag in hashtags:

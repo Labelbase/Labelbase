@@ -14,36 +14,43 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='historicalprice',
             name='aud_price_currency',
-            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), ('EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='AUD', editable=False, max_length=3),
+            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), (
+                'EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='AUD', editable=False, max_length=3),
         ),
         migrations.AlterField(
             model_name='historicalprice',
             name='cad_price_currency',
-            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), ('EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='CAD', editable=False, max_length=3),
+            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), (
+                'EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='CAD', editable=False, max_length=3),
         ),
         migrations.AlterField(
             model_name='historicalprice',
             name='chf_price_currency',
-            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), ('EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='CHF', editable=False, max_length=3),
+            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), (
+                'EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='CHF', editable=False, max_length=3),
         ),
         migrations.AlterField(
             model_name='historicalprice',
             name='eur_price_currency',
-            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), ('EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='EUR', editable=False, max_length=3),
+            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), (
+                'EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='EUR', editable=False, max_length=3),
         ),
         migrations.AlterField(
             model_name='historicalprice',
             name='gbp_price_currency',
-            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), ('EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='GBP', editable=False, max_length=3),
+            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), (
+                'EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='GBP', editable=False, max_length=3),
         ),
         migrations.AlterField(
             model_name='historicalprice',
             name='jpy_price_currency',
-            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), ('EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='JPY', editable=False, max_length=3),
+            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), (
+                'EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='JPY', editable=False, max_length=3),
         ),
         migrations.AlterField(
             model_name='historicalprice',
             name='usd_price_currency',
-            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), ('EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='USD', editable=False, max_length=3),
+            field=djmoney.models.fields.CurrencyField(choices=[('AUD', 'Australian Dollar'), ('GBP', 'British Pound'), ('CAD', 'Canadian Dollar'), (
+                'EUR', 'Euro'), ('JPY', 'Japanese Yen'), ('CHF', 'Swiss Franc'), ('USD', 'US Dollar')], default='USD', editable=False, max_length=3),
         ),
     ]

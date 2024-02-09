@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='labelbase',
             name='operation_mode',
-            field=models.CharField(choices=[('combine', 'Combine Identical Entries'), ('duplicate', 'Create Duplicate Entries (Default)'), ('replace', 'Replace Previous Entries'), ('skip', 'Skip Identical Entries')], default='duplicate', help_text="Choose the operation mode for handling entries with the same 'type' and 'ref'. The default mode is to create duplicate entries.", max_length=10),
+            field=models.CharField(choices=[('combine', 'Combine Identical Entries'), ('duplicate', 'Create Duplicate Entries (Default)'), ('replace', 'Replace Previous Entries'), ('skip', 'Skip Identical Entries')],
+                                   default='duplicate', help_text="Choose the operation mode for handling entries with the same 'type' and 'ref'. The default mode is to create duplicate entries.", max_length=10),
         ),
     ]

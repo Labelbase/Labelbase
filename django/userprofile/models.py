@@ -40,8 +40,8 @@ class Profile(models.Model):
     update_utxo_on_login = models.BooleanField(default=True)
 
     my_currency = models.CharField(max_length=3,
-                                    choices=CURRENCY_CHOICES,
-                                    default='USD')
+                                   choices=CURRENCY_CHOICES,
+                                   default='USD')
 
     def labelbases(self):
         return Labelbase.objects.filter(user_id=self.user_id)

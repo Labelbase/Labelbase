@@ -17,7 +17,7 @@ class Labelbase(models.Model):
 
     Labelbase Operation Modes
     =========================
-    
+
     (this should be only choosable when creating a labelbase, not afterwards.)
     ( this affects entries when changing entries - maybe, depending on the change)
 
@@ -180,7 +180,7 @@ class Label(models.Model):
         if self.labelbase and self.labelbase.network != "mainnet":
             mempool_endpoint = \
                 "{}/{}".format(self.labelbase.user.profile.mempool_endpoint,
-                                self.labelbase.network)
+                               self.labelbase.network)
         else:
             mempool_endpoint = self.labelbase.user.profile.mempool_endpoint
         try:

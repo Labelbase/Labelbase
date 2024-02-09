@@ -7,9 +7,9 @@ from rest_framework.documentation import include_docs_urls
 from django.contrib.auth.decorators import login_required
 
 from userprofile.views import (ProfileView,
-                                ProfileAvatarUpdateView,
-                                ProfileCurrencyUpdateView,
-                                ElectrumInfoUpdateView)
+                               ProfileAvatarUpdateView,
+                               ProfileCurrencyUpdateView,
+                               ElectrumInfoUpdateView)
 from userprofile.views import APIKeyView
 
 

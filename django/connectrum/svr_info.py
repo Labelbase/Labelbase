@@ -23,7 +23,7 @@ class ServerInfo(dict):
     FIELDS = ['nickname', 'hostname', 'ports', 'version', 'pruning_limit' ]
 
     def __init__(self, nickname_or_dict, hostname=None, ports=None,
-                        version=None, pruning_limit=None, ip_addr=None):
+                 version=None, pruning_limit=None, ip_addr=None):
 
         if not hostname and not ports:
             # promote a dict, or similar
@@ -141,8 +141,8 @@ class ServerInfo(dict):
     def select(self, protocol='s', is_onion=None, min_prune=0):
         # predicate function for selection based on features/properties
         return ((protocol in self.protocols)
-                    and (self.is_onion == is_onion if is_onion is not None else True)
-                    and (self.pruning_limit >= min_prune))
+                and (self.is_onion == is_onion if is_onion is not None else True)
+                and (self.pruning_limit >= min_prune))
 
     def __repr__(self):
         return '<ServerInfo {hostname} nick={nickname} ports="{ports}" v={version} prune={pruning_limit}>'\
@@ -155,6 +155,7 @@ class ServerInfo(dict):
     def __hash__(self):
         # this one-line allows use as a set member, which is really handy!
         return hash(self['hostname'].lower())
+
 
 class KnownServers(dict):
     '''

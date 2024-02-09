@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger('connectrum')
 
+
 class StratumProtocol(asyncio.Protocol):
     client = None
     closed = False

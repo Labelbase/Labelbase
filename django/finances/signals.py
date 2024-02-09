@@ -2,6 +2,7 @@ from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 from finances.models import HistoricalPrice
 
+
 @receiver(user_logged_in)
 def perform_tasks_on_login(sender, user, request, **kwargs):
     """ """

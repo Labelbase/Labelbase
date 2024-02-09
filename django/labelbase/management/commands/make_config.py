@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 import subprocess
 import os
 
+
 class Command(BaseCommand):
     help = 'Make inital Labelbase config'
 

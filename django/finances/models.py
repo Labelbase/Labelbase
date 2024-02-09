@@ -43,7 +43,7 @@ class OutputStat(models.Model):
         default=None,
         null=True
     )
-    value = models.IntegerField() # tx output, in sats
+    value = models.IntegerField()  # tx output, in sats
     confirmed_at_block_height = models.IntegerField(default=0)
     confirmed_at_block_time = models.IntegerField(default=0)
 

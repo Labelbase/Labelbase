@@ -1,7 +1,7 @@
 import os
 
-#import sentry_sdk
-#from sentry_sdk.integrations.django import DjangoIntegration
+# import sentry_sdk
+# from sentry_sdk.integrations.django import DjangoIntegration
 
 from pathlib import Path
 from configparser import RawConfigParser
@@ -114,24 +114,24 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    #"django.middleware.cache.UpdateCacheMiddleware",
+    # "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django_otp.middleware.OTPMiddleware",
-    #"django.middleware.cache.FetchFromCacheMiddleware",
+    # "django.middleware.cache.FetchFromCacheMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    #"labellabor.middleware.SentryUserMiddleware",
+    # "labellabor.middleware.SentryUserMiddleware",
 ]
 
 
-#CACHES = {
+# CACHES = {
 #    'default': {
 #        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
 #        'LOCATION': 'labelbase-snowflake',
 #    }
-#}
+# }
 
 ROOT_URLCONF = "labellabor.urls"
 

@@ -274,6 +274,7 @@ class TaskProxy(object):
     def __str__(self):
         return 'TaskProxy(%s)' % self.name
 
+
 tasks = Tasks()
 
 

@@ -11,9 +11,9 @@ def update_type_ref_hash(sender, instance, **kwargs):
 
 def trigger_electrumx_checkup(sender, instance, **kwargs):
     if instance.type == "output":
-        #from finances.models import OutputStat
-        #txid, vout =  instance.ref.split(":")
-        #obj, created = OutputStat.get_or_create_from_api(
+        # from finances.models import OutputStat
+        # txid, vout =  instance.ref.split(":")
+        # obj, created = OutputStat.get_or_create_from_api(
         #                                type_ref_hash=instance.type_ref_hash,
         #                                network=instance.labelbase.network,
         #                                txid=txid, vout=vout, force_reload=True)

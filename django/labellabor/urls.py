@@ -32,7 +32,7 @@ from .views import (
     EncryptionView,
     InteroperationalView,
     ExportLabelsView,
-    #StatsAndKPIView,
+    # StatsAndKPIView,
     TreeMapsView,
     FixAndMergeLabelsView,
     LabelbaseDatatableView,
@@ -139,11 +139,11 @@ urlpatterns = [
         login_required(FixAndMergeLabelsView.as_view()),
         name="labelbase_fix_and_manage"
     ),
-    #path(
+    # path(
     #    "labelbase/<int:labelbase_id>/stats-and-kpi/",
     #    login_required(StatsAndKPIView.as_view()),
     #    name="labelbase_stats_and_kpi"
-    #),
+    # ),
     path(
         "labelbase/<int:pk>/tree-maps/",
         login_required(TreeMapsView.as_view()),

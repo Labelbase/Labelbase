@@ -105,14 +105,14 @@ def process_uploaded_data(uploaded_data_id, loop=None):
                         serializer.save()
                         imported_lables += 1
                     else:
-                        #messages.add_message(
+                        # messages.add_message(
                         #    request,
                         #    messages.ERROR,
                         #    'Could not process record "{}".'.format(item),
-                        #)
+                        # )
                         pass
         else:
-            print("ERROR") # TODO
+            print("ERROR")  # TODO
     # BlueWallet
     elif uploaded_data.import_type == "csv-bluewallet":
         header_row = True
@@ -137,18 +137,18 @@ def process_uploaded_data(uploaded_data_id, loop=None):
                     serializer.save()
                     imported_lables += 1
                 else:
-                    #messages.add_message(
+                    # messages.add_message(
                     #    request,
                     #    messages.ERROR,
                     #    'Could not process line "{}".'.format(buf),
-                    #)
+                    # )
                     pass
             except Exception as ex:
-                #messages.add_message(
+                # messages.add_message(
                 #    request,
                 #    messages.ERROR,
                 #    'Could not process line "{}", {}.'.format(buf, ex),
-                #)
+                # )
                 pass
     # Clean up – Note: Currently we delete the upload from the file system,
     # later we can store the messages.add_message messages, the state and the

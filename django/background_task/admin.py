@@ -8,6 +8,8 @@ def inc_priority(modeladmin, request, queryset):
     for obj in queryset:
         obj.priority += 1
         obj.save()
+
+
 inc_priority.short_description = "priority += 1"
 
 
@@ -15,6 +17,8 @@ def dec_priority(modeladmin, request, queryset):
     for obj in queryset:
         obj.priority -= 1
         obj.save()
+
+
 dec_priority.short_description = "priority -= 1"
 
 

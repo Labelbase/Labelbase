@@ -379,7 +379,7 @@ class StratumClient:
             the result from the server. Failures are returned as exceptions.
         '''
         assert '.' in method
-        #assert not method.endswith('subscribe')
+        # assert not method.endswith('subscribe')
 
         return self._send_request(method, params)
 
@@ -470,4 +470,4 @@ if __name__ == '__main__':
     print("DONE!: this server has %d peers" % len(rv))
     loop.close()
 
-    #c.blockchain.address.get_balance(23)
+    # c.blockchain.address.get_balance(23)

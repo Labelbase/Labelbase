@@ -263,10 +263,10 @@ if __name__ == '__main__':
 
     ks = KnownServers()
 
-    #ks.from_json('servers.json')
+    # ks.from_json('servers.json')
     ks.from_irc()
 
-    #print (ks.dump())
+    # print (ks.dump())
 
     from constants import PROTOCOL_CODES
 

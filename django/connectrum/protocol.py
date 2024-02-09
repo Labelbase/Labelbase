@@ -47,7 +47,7 @@ class StratumProtocol(asyncio.Protocol):
                 self.connection_lost(exc)
                 return
 
-            #logger.debug("RX:\n%s", json.dumps(msg, indent=2))
+            # logger.debug("RX:\n%s", json.dumps(msg, indent=2))
 
             try:
                 self.client._got_response(msg)
@@ -59,7 +59,7 @@ class StratumProtocol(asyncio.Protocol):
         '''
             Given an object, encode as JSON and transmit to the server.
         '''
-        #logger.debug("TX:\n%s", json.dumps(message, indent=2))
+        # logger.debug("TX:\n%s", json.dumps(message, indent=2))
         data = json.dumps(message).encode('utf-8') + b'\n'
         self.transport.write(data)
 

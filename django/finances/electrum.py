@@ -6,7 +6,7 @@ import asyncio
 import threading
 
 from labelbase.models import Label
-#from labelbase.utils import compute_type_ref_hash
+# from labelbase.utils import compute_type_ref_hash
 from finances.models import OutputStat, HistoricalPrice
 
 import logging
@@ -112,7 +112,7 @@ def checkup_label(label_id, loop):
                         output.confirmed_at_block_time = blocktime
                     if utxo_value:
                         output.value = utxo_value
-                    elif value: # take value from TX
+                    elif value:  # take value from TX
                         output.value = value
                     if unspent_utxo:
                         output.spent = False

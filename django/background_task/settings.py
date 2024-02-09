@@ -58,4 +58,5 @@ class AppSettings(object):
             prefix = '-'
         return prefix
 
+
 app_settings = AppSettings()

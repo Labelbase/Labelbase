@@ -29,6 +29,3 @@ BOOTSTRAP_SERVERS = {
     'btc.smsys.me': {'t': 110, 's': 995},
     'electrum.online': {'t': 50001, 's': 50002},
 }
-
-
-

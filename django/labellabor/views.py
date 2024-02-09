@@ -143,9 +143,9 @@ class LabelbaseDatatableView(BaseDatatableView):
                 spendable_formatted = ''
             else:
                 spendable_formatted = 'true' if spendable_value else 'false'
-            #if spendable_formatted == 'true':
+            # if spendable_formatted == 'true':
             #    return f'<span class="badge badge-spendable fs--2 "><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check ms-1" style="height:12.8px;width:12.8px;"><polyline points="20 6 9 17 4 12"></polyline></svg> <span class="badge-label"><tt>{spendable_formatted }</tt></span>  </span>'
-            #elif spendable_formatted == 'false':
+            # elif spendable_formatted == 'false':
             #    return f'<span class="badge badge-unspendable fs--2 "><svg xmlns="http://www.w3.org/2000/svg" width="12.4" height="12.4" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6L6 18M6 6l12 12"/></svg><span class="badge-label"><tt>{spendable_formatted }</tt></span></span>'
             return f'<tt>{spendable_formatted }</tt>'
         else:
@@ -276,6 +276,7 @@ class StatsAndKPIView(View):
             "labelbase": labelbase,
             "active_labelbase_id": labelbase_id})
 
+
 """
 
 
@@ -328,7 +329,7 @@ class TreeMapsView(ListView):
         return context
 
     def get_queryset(self):
-        #action = self.kwargs.get('action', 'unspent-outputs')
+        # action = self.kwargs.get('action', 'unspent-outputs')
 
         label_ids = []
 
@@ -343,9 +344,9 @@ class TreeMapsView(ListView):
                                             type_ref_hash=l.type_ref_hash,
                                             network=l.labelbase.network).last()
                 if output and output.spent is False:
-                    #if action == 'unspent-spendable-outputs' and l.spendable == True:
+                    # if action == 'unspent-spendable-outputs' and l.spendable == True:
                     #    label_ids.append(l.id)
-                    #else:
+                    # else:
                     label_ids.append(l.id)
         if label_ids:
             qs = qs.filter(id__in=label_ids,
@@ -461,13 +462,13 @@ class FixAndMergeLabelsView(View):
         for key_all_identical, duplicates in record_groups_all_identical.items():
             if len(duplicates) > 1:
                 type_val, ref_val, label_val, origin_val, spendable_cal = key_all_identical
-                #print(f"Duplicates for labelbase_id={labelbase_id}, type='{type_val}', ref='{ref_val}', label='{label_val}':")
+                # print(f"Duplicates for labelbase_id={labelbase_id}, type='{type_val}', ref='{ref_val}', label='{label_val}':")
                 for record in duplicates:
                     if record not in all_identical_records:
                         all_identical_records.append(record)
                 #    print(f"  ID: {record.id}, origin: {record.origin}, spendable: {record.spendable}")
                 resulting_duplicates_all_identical.append({'type': type_val, 'ref': ref_val, 'label': label_val,
-                                                    'origin': origin_val, 'spendable': spendable_cal}) # nonsense, but counts
+                                                    'origin': origin_val, 'spendable': spendable_cal})  # nonsense, but counts
 
         fix_suggestions = len(resulting_duplicates_type_and_ref) + \
         len(resulting_duplicates_type_and_ref_and_label) + \
@@ -592,7 +593,7 @@ class LabelUpdateView(UpdateView):
         context["labelbase"] = self.object.labelbase
         context["action"] = self.kwargs.get('action', 'update')
         if context["action"] == "labeling":
-            #mempool_api = self.object.labelbase.get_mempool_api()
+            # mempool_api = self.object.labelbase.get_mempool_api()
             if self.object.type == "tx":
                 mempool_api = self.object.labelbase.get_mempool_api()
                 context["res_tx"] = mempool_api.get_transaction(self.object.ref)

@@ -39,6 +39,7 @@ def generate_config_file(config_file_path="config.ini"):
     with open(config_file_path, 'w') as configfile:
         config.write(configfile)
 
+
 if __name__ == "__main__":
     # Check if the config.ini file exists
     if not os.path.isfile(config_file_path):

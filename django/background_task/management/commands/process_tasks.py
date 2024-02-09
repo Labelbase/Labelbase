@@ -51,7 +51,7 @@ class Command(BaseCommand):
                 if not self._tasks.run_next_task(queue=None, loop=self.loop):
                     # there were no tasks in the queue, let's recover.
                     close_old_connections()
-                    time.sleep(5) # Wait a few second before checking again.
+                    time.sleep(5)  # Wait a few second before checking again.
                 else:
                     # there were some tasks to process, let's check if there is more work to do after a little break.
                     sleep_duration = random.uniform(sig_manager.time_to_wait[0],

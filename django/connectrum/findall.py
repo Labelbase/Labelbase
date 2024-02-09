@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 #
 #
 import bottom, random, time, asyncio
@@ -44,7 +44,7 @@ class IrcListener(bottom.Client):
         self.send('USER', user=self.my_nick, realname='Connectrum Client')
         # long delay here as it does an failing Ident probe (10 seconds min)
         self.send('JOIN', channel='#electrum')
-        #self.send('WHO', mask='E_*')
+        # self.send('WHO', mask='E_*')
 
     def keepalive(self, message, **kwargs):
         self.send('PONG', message=message)
@@ -61,7 +61,7 @@ class IrcListener(bottom.Client):
         '''
             Server replied to one of our WHO requests, with details.
         '''
-        #logger.debug('who reply: %r' % kws)
+        # logger.debug('who reply: %r' % kws)
 
         nick = nick[2:] if nick[0:2] == 'E_' else nick
         host, ports = real_name.split(' ', 1)
@@ -75,7 +75,7 @@ class IrcListener(bottom.Client):
             self.all_done.set()
 
     async def got_users(self, users=[], **kws):
-        # After successful join to channel, we are given a list of 
+        # After successful join to channel, we are given a list of
         # users on the channel. Happens a few times for busy channels.
         logger.debug('Got %d (more) users in channel', len(users))
 
@@ -132,8 +132,7 @@ if __name__ == '__main__':
     bot = IrcListener(ssl=False)
     bot.loop.set_debug(True)
     fut = bot.collect_data()
-    #bot.loop.create_task(bot.connect())
+    # bot.loop.create_task(bot.connect())
     rv = bot.loop.run_until_complete(fut)
 
     print(rv)
-

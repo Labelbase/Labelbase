@@ -1,0 +1,30 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load sekizai_tags %}
+{% load bootstrap %}
+
+{% block content %}
+{% include "profile_header_menu.html" %}
+<div style="padding-top: 2rem; ">
+{% block profile_content %}{% endblock %}
+</div>
+
+<p class="fs-6 text-muted">
+  Select your preferred currency for displaying fiat values.
+  <form action="" method="POST">
+    {% csrf_token %}
+    <table>
+      {{ form|bootstrap }}
+      <tr>
+        <td>&nbsp;</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: center;">
+          <button class="btn btn-primary" type="submit">Update currency</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</p>
+{% endblock %}

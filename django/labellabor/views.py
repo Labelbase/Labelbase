@@ -506,7 +506,7 @@ class ExportLabelsView(View):
                 labels = Label.objects.filter(labelbase_id=labelbase_id,
                                               labelbase__user_id=request.user.id,
                                               type__in=selected_type_attributes
-                                        ).order_by("id")
+                                             ).order_by("id")
                 for label in labels:
                     label_entry = {
                         "type": label.type,
@@ -535,6 +535,7 @@ class ExportLabelsView(View):
             response['Content-Disposition'] = f'attachment; filename="{final_filename}"'
             os.remove(temp_file.name)
             return response
+
         # TODO: error message
         return HttpResponseRedirect(labelbase.get_absolute_url())
 

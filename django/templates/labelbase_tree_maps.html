@@ -1,0 +1,37 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load sekizai_tags %}
+{% load labelbase_tags %}
+{% load importer_tags %}
+{% load bootstrap %}
+
+{% block content %}
+
+{#% include "_labelbase_header_info_menu.html" %#}
+
+<ul class="nav nav-tabs" style="padding-top: 2rem; ">
+  <li class="nav-item">
+    <a class="nav-link {% if action == "unspent-outputs" %}active" aria-current="page" {% else %}"{% endif %} href="{% url "labelbase_tree_maps" pk=labelbase.id %}unspent-outputs/">Unspent Outputs</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if action == "unspent-spendable-outputs" %}active" aria-current="page" {% else %}"{% endif %} href="{% url "labelbase_tree_maps" pk=labelbase.id %}unspent-spendable-outputs/">Unspent Spendable Outputs</a>
+  </li>
+</ul>
+
+
+
+<div style="padding-top: 0rem; ">
+{% block treemap %}
+{% endblock %}
+</div>
+
+
+
+
+<script>
+{% addtoblock "js" %}
+{% endaddtoblock %}
+</script>
+
+
+{% endblock %}

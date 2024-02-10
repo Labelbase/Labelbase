@@ -1,0 +1,293 @@
+{% extends "labelbase_tree_maps.html" %}
+{% load i18n %}
+{% load sekizai_tags %}
+{% load labelbase_tags %}
+{% load importer_tags %}
+{% load bootstrap %}
+{% block treemap %}
+
+{% if labelbase %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@0.2.3"></script>
+
+{% if labelbase.is_testnet %}
+<div class="alert alert-dismissible bd-callout bd-callout-info">
+  <button type="button" class="btn-close" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;" data-bs-dismiss="alert" aria-label="Close"></button>
+  <div style="padding-right: 1.8rem;">
+    <strong>Important Notice for Testnet Transactions:</strong> Testnet coins hold no real-world value and are solely intended for testing purposes.
+  </div>
+</div
+{% else %}
+<div class="alert alert-dismissible bd-callout bd-callout-info ">
+  <button type="button" class="btn-close" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;" data-bs-dismiss="alert" aria-label="Close"></button>
+  <div style=" padding-right: 1.8rem"><strong>Format Requirement for UTXO Value Tracking:</strong> If you wish to track the value you exchanged for a UTXO, please include it in the supported format (e.g., CHF 615.00, EUR 1999.99, or USD 1000), using one of the supported currencies.
+  Ensure that you operate your Labelbase in the appropriate 'Operation mode' and input or transmit your labels accordingly to avoid losing information.
+If the UTXO value is not provided, Labelbase will estimate it based on historical data retrieved from mempool.space.
+</div>
+</div>
+{% endif %}
+<div class="row ">
+
+<style>
+.canvas-holder{
+	margin: auto;
+}
+</style>
+
+<div class="canvas-holder">
+  <canvas id="chart-area"  style="height: 56vh;"></canvas>
+</div>
+
+
+
+<script type="text/javascript">
+
+function colorFromValue(value, index, border) {
+    var alpha = (1 + Math.log(value)) / 5;
+
+    // Spendable or not?
+    if (window.records[index].spendable == "false") {
+      var color = "#dee2e6";
+    } else {
+      var color = "#F7931A";
+    }
+    //var color = "orange";
+    if (border) {
+      alpha += 0.01;
+    }
+    return Chart.helpers.color(color)
+      .alpha(alpha)
+      .rgbString();
+}
+
+
+function red_or_greem_fromValue(value, index, border) {
+    var alpha = (1 + Math.log(value)) / 5;
+    var color;
+
+    value = window.records[index].performance;
+   /*  if (window.records[index].spendable == "false") {
+      color = "#dee2e6";
+    } else */
+    if (value > 0) {
+        color = "rgba(46, 204, 113, 1)"; // muted green color for positive values
+    } else if (value < 0) {
+        color = "rgba(231, 76, 60, 1)"; // muted red color for negative values
+    } else {
+        color = "#dee2e6"; // grey color for zero values
+    }
+
+    if (border) {
+        alpha += 0.01;
+    }
+
+    return Chart.helpers.color(color)
+        .alpha(alpha)
+        .rgbString();
+}
+
+window.records = [
+  {% for label in label_list %}
+    {
+      'spendable': {% if label.spendable %}"true"{% else %}"false"{% endif %},
+      "spent": '{{ label.get_finance_output_metrics_dict.spent }}',
+      'ref': '{{ label.ref }}',
+      'label': '{{ label.label }}',
+      'fiat_value_old': {{ label.get_finance_output_metrics_dict.fiat_value_old|floatformat:"2" }},
+      'fiat_cur': '{{ label.get_finance_output_metrics_dict.fiat_cur }}',
+      'confirmed_at_block_height': '{{ label.get_finance_output_metrics_dict.confirmed_at_block_height }}',
+      'id': {{ label.id }},
+      'sats': '{{ label.get_finance_output_metrics_dict.value }}',
+      'type_ref_hash': '{{ label.get_finance_output_metrics_dict.type_ref_hash }}',
+      'performance': {{label.get_finance_output_metrics_dict.performance|floatformat:"2" }},
+      'current_price': {{label.get_finance_output_metrics_dict.current_price|floatformat:"2" }},
+      'fiat_value_old': {{label.get_finance_output_metrics_dict.fiat_value_old|floatformat:"2" }}, // historical or tracked value
+      'is_tracked': {{label.get_finance_output_metrics_dict.is_tracked|lower }} // tracked value
+
+    },
+  {% endfor %}
+];
+
+
+// Sorting the array by the 'sats' property in descending order
+window.records.sort(function(a, b) {
+  return b.sats - a.sats;
+});
+
+
+
+var ctx = document.getElementById("chart-area").getContext("2d");
+
+window.chart1 = new Chart(ctx, {
+type: "treemap",
+data: {
+  datasets: [
+    {
+      label: "UTXO, in sats",
+      data: window.records,
+      key: 'sats',
+      backgroundColor: function(ctx) {
+        return red_or_greem_fromValue(ctx.dataset.data[ctx.dataIndex].v, ctx.dataIndex);
+      },
+      borderColor: function(ctx) {
+        return red_or_greem_fromValue(ctx.dataset.data[ctx.dataIndex].v, ctx.dataIndex, true);
+      },
+      spacing: 1,
+      borderWidth: 0,
+      borderColor: "rgba(180,180,180, 0.15)"
+    }
+  ]
+},
+options: {
+  maintainAspectRatio: false,
+  title: {
+    display: true,
+    text: "Unspent outputs"
+  },
+  legend: {
+     display: false
+   },
+  tooltips: {
+    enabled: false
+  },
+  overflow: 'fit',
+}
+});
+
+
+
+document.getElementById("chart-area").onclick = function(evt) {
+      var activePoints = window.chart1.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+      if (activePoints[0]) {
+          window.location = "/label/"+window.records[activePoints[0]._index].id+"/edit/";
+      }
+  };
+
+  // Track the current popover index
+  window.curr_popover_index = -1;
+
+// Define popover content
+function getPopoverContent(index) {
+    if (index >= 0 && index < window.records.length) {
+        var content = '<div class="popover-content">';
+        content += '<div><strong>Label:</strong> ' + window.records[index].label + '</div>';
+        content += '<div><strong>Output:</strong> ' + window.records[index].ref + '</div>';
+        content += '<div><strong>Confirmed in block:</strong> ' + window.records[index].confirmed_at_block_height + '</div>';
+        if (window.records[index].is_tracked) {
+          content += '<div><strong>Tracked value:</strong> ' + window.records[index].fiat_cur + ' ' + window.records[index].fiat_value_old + '</div>';
+        } else {
+          content += '<div><strong>Historical value:</strong> ' + window.records[index].fiat_cur + ' ' + window.records[index].fiat_value_old + '</div>';
+        }
+        content += '<div><strong>Output value in sats:</strong> ' + window.records[index].sats + '</div>';
+        content += '<div><strong>Current value:</strong> ' + window.records[index].fiat_cur + ' ' + window.records[index].current_price + '</div>';
+        content += '<div><strong>Performance:</strong> ' + window.records[index].performance + '%</div>';
+        content += '</div>';
+        return content;
+    }
+    return '';
+}
+
+var movementTimer;
+
+document.body.onmousemove = function (evt) {
+  clearTimeout(movementTimer);
+
+  movementTimer = setTimeout(function() {
+    var activePoints = window.chart1.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+    var element = document.getElementById("chart-area");
+
+    if (activePoints[0]) {
+      var index = activePoints[0]._index;
+
+      if (index >= 0 && index < window.records.length) {
+        var popoverContent = getPopoverContent(index);
+        if (popoverContent !== '') {
+          if (!$(element).data('bs.popover') || !$(element).data('bs.popover').tip.classList.contains('show')) {
+            element.setAttribute('data-content', popoverContent);
+            $(element).popover('dispose');
+            $(element).popover({
+              content: popoverContent,
+              placement: 'manual',
+              html: true
+            });
+            $(element).popover('show');
+            var popover = $('.popover');
+            var popoverWidth = popover.outerWidth();
+            var popoverHeight = popover.outerHeight();
+            var topPosition = evt.pageY - popoverHeight / 2;
+            var leftPosition;
+            if (evt.pageX <= element.getBoundingClientRect().left + element.offsetWidth / 2) {
+              // Inside the left half of chart-area, keep popover on the right side of the evt.pageX
+              leftPosition = evt.pageX + 10;
+            } else {
+              // Inside the right half of chart-area, keep popover on the left side of the evt.pageX (posx - popoverWidth = new pos x)
+              leftPosition = evt.pageX - popoverWidth - 10;
+            }
+            leftPosition = Math.min(leftPosition, window.innerWidth - popoverWidth - 10); // Ensure the popover doesn't exceed the right screen border
+            leftPosition = Math.max(leftPosition, 10); // Ensure the popover doesn't exceed the left screen border
+
+            // Ensure that the top position is within the viewport
+            if (topPosition < 0) {
+              topPosition = 0;
+            } else if (topPosition + popoverHeight > window.innerHeight) {
+              topPosition = window.innerHeight - popoverHeight;
+            }
+
+            popover.css({
+              top: topPosition,
+              left: leftPosition
+            });
+          }
+        }
+        window.curr_popover_index = index;
+      }
+    } else {
+      $(element).popover('hide');
+      window.curr_popover_index = -1;
+    }
+  }, 40);
+};
+
+document.getElementById("chart-area").onmouseout = function (evt) {
+  var element = evt.target;
+  $(element).popover('hide');
+  window.curr_popover_index = -1;
+};
+
+</script>
+
+</div>
+
+
+{% else %}
+NO LABELBASE
+{% endif %}
+
+
+
+<script>
+{% addtoblock "js" %}
+$(document).ready(function () {
+
+
+
+  $('[data-toggle="popover"]').popover()
+
+
+
+});
+{% endaddtoblock %}
+
+
+
+
+
+
+
+</script>
+
+
+
+
+{% endblock %}

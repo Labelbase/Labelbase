@@ -1,0 +1,126 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load sekizai_tags %}
+{% block content %}
+<div >
+  {% include "profile_header_menu.html" %}
+
+<div style="padding-top: 2rem; ">
+{% block profile_content %}
+{% endblock %}
+</div>
+
+
+
+<div  class="">
+
+  <h4>Extensions</h4>
+  <table class="table">
+      <tbody>
+
+          <tr >
+              <td style="width:15%;"><b>Fiat Finances</b></td>
+              <td style="width:80%;"><small>Enable or disable fiat currency parsing and its associated functions.</small></td>
+              <td>
+                  <div class="form-check form-switch">
+                      <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_fiatfinances %}checked="checked"{% endif %} id="use_fiatfinances">
+                  </div>
+              </td>
+          </tr>
+          <tr >
+              <td style="width:15%;"><b>Hashtags</b></td>
+              <td style="width:80%;"><small>Enable or disable hashtag parsing and its associated functions.</small></td>
+              <td>
+                  <div class="form-check form-switch">
+                      <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_hashtags %}checked="checked"{% endif %} id="use_hashtags">
+                  </div>
+              </td>
+          </tr>
+          <tr >
+              <td style="width:15%;"><b>Tree Map</b></td>
+              <td style="width:80%;"><small>Enable or disable Tree Map.</small></td>
+              <td>
+                  <div class="form-check form-switch">
+                      <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_treemap %}checked="checked"{% endif %} id="use_treemap">
+                  </div>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+
+  <h4>Privacy</h4>
+  <table class="table">
+      <tbody>
+          <tr>
+              <td style="width:15%;"<b>Sentry</b></td>
+              <td style="width:80%;"<small>Enable or disable anonymized error tracking.</small></td>
+              <td>
+                  <div class="form-check form-switch">
+                      <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_sentry %}checked="checked"{% endif %} id="use_sentry">
+                  </div>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+
+
+  <h4>On login</h4>
+  <table class="table">
+      <tbody>
+      <tr>
+          <td><b>Update spent Outputs</b></td>
+          <td>
+            <small>Check and update all unspent outputs using <a href="/account/userprofile-electrum/">Electrum</a>.</small></td>
+          <td>
+            <td>
+                <div class="form-check form-switch">
+                    <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.update_utxo_on_login %}checked="checked"{% endif %} id="update_utxo_on_login">
+                </div>
+            </td>
+          </td>
+      </tr>
+  </table>
+
+
+
+ </div>
+
+
+{% csrf_token %}
+ <script>
+   {% addtoblock "js" %}
+   $(document).ready(function () {
+
+     var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+     console.log("csrftoken" + csrftoken)
+
+     $('.user-setting').change(function () {
+         console.log("changed settings")
+         var toggleId = $(this).attr('id');
+         var toggleCheckbox = $(this);
+         console.log(toggleId)
+         var previousValue = toggleCheckbox.prop('checked'); // Capture the previous value
+
+         // Make an AJAX request to store the user profile settings
+         $.ajax({
+             type: 'POST',
+             url: '.',
+             headers: { 'X-CSRFToken': csrftoken },
+             data: { toggleId: toggleId, toggleValue: toggleCheckbox.prop('checked') },
+             success: function (response) {
+                 show_message("success", "<strong>Success!</strong> " + response.message)
+             },
+             error: function (xhr, status, error) {
+                 console.error(error);
+                 show_message("error", "<strong>Failed to update!</strong> " + error)
+                 // Revert to previous setting on error
+                 toggleCheckbox.prop('checked', previousValue);
+             }
+         });
+     });
+    });
+
+    {% endaddtoblock %}
+</script>
+
+{% endblock %}

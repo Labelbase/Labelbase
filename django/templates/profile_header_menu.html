@@ -1,0 +1,22 @@
+<h2 style="padding-top: 1em;">{% block title %}Profile Settings{% endblock %}</h2>
+<ul class="nav nav-tabs" style="padding-top: 2rem; ">
+
+  <li class="nav-item">
+    {% url 'userprofile' as userprofile_url %}
+    <a class="nav-link {% if request.path == userprofile_url %}active" aria-current="page" {% else %}"{% endif %} href="{{ userprofile_url }}">Settings</a>
+  </li>
+  <li class="nav-item">
+    {% url 'userprofile_avatar' as avatar_url %}
+    <a class="nav-link {% if request.path == avatar_url %}active" aria-current="page" {% else %}"{% endif %} href="{{ avatar_url }}">Avatar</a>
+  </li>
+  <li class="nav-item">
+    {% url 'userprofile_electrum' as electrum_url %}
+    <a class="nav-link {% if request.path == electrum_url %}active" aria-current="page" {% else %}"{% endif %} href="{{electrum_url }}">Electrum</a>
+  </li>
+  {% if request.user.profile.use_fiatfinances %}
+  <li class="nav-item">
+    {% url 'userprofile_currency' as my_currency_url %}
+    <a class="nav-link {% if request.path == my_currency_url %}active" aria-current="page" {% else %}"{% endif %} href="{{ my_currency_url }}">Currency</a>
+  </li>
+  {% endif %}
+</ul>

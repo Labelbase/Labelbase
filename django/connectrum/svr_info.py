@@ -21,7 +21,7 @@ class ServerInfo(dict):
         Information to be stored on a server. Originally based on IRC data published to a channel.
 
     '''
-    FIELDS = ['nickname', 'hostname', 'ports', 'version', 'pruning_limit' ]
+    FIELDS = ['nickname', 'hostname', 'ports', 'version', 'pruning_limit']
 
     def __init__(self, nickname_or_dict, hostname=None, ports=None,
                  version=None, pruning_limit=None, ip_addr=None):
@@ -258,24 +258,3 @@ class KnownServers(dict):
         random.shuffle(lst)
 
         return lst
-
-
-if __name__ == '__main__':
-
-    ks = KnownServers()
-
-    # ks.from_json('servers.json')
-    ks.from_irc()
-
-    # print (ks.dump())
-
-    from constants import PROTOCOL_CODES
-
-    print ("%3d: servers in total" % len(ks))
-
-    for tor in [False, True]:
-        for pp in PROTOCOL_CODES.keys():
-            ll = ks.select(pp, is_onion=tor)
-            print ("%3d: %s" % (len(ll), PROTOCOL_CODES[pp] + (' [TOR]' if tor else '')))
-
-# EOF

@@ -11,7 +11,9 @@ if importutil.find_spec("bottom") is not None:
 else:
     have_bottom = False
 
-import time, random, json
+import time
+import random
+import json
 from .constants import DEFAULT_PORTS
 
 

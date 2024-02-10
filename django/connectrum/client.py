@@ -4,7 +4,8 @@
 
 # Runtime check for optional modules
 from importlib import util as importutil
-import json, warnings, asyncio, ssl
+import asyncio
+import ssl
 from .protocol import StratumProtocol
 from . import __version__
 
@@ -118,7 +119,7 @@ class StratumClient:
             else:
                 logger.debug("Error: want to use tor, but no aiosocks module.")
 
-        if use_ssl == True and disable_cert_verify:
+        if use_ssl is True and disable_cert_verify:
             # Create a more liberal SSL context that won't
             # object to self-signed certicates. This is
             # very bad on public Internet, but probably ok
@@ -130,7 +131,8 @@ class StratumClient:
             logger.debug(" .. SSL cert check disabled")
 
         async def _reconnect():
-            if self.protocol: return        # race/duplicate work
+            if self.protocol:
+                return # race/duplicate work
 
             if proxy:
                 if have_aiosocks:
@@ -436,38 +438,3 @@ class StratumClient:
         assert '.' in method
         assert method.endswith('subscribe')
         return self._send_request(method, params, is_subscribe=True)
-
-
-if __name__ == '__main__':
-    from transport import SocketTransport
-    from svr_info import KnownServers, ServerInfo
-
-    logging.basicConfig(format="%(asctime)-11s %(message)s", datefmt="[%d/%m/%Y-%H:%M:%S]")
-
-    loop = asyncio.get_event_loop()
-    loop.set_debug(True)
-
-    proto_code = 's'
-
-    if 0:
-        ks = KnownServers()
-        ks.from_json('servers.json')
-        which = ks.select(proto_code, is_onion=True, min_prune=1000)[0]
-    else:
-        which = ServerInfo({
-            "seen_at": 1465686119.022801,
-            "ports": "t s",
-            "nickname": "dunp",
-            "pruning_limit": 10000,
-            "version": "1.0",
-            "hostname": "erbium1.sytes.net" })
-
-    c = StratumClient(loop=loop)
-
-    loop.run_until_complete(c.connect(which, proto_code, disable_cert_verify=True, use_tor=True))
-
-    rv = loop.run_until_complete(c.RPC('server.peers.subscribe'))
-    print("DONE!: this server has %d peers" % len(rv))
-    loop.close()
-
-    # c.blockchain.address.get_balance(23)

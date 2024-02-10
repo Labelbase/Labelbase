@@ -121,18 +121,4 @@ class IrcListener(bottom.Client):
 
         logger.debug("Reconnect scheduled.")
 
-
-if __name__ == '__main__':
-
-    import logging
-    logging.getLogger('bottom').setLevel(logging.DEBUG)
-    logging.getLogger('connectrum').setLevel(logging.DEBUG)
-    logging.getLogger('asyncio').setLevel(logging.DEBUG)
-
-    bot = IrcListener(ssl=False)
-    bot.loop.set_debug(True)
-    fut = bot.collect_data()
-    # bot.loop.create_task(bot.connect())
-    rv = bot.loop.run_until_complete(fut)
-
-    print(rv)
+ 

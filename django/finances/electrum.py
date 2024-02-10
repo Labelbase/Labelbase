@@ -1,16 +1,13 @@
 from connectrum.client import StratumClient
 from connectrum.svr_info import ServerInfo
 from connectrum import ElectrumErrorResponse
-import json
-import asyncio
-import threading
+
 
 from labelbase.models import Label
 from finances.models import OutputStat, HistoricalPrice
 
 import logging
 logger = logging.getLogger('labelbase')
-
 
 
 async def interact(conn, server_info, method, utxo):
@@ -29,7 +26,7 @@ async def interact(conn, server_info, method, utxo):
                     blocktime = 0
                     logger.error("Can't get blocktime: {}".format(ex))
                 print(txn.get('vout'))
-                address = txn.get('vout')[int(index)].get('scriptPubKey',{}).get('address')
+                address = txn.get('vout')[int(index)].get('scriptPubKey', {}).get('address')
                 value = txn.get('vout')[int(index)].get('value')*100000000
                 return (txid, index, address, value, blocktime)
             else:
@@ -66,7 +63,6 @@ def checkup_label(label_id, loop):
         output = OutputStat.objects.filter(type_ref_hash=elem.type_ref_hash, network=elem.labelbase.network).last()
         if not output:
             output = OutputStat(type_ref_hash=elem.type_ref_hash, network=elem.labelbase.network, value=0)
-        logger.debug("Output found {}".format(output.id))
         if elem.type == "output" and output.spent is not True:
             electrum_hostname = elem.labelbase.user.profile.electrum_hostname
             if not electrum_hostname:
@@ -74,10 +70,8 @@ def checkup_label(label_id, loop):
             electrum_ports = elem.labelbase.user.profile.electrum_ports
             if not electrum_ports:
                 electrum_ports = "s50002"
-            logger.debug("Processing Label {} using electrum server connection: {} {} {}".format(label_id, electrum_hostname, electrum_hostname, electrum_ports))
             server_info = ServerInfo(electrum_hostname, electrum_hostname, ports=((electrum_ports)))
             conn = StratumClient()
-            logger.debug("type_ref_hash: {}".format(elem.type_ref_hash))
             assert elem.type_ref_hash
             utxo = elem.ref
             tx_hash, tx_pos = elem.ref.split(":")
@@ -91,7 +85,6 @@ def checkup_label(label_id, loop):
                 unspent_utxo = False
                 utxo_value = 0
                 utxo_height = 0
-                logger.debug("unspents {}".format(unspents))
                 for unspent in unspents:
                     if unspent.get('tx_hash') == tx_hash and \
                         unspent.get('tx_pos') == int(tx_pos) and \
@@ -117,9 +110,6 @@ def checkup_label(label_id, loop):
                     else:
                         output.spent = True
                     output.save()
-                    logger.debug("saved output {}".format(output.id))
-        else:
-            logger.debug("Label is not an output. Spent is {}".format(output.spent))
     else:
         if not label_id:
             logger.error("Can't get label_id! {}".format(label_id))

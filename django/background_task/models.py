@@ -450,6 +450,7 @@ class CompletedTask(models.Model):
                 os.kill(int(self.locked_by), 0)
                 return True
             except Exception as ex:
+                logger.debug(ex)
                 return False
         else:
             return None

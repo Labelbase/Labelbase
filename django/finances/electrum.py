@@ -81,7 +81,8 @@ def checkup_label(label_id, loop):
                 txid, index, address, value, blocktime = utxo_resp
                 if blocktime:
                     HistoricalPrice.get_or_create_from_api(timestamp=blocktime)
-                unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.address.listunspent", address))
+                unspents = loop.run_until_complete(interact_addr(
+                                conn, server_info, "blockchain.address.listunspent", address))
                 unspent_utxo = False
                 utxo_value = 0
                 utxo_height = 0

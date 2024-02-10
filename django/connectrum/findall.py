@@ -120,5 +120,3 @@ class IrcListener(bottom.Client):
         self.loop.create_task(self.connect())
 
         logger.debug("Reconnect scheduled.")
-
- 

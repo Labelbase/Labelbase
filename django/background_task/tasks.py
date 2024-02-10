@@ -13,7 +13,6 @@ from six import python_2_unicode_compatible
 
 from background_task.exceptions import BackgroundTaskError
 from background_task.models import Task
-from background_task.settings import app_settings
 from background_task import signals
 
 logger = logging.getLogger("labelbase")

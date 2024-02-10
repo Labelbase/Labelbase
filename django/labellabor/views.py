@@ -1,7 +1,6 @@
 import os
 import time
 import tempfile
-import json
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect, resolve_url
@@ -22,14 +21,11 @@ from django.http import HttpResponseRedirect
 from django.http import FileResponse
 from rest_framework.authtoken.models import Token
 from bip329.bip329_writer import BIP329JSONLWriter, BIP329JSONLEncryptedWriter
-from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django_datatables_view.base_datatable_view import BaseDatatableView
-from django.utils.html import escape
 from django.template.loader import render_to_string
 
 from .utils import hashtag_to_badge, extract_fiat_value
-from labelbase.utils import compute_type_ref_hash
 from finances.models import OutputStat
 from finances.tasks import check_all_outputs
 
@@ -68,7 +64,6 @@ class LabelDeleteView(DeleteView):
     error_url = "/#failed"
 
     def post(self, request, *args, **kwargs):
-        dummy + yummy
         self.object = self.get_object()
         if self.object.labelbase.user != self.request.user:
             return redirect(self.error_url)
@@ -122,10 +117,11 @@ class LabelbaseDatatableView(BaseDatatableView):
         elif column == 'type':
             return "<tt>{}</tt>".format(row.get_type_display())
         elif column == 'ref':
-            return render_to_string('labelbase_dt_ref.html',
-                                    context={'row': row,
-                                             'mempool_url': row.get_mempool_url(),
-                                    }, request=self.request)
+            ctx = {
+                'row': row,
+                'mempool_url': row.get_mempool_url(),
+            }
+            return render_to_string('labelbase_dt_ref.html', context=ctx, request=self.request)
         elif column == 'label':
             if row.label is None:
                 return ""
@@ -144,10 +140,10 @@ class LabelbaseDatatableView(BaseDatatableView):
             else:
                 spendable_formatted = 'true' if spendable_value else 'false'
             # if spendable_formatted == 'true':
-            #    return f'<span class="badge badge-spendable fs--2 "><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check ms-1" style="height:12.8px;width:12.8px;"><polyline points="20 6 9 17 4 12"></polyline></svg> <span class="badge-label"><tt>{spendable_formatted }</tt></span>  </span>'
+            #    return f'<span class="badge badge-spendable fs--2 "><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check ms-1" style="height:12.8px;width:12.8px;"><polyline points="20 6 9 17 4 12"></polyline></svg> <span class="badge-label"><tt>{spendable_formatted }</tt></span></span>' # noqa
             # elif spendable_formatted == 'false':
-            #    return f'<span class="badge badge-unspendable fs--2 "><svg xmlns="http://www.w3.org/2000/svg" width="12.4" height="12.4" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6L6 18M6 6l12 12"/></svg><span class="badge-label"><tt>{spendable_formatted }</tt></span></span>'
-            return f'<tt>{spendable_formatted }</tt>'
+            #    return f'<span class="badge badge-unspendable fs--2 "><svg xmlns="http://www.w3.org/2000/svg" width="12.4" height="12.4" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6L6 18M6 6l12 12"/></svg><span class="badge-label"><tt>{spendable_formatted }</tt></span></span>' # noqa
+            return f'<tt>{spendable_formatted}</tt>'
         else:
             return super(LabelbaseDatatableView, self).render_column(row, column)
 
@@ -170,7 +166,6 @@ class LabelbaseDatatableView(BaseDatatableView):
                 if record.origin and search in record.origin.lower():
                     res_ids.append(record.id)
                     continue
-
             return qs.filter(id__in=res_ids)
         return qs
 
@@ -275,33 +270,6 @@ class StatsAndKPIView(View):
         return render(request, self.template_name, {
             "labelbase": labelbase,
             "active_labelbase_id": labelbase_id})
-
-
-"""
-
-
-def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context["active_labelbase_id"] = self.object.labelbase.id
-    context["labelbase"] = self.object.labelbase
-    context["action"] = self.kwargs.get('action', 'unspent-outputs')
-    if context["action"] == "labeling":
-        #mempool_api = self.object.labelbase.get_mempool_api()
-        if self.object.type == "tx":
-            mempool_api = self.object.labelbase.get_mempool_api()
-            context["res_tx"] = mempool_api.get_transaction(self.object.ref)
-
-    if self.object.type == "output":
-        context["output"] = OutputStat.objects.filter(type_ref_hash= \
-                                        self.object.type_ref_hash).last()
-
-    return context
-
-
-
-
-
-"""
 
 
 class TreeMapsView(ListView):
@@ -462,13 +430,17 @@ class FixAndMergeLabelsView(View):
         for key_all_identical, duplicates in record_groups_all_identical.items():
             if len(duplicates) > 1:
                 type_val, ref_val, label_val, origin_val, spendable_cal = key_all_identical
-                # print(f"Duplicates for labelbase_id={labelbase_id}, type='{type_val}', ref='{ref_val}', label='{label_val}':")
                 for record in duplicates:
                     if record not in all_identical_records:
                         all_identical_records.append(record)
-                #    print(f"  ID: {record.id}, origin: {record.origin}, spendable: {record.spendable}")
-                resulting_duplicates_all_identical.append({'type': type_val, 'ref': ref_val, 'label': label_val,
-                                                           'origin': origin_val, 'spendable': spendable_cal})  # nonsense, but counts
+                res_rec = {
+                    'type': type_val,
+                    'ref': ref_val,
+                    'label': label_val,
+                    'origin': origin_val,
+                    'spendable': spendable_cal
+                }
+                resulting_duplicates_all_identical.append(res_rec) # nonsense, but counts
 
         fix_suggestions = len(resulting_duplicates_type_and_ref) + \
         len(resulting_duplicates_type_and_ref_and_label) + \

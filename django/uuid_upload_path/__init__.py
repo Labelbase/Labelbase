@@ -10,5 +10,5 @@ Developed by Dave Hall.
 __version__ = (1, 0, 0)
 
 
-from uuid_upload_path.uuid import uuid
-from uuid_upload_path.storage import upload_to_factory, upload_to
+from uuid_upload_path.uuid import uuid # noqa
+from uuid_upload_path.storage import upload_to_factory, upload_to # noqa

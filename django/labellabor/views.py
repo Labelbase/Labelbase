@@ -412,16 +412,11 @@ class FixAndMergeLabelsView(View):
         for key_type_and_ref, duplicates in record_groups_type_and_ref.items():
             if len(duplicates) > 1:
                 type_val, ref_val = key_type_and_ref
-                print(f"Duplicates for labelbase_id={labelbase_id}, type='{type_val}', ref='{ref_val}', ")
-                for record in duplicates:
-                    print(f"  ID: {record.id}, origin: {record.origin}, spendable: {record.spendable}")
                 resulting_duplicates_type_and_ref.append({'type': type_val, 'ref': ref_val})
 
         for key_type_and_ref_and_label, duplicates in record_groups_type_and_ref_and_label.items():
             if len(duplicates) > 1:
                 type_val, ref_val, label_val = key_type_and_ref_and_label
-                for record in duplicates:
-                    print(f"  ID: {record.id}, origin: {record.origin}, spendable: {record.spendable}")
                 resulting_duplicates_type_and_ref_and_label.append(
                     {'type': type_val, 'ref': ref_val, 'label': label_val})
 
@@ -439,14 +434,11 @@ class FixAndMergeLabelsView(View):
                     'spendable': spendable_cal
                 }
                 resulting_duplicates_all_identical.append(res_rec) # nonsense, but counts
-
-        fix_suggestions = sum(map(len, [resulting_duplicates_type_and_ref, 
+        fix_suggestions = sum(map(len, [resulting_duplicates_type_and_ref,
                                         resulting_duplicates_type_and_ref_and_label,
                                         resulting_duplicates_all_identical,
                                         resulting_empty_label_records,
                                         resulting_too_long_label_records]))
-
-
         return render(request, self.template_name, {
             "labelbase": labelbase,
             "fix_suggestions": fix_suggestions,

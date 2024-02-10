@@ -42,8 +42,6 @@ from .views import (
 from importer.views import upload_labels
 from django.contrib.auth import views as auth_views
 
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path(

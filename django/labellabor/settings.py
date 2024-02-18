@@ -1,7 +1,7 @@
 import os
 
-# import sentry_sdk
-# from sentry_sdk.integrations.django import DjangoIntegration
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 from pathlib import Path
 from configparser import RawConfigParser
@@ -38,22 +38,22 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = [proj_config.get("internal", "allowed_host")]
 
-SENTRY_DSN="https://3b833ae08ccc4ff68793e961fff4921c@o4504646963232768.ingest.sentry.io/4504646967361536"
-if False:
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[
-            DjangoIntegration(),
-        ],
-        # Set traces_sample_rate to 1.0 to capture 100%
-        # of transactions for performance monitoring.
-        # We recommend adjusting this value in production.
-        traces_sample_rate=1.0,
-        # If you wish to associate users to errors (assuming you are using
-        # django.contrib.auth) you may enable sending PII data.
-        send_default_pii=False,
-    )
-    sentry_sdk.set_tag("version", "0.23.1")
+SENTRY_DSN = "https://3b833ae08ccc4ff68793e961fff4921c@o4504646963232768.ingest.sentry.io/4504646967361536"
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[
+        DjangoIntegration(),
+    ],
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=False,
+)
+sentry_sdk.set_tag("version", "0.23.1")
 
 LOGGING = {
     'version': 1,
@@ -107,7 +107,7 @@ INSTALLED_APPS = [
     "importer",
     "finances",
     "background_task",
-    "connectrum",
+    "connectrum", 
 ]
 
 

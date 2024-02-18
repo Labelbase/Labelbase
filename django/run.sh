@@ -1,6 +1,7 @@
 #!/bin/bash
+
 sleep 15
-python manage.py make_config
+#python manage.py make_config
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput

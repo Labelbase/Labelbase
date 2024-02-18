@@ -4,7 +4,7 @@ import string
 import secrets
 import configparser
 import time
-
+import os
 
 def generate_random_string(length):
     # Exclude curly braces '{}' from the pool of characters
@@ -15,23 +15,28 @@ def generate_random_string(length):
 def generate_config_file(config_file_path="config.ini"):
     config = configparser.ConfigParser()
 
-    # Generate random values for password and secret_key with specified lengths
+    # Generate random values where needed
     dj_secret_key = generate_random_string(50)
+    database_password = "10almm6a62ec3z8jm4jjw6dny5" # os.getenv("MYSQL_PASSWORD")
+    print("*"*20)
+    print (database_password)
+    print("*"*20)
+    crypto_salt = 'labelbase_{}_'.format(generate_random_string(8))
 
     # Set the values in the configuration file
     config['internal'] = {
         'secret_key': '{}'.format(dj_secret_key),
         'proj_name': 'labelbase',
-        'crypto_salt': 'labelbase_',
+        'crypto_salt': crypto_salt,
         'allowed_host': '*',
         'debug': True,
-        'current_timestamp_seconds': int(time.time())
+        'current_timestamp_seconds': int(time.time()),
     }
 
     config['database'] = {
         'name': 'labelbase',
         'user': 'ulabelbase',
-        'password': 'vrZvZmX6Kp16B9tTa8JAA4RtAkWEhi',
+        'password': database_password,
     #    'host': '127.0.0.1'
     }
 
@@ -44,5 +49,6 @@ if __name__ == "__main__":
     # Check if the config.ini file exists
     if not os.path.isfile(config_file_path):
         generate_config_file()
+        print("Config file {} created.".format(config_file_path))
     else:
         print("{} already exists.".format(config_file_path))

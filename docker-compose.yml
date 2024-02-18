@@ -1,21 +1,34 @@
 version: "3.7"
 
+#x-common-variables: &common-variables
+#  MYSQL_ROOT_PASSWORD:
+#  MYSQL_DATABASE: labelbase
+#  MYSQL_USER: ulabelbase
+#  MYSQL_PASSWORD:
+
+
 services:
   labelbase_mysql:
     build:
       context: ./mysql
     stop_grace_period: 1m
     restart: always
+    #secrets:
+    #  - mysql_root_password
+    #  - mysql_user_password
     environment:
-      - MYSQL_ROOT_PASSWORD=iheWkAtR4AAJ8aTt9B61pK6XmZvZrv
       - MYSQL_DATABASE=labelbase
       - MYSQL_USER=ulabelbase
-      - MYSQL_PASSWORD=vrZvZmX6Kp16B9tTa8JAA4RtAkWEhi
+      - MYSQL_ROOT_PASSWORD=10almm6a62ec3z8jm4jjw6dny5
+      - MYSQL_PASSWORD=10almm6a62ec3z8jm4jjw6dny5
+      #- MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mysql_root_password
+      #- MYSQL_PASSWORD_FILE=/run/secrets/mysql_user_password
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
       - db_data:/run/mysqld
+      - db_data:/run/secrets
     networks:
       - compose_network
   labelbase_django:
@@ -29,11 +42,22 @@ services:
       - db_data:/var/lib/mysql
       - db_data:/run/mysqld
       - web_static:/app/static/
+      - db_data:/run/secrets
     depends_on:
       - labelbase_mysql
     restart: always
     networks:
       - compose_network
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=ulabelbase
+      - MYSQL_DATABASE=labelbase
+      - MYSQL_ROOT_PASSWORD=10almm6a62ec3z8jm4jjw6dny5
+      - MYSQL_PASSWORD=10almm6a62ec3z8jm4jjw6dny5
+      #- MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mysql_root_password
+      #- MYSQL_PASSWORD_FILE=/run/secrets/mysql_user_password
+    #secrets:
+    #  - mysql_user_password
     command: /app/run.sh
   labelbase_nginx:
     build:
@@ -53,6 +77,12 @@ volumes:
   db_data:
   tmp:
   web_static:
+
+#secrets:
+#  mysql_root_password:
+#    file: ./mysql_root_password.txt
+#  mysql_user_password:
+#    file: ./mysql_user_password.txt
 
 networks:
   compose_network:

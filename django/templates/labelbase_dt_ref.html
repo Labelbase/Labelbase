@@ -1,0 +1,8 @@
+{% if mempool_url %}<a href="{{ mempool_url }}">{% endif %}
+<tt>
+  <span style="display:none;">{{ row.ref }}</span>
+  <span class="connector-float-left d-block d-md-none">{{ row.ref|slice:"0:8" }}… {{  row.ref|slice:"-"|slice:"-8:" }}</span>
+  <span class="connector-float-left d-none d-md-block d-lg-none">{{ row.ref|slice:"0:4" }}… {{  row.ref|slice:"-"|slice:"-4:" }}</span>
+  <span class="connector-float-left d-none d-lg-block">{{ row.ref|slice:"0:10" }}… {{  row.ref|slice:"-"|slice:"-10:" }}</span>
+</tt>
+{% if mempool_url %}</a>{% endif %}

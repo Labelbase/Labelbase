@@ -444,6 +444,7 @@ class FixAndMergeLabelsView(View):
             "fix_suggestions": fix_suggestions,
             "resulting_duplicates_all_identical_final_record_count": len(resulting_duplicates_all_identical),
             "resulting_duplicates_all_identical_current_record_count": len(all_identical_records),
+            "all_identical_records": all_identical_records, # the unique identical records where all fields are the same
 
             "resulting_duplicates_type_and_ref": resulting_duplicates_type_and_ref,
             "resulting_duplicates_type_and_ref_and_label": resulting_duplicates_type_and_ref_and_label,

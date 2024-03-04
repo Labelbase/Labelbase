@@ -1,0 +1,11 @@
+*.pyc
+db.sqlite3
+config.ini
+labelbase.log
+bgt.log
+db/
+*.pyc
+__pycache__
+django/importer/uploadeddata/*
+_scratches
+exports.sh

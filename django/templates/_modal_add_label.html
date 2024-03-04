@@ -1,0 +1,26 @@
+{% load bootstrap %}
+
+<!-- modal -->
+<div class="modal" tabindex="-1" id="addLabelModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="{% url "labelbase" labelbase_id=active_labelbase_id %}" method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Create New Label</h5>
+        <a href="#" type="button" class="btn btn-link" style="color: #727272;"
+          onclick="$('.help-block').css('display', 'block');">
+            <span data-feather="help-circle" ></span></a>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ labelform|bootstrap  }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">OK</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

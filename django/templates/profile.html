@@ -19,8 +19,8 @@
       <tbody>
 
           <tr >
-              <td style="width:15%;"><b>Fiat Finances</b></td>
-              <td style="width:80%;"><small>Enable or disable fiat currency parsing and its associated functions.</small></td>
+              <td style="width:21%;"><b>Fiat Finances</b></td>
+              <td style="width:75%;"><small>Enable or disable fiat currency parsing and its associated functions.</small></td>
               <td>
                   <div class="form-check form-switch">
                       <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_fiatfinances %}checked="checked"{% endif %} id="use_fiatfinances">
@@ -28,8 +28,8 @@
               </td>
           </tr>
           <tr >
-              <td style="width:15%;"><b>Hashtags</b></td>
-              <td style="width:80%;"><small>Enable or disable hashtag parsing and its associated functions.</small></td>
+              <td style="width:21%;"><b>Hashtags</b></td>
+              <td style="width:75%;"><small>Enable or disable hashtag parsing and its associated functions.</small></td>
               <td>
                   <div class="form-check form-switch">
                       <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_hashtags %}checked="checked"{% endif %} id="use_hashtags">
@@ -37,8 +37,8 @@
               </td>
           </tr>
           <tr >
-              <td style="width:15%;"><b>Tree Map</b></td>
-              <td style="width:80%;"><small>Enable or disable Tree Map.</small></td>
+              <td style="width:21%;"><b>Tree Map</b></td>
+              <td style="width:75%;"><small>Enable or disable Tree Map.</small></td>
               <td>
                   <div class="form-check form-switch">
                       <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_treemap %}checked="checked"{% endif %} id="use_treemap">
@@ -52,8 +52,8 @@
   <table class="table">
       <tbody>
           <tr>
-              <td style="width:15%;"<b>Sentry</b></td>
-              <td style="width:80%;"<small>Enable or disable anonymized error tracking.</small></td>
+              <td style="width:21%;"><b>Sentry</b></td>
+              <td style="width:75%;"><small>Enable or disable anonymized error tracking.</small></td>
               <td>
                   <div class="form-check form-switch">
                       <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_sentry %}checked="checked"{% endif %} id="use_sentry">
@@ -68,8 +68,8 @@
   <table class="table">
       <tbody>
       <tr>
-          <td><b>Update spent Outputs</b></td>
-          <td>
+            <td style="width:21%;"><b>Update spent Outputs</b></td>
+          <td style="width:75%;">
             <small>Check and update all unspent outputs using <a href="/account/userprofile-electrum/">Electrum</a>.</small></td>
           <td>
             <td>

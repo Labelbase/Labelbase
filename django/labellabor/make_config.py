@@ -6,6 +6,12 @@ import configparser
 import time
 import os
 
+def read_file_content(file_path):
+    with open(file_path, 'r') as file:
+        content = file.read()
+        return content.strip()
+
+
 def generate_random_string(length):
     # Exclude curly braces '{}' from the pool of characters
     characters = string.ascii_letters + string.digits
@@ -14,14 +20,11 @@ def generate_random_string(length):
 
 def generate_config_file(config_file_path="config.ini"):
     config = configparser.ConfigParser()
-
     # Generate random values where needed
     dj_secret_key = generate_random_string(50)
-    database_password = "10almm6a62ec3z8jm4jjw6dny5" # os.getenv("MYSQL_PASSWORD")
-    print("*"*20)
-    print (database_password)
-    print("*"*20)
-    crypto_salt = 'labelbase_{}_'.format(generate_random_string(8))
+    #database_password = read_file_content("/run/secrets/mysql_password")
+    database_password = os.getenv("MYSQL_PASSWORD")
+    crypto_salt = 'labelbase_{}_'.format(generate_random_string(32))
 
     # Set the values in the configuration file
     config['internal'] = {

@@ -38,6 +38,9 @@
       </li>
       -->{% endcomment %}
       {% case "output" %}
+      <li class="nav-item">
+        <a class="nav-link {% if action == "output-details" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}output-details/">Output Details</a>
+      </li>
 
       {% comment %}<!--
 
@@ -63,12 +66,10 @@
       </li>
       -->{% endcomment %}
 
-      {% case "addr" %}
-      {% comment %}<!--
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin Value</a>
-      </li>
-      -->{% endcomment %}
+
+
+
+
 
   {% endswitch %}
 

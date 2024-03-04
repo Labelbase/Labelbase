@@ -7,4 +7,5 @@ db/
 *.pyc
 __pycache__
 django/importer/uploadeddata/*
-_scratches
+#_scratches
+exports.sh

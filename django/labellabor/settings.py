@@ -107,7 +107,7 @@ INSTALLED_APPS = [
     "importer",
     "finances",
     "background_task",
-    "connectrum", 
+    "connectrum",
 ]
 
 

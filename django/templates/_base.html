@@ -385,39 +385,39 @@
 
       $(document).ready(function () {
 
+          // Disable the Origin field by default if not Tx
+          {% if label.type == "tx" %}
+          {% else %}
+          $('#id_origin').prop('disabled', true);
+          {% endif %}
 
-              // Disable the Origin field by default if not Tx
-              {% if label.type == "tx" %}
-              {% else %}
-              $('#id_origin').prop('disabled', true);
-              {% endif %}
+          // Disable the Spendable field by default if not output
+          {% if label.type == "output" %}
+          {% else %}
+          $('#id_spendable').prop('disabled', true);
+          {% endif %}
+          // Monitor changes in the Type dropdown
+          $('#id_type').change(function () {
+              var selectedType = $(this).val();
 
-              // Disable the Spendable field by default if not output
-              {% if label.type == "output" %}
-              {% else %}
-              $('#id_spendable').prop('disabled', true);
-              {% endif %}
-              // Monitor changes in the Type dropdown
-              $('#id_type').change(function () {
-                  var selectedType = $(this).val();
+              // Enable or disable the Origin field based on the selected Type
+              if (selectedType === 'tx') {
+                  $('#id_origin').prop('disabled', false);
+                  $('#id_origin').val('');
+              } else {
+                  $('#id_origin').prop('disabled', true);
+              }
 
-                  // Enable or disable the Origin field based on the selected Type
-                  if (selectedType === 'tx') {
-                      $('#id_origin').prop('disabled', false);
-                      $('#id_origin').val('');
-                  } else {
-                      $('#id_origin').prop('disabled', true);
-                  }
-
-                  // Enable or disable the Spendable field based on the selected Type
-                  if (selectedType === 'output') {
-                      $('#id_spendable').prop('disabled', false);
-                  } else {
-                      $('#id_spendable').val("unknown").change();
-                      $('#id_spendable').prop('disabled', true);
-                  }
-              });
+              // Enable or disable the Spendable field based on the selected Type
+              if (selectedType === 'output') {
+                  $('#id_spendable').prop('disabled', false);
+              } else {
+                  $('#id_spendable').val("unknown").change();
+                  $('#id_spendable').prop('disabled', true);
+              }
           });
+
+      });
 
       </script>
 

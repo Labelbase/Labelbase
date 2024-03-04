@@ -549,6 +549,9 @@ class LabelUpdateView(UpdateView):
             action = self.kwargs['action']
             if action == 'labeling':
                 return "label_edit_labeling.html"
+            elif action == 'output-details':
+                return "label_edit_output_details.html"
+
         return "label_edit_update.html"
 
     def get_context_data(self, **kwargs):
@@ -557,7 +560,9 @@ class LabelUpdateView(UpdateView):
         context["labelbase"] = self.object.labelbase
         context["action"] = self.kwargs.get('action', 'update')
         if context["action"] == "labeling":
-            # mempool_api = self.object.labelbase.get_mempool_api()
+            context["labelform"] = LabelForm(
+                request=self.request, labelbase_id=self.object.labelbase.id
+            )
             if self.object.type == "tx":
                 mempool_api = self.object.labelbase.get_mempool_api()
                 context["res_tx"] = mempool_api.get_transaction(self.object.ref)

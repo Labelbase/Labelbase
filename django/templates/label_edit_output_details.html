@@ -1,0 +1,22 @@
+{% extends "label_edit.html" %}
+{% load bootstrap %}
+{% load i18n %}
+
+
+{% block label_edit_content %}
+<!--
+{{  res_tx|safe }}
+-->
+{% if action == "output-details" %}
+  {% if form.instance.type == "output" %}
+  <br>
+  <pre>
+    Output, ref:  {{ label.ref }}
+    Output value, in sats: {{ output.value }}
+    Confirmed at block height: {{ output.confirmed_at_block_height }}
+    Confirmed at block time: {{ output.confirmed_at_block_time }}
+    Network: {{ output.get_network_display }}
+  </pre>
+  {% endif %}
+{% endif %}
+{% endblock %}

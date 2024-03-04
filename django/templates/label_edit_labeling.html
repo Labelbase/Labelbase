@@ -1,0 +1,191 @@
+{% extends "label_edit.html" %}
+{% load bootstrap %}
+{% load i18n %}
+{% load sekizai_tags %}
+
+{% block label_edit_content %}
+
+{% include "_modal_add_label.html" %}
+
+<!--
+{{  res_tx|safe }}
+-->
+{% if action == "labeling" %}
+  {% if form.instance.type == "tx" %}
+
+    <style>
+      .connector button {
+              min-width: 10rem;
+        }
+
+      .connector {
+        margin-bottom: 0.5rem;
+      /*  height: 2.5rem;
+        border-bottom: 2px solid #ccc; */
+        position: relative;
+      }
+      .connector-float-left {
+        float: left;
+      }
+      .connector-float-right {
+        float: right;
+      }
+    </style>
+
+    <div class="row" style="padding-top: 1rem; padding-bottom: 1rem;">
+      <div class="col-md-4">
+        <h4 class="mb-4">Inputs</h4>
+
+        {% for vin in res_tx.vin %}
+
+        <div class="card text-center" style="border-right:0;">
+          <div class="card-body">
+
+          <div class="connector ">
+            <p>
+              <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm connector-float-right open-modal"
+                  data-label=""
+                  data-type="input"
+                  data-ref="{{ vin.txid }}:{{ vin.vout }}">New "input" Label</a>
+
+              <span class="connector-float-left d-block d-md-none">{{ vin.txid|slice:"0:12" }}…{{  vin.txid|slice:"-"|slice:"-12:" }}:{{ vin.vout }}</span>
+              <span class="connector-float-left d-none d-md-block d-lg-none">{{ vin.txid|slice:"0:4" }}…{{  vin.txid|slice:"-"|slice:"-4:" }}:{{ vin.vout }} </span>
+              <span class="connector-float-left d-none d-lg-block">{{ vin.txid|slice:"0:12" }}…{{  vin.txid|slice:"-"|slice:"-6:" }}:{{ vin.vout }}</span>
+              <br>
+              <small><i>{{ vin.prevout.value }} sats</i></small>
+
+            </p>
+            <hr>
+          </div>
+
+        </div>
+          <!--div class="card-footer text-body-secondary">
+            2 days ago
+          </div-->
+      </div>
+      <br>
+
+        {% endfor %}
+      </div>
+
+      <div class="col-md-4">
+
+
+
+
+        <div class="list-group">
+
+  <span   class="list-group-item  " style="background-color:whitesmoke;" >
+    <div class="d-flex w-100 justify-content-between">
+      <h4 class="mb-1">Transaction</h4>
+      <small class="text-body-secondary">{% if res_tx.status.confirmed %}confirmed{% else %}unconfirmed{% endif %}</small>
+    </div>
+
+  </span>
+  <span class="list-group-item  ">
+    <div class="d-flex w-100 justify-content-between ">
+      <h6 class="mb-1">Transaction ID</h6>
+    </div>
+    <p class="mb-1" style="word-break: break-word;"> {{ form.instance.ref }}</p>
+    <small class="text-body-secondary"></small>
+    <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm connector-float-right open-modal"
+        data-label=""
+        data-type="tx"
+        data-ref="{{ form.instance.ref }}">New "tx" Label</a>
+  </span>
+  {% if  res_tx.status.block_height %}
+  <span class="list-group-item  ">
+    <div class="d-flex w-100 justify-content-between">
+      <h6 class="mb-1">Block Height</h6>
+      {#   <small><!--3 days ago-->{{ res_tx.status.block_time }}</small> #}
+    </div>
+    <p class="mb-1">{{  res_tx.status.block_height }}</p>
+    <small class="text-body-secondary">{{ res_tx.status.block_time }}</small>
+  </span>
+  {% endif %}
+</div>
+
+
+
+
+
+      </div>
+
+      <div class="col-md-4">
+        <h4 class="mb-4">Outputs</h4>
+
+
+        {% for vout in res_tx.vout %}
+
+
+
+        <div class="card text-center" style="border-left:0;">
+          <div class="card-body">
+            <h5 class="card-title">Output #{{ forloop.counter }}</h5>
+            <p class="card-text">{{ form.instance.ref }}:{{ forloop.counter0 }}</p>
+            <p class="card-text">{{ vout.scriptpubkey_address }}</p>
+            <p class="card-text">{{ vout.value }} sats</p>
+            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm open-modal"
+                data-label=""
+                data-type="addr"
+                data-ref="{{ vout.scriptpubkey_address }}">New "addr" Label</a>
+            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm open-modal"
+                data-label=""
+                data-type="output"
+                data-ref="{{ form.instance.ref }}:{{ forloop.counter0 }}">New "output" Label</a>
+
+
+
+          </div>
+            <!--div class="card-footer text-body-secondary">
+              2 days ago
+            </div-->
+        </div>
+        <br>
+
+          <div class="connector" style="display:none">
+            <p>
+              <span class="connector-float-left d-block d-md-none">{{ vout.scriptpubkey_address|slice:"0:12" }}…{{  vout.scriptpubkey_address|slice:"-"|slice:"-12:" }}</span>
+              <span class="connector-float-left d-none d-md-block d-lg-none">{{ vout.scriptpubkey_address|slice:"0:4" }}…{{  vout.scriptpubkey_address|slice:"-"|slice:"-4:" }}</span>
+              <span class="connector-float-left d-none d-lg-block">{{ vout.scriptpubkey_address|slice:"0:12" }}…{{  vout.scriptpubkey_address|slice:"-"|slice:"-6:" }}</span>
+              <button class="btn btn-outline-primary btn-sm connector-float-right">New "addr" Label</button>
+              <br>
+              <br>
+                <span class="connector-float-left d-block d-md-none">{{ form.instance.ref|slice:"0:12" }}…{{  form.instance.ref|slice:"-"|slice:"-12:" }}:{{ forloop.counter0 }} <small><i>#{{ forloop.counter }}</i></small></span>
+                <span class="connector-float-left d-none d-md-block d-lg-none">{{ form.instance.ref|slice:"0:4" }}…{{  form.instance.ref|slice:"-"|slice:"-4:" }}:{{ forloop.counter0 }} <small><i>#{{ forloop.counter }}</i></small></span>
+                <span class="connector-float-left d-none d-lg-block">{{ form.instance.ref|slice:"0:12" }}…{{  form.instance.ref|slice:"-"|slice:"-6:" }}:{{ forloop.counter0 }} <small><i>#{{ forloop.counter }}</i></small></span>
+                <button class="btn btn-outline-primary btn-sm connector-float-right">New "output" Label</button>
+
+              <br>
+              <small><i>{{ vout.value }} sats</i></small>
+
+            </p>
+            <hr>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <script>
+    {% addtoblock "js" %}
+
+    $(document).ready(function() {
+        $('.open-modal').click(function() {
+            var label = $(this).data('label');
+            var type = $(this).data('type');
+            var ref = $(this).data('ref');
+
+            $('#id_label').val(label);
+            $('#id_type').val(type);
+            $('#id_ref').val(ref);
+
+            $('#addLabelModal').modal('show');
+            $('#id_type').change() // update readonly fields based on type
+        });
+    });
+    {% endaddtoblock %}
+  </script>
+
+
+  {% endif %}
+{% endif %}
+{% endblock %}

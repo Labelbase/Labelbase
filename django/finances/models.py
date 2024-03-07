@@ -164,7 +164,8 @@ class OutputStat(models.Model):
         }
 
     @classmethod
-    def get_or_create_from_api(cls, type_ref_hash=None,
+    def get_or_create_from_api(cls,
+                               type_ref_hash=None,
                                network='mainnet',
                                txid=None,
                                vout=None,

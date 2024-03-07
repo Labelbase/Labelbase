@@ -172,32 +172,34 @@ box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
     }
 
 
-    .badge-hashtag {
-        padding: 2px 7px !important;
-        font-size: 1em;
-        font-weight: normal;
-        background-color: whitesmoke;
-        border: 1px solid grey;
-        color: rgba(var(--bs-body-color,1));
-        text-decoration: none;
-        /*margin-left: 0.5ch;
-        margin-right: 0.5ch;*/
-    }
+      .badge-hashtag {
+          padding: 2px 7px !important;
+          font-size: 1em;
+          font-weight: normal;
+          background-color: whitesmoke;
+          border: 1px solid grey;
+          color: rgba(var(--bs-body-color,1));
+          text-decoration: none;
+          /*margin-left: 0.5ch;
+          margin-right: 0.5ch;*/
+      }
 
       .badge-hashtag:hover {
         color: #0a58ca;
       }
 
 
+      .badge-hashtag-nohover:hover {
+        color: rgba(var(--bs-body-color,1)) !important;
+      }
+
       .badge-spendable {
         padding: 2px 7px;
-
-          background-color: #d9fbd0;
-          color: #1c6c0f;
-
-          border: 1px solid  #bee8be;
-
+        background-color: #d9fbd0;
+        color: #1c6c0f;
+        border: 1px solid  #bee8be;
       }
+
       .badge-unspendable {
         padding: 2px 7px;
 

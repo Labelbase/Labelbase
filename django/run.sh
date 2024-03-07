@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo "Executing run.sh in 15 seconds."
 sleep 15
 #python manage.py make_config
 python manage.py makemigrations --noinput

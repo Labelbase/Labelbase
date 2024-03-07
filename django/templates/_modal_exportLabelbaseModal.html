@@ -100,14 +100,10 @@
   // Function to toggle the Export button state
   function toggleExportButton() {
     const isEncryptChecked = encryptCheckbox.prop("checked");
-    const passphraseValue = passphraseInput.val().trim();
-
-    // Check if the element exists
+    var passphraseValue = "";
     if (passphraseInput.length) {
-        const passphraseValue = passphraseInput.val().trim();
-        // Rest of your code using passphraseValue
+        passphraseValue = passphraseInput.val().trim();
     } else {
-        const passphraseValue = "";
         console.log('passphraseInput element not found.');
     }
 

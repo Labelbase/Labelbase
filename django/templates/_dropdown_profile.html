@@ -23,11 +23,23 @@
               <li class="nav-item">
                   <a class="nav-link  {% block nav_apikey %}{% endblock %}" href="JavaScript:void(0);" onclick="window.location='{% url 'apikey' %}';"><span data-feather="send" class="align-text-bottom"></span> API Key & Reference</a>
               </li>
+              {% if request.user.profile.use_chatwoot %}
+              {% else %}
+              <li class="nav-item">
+                  <a class="nav-link" href="JavaScript:void(0);" onclick="$('#chatModal').modal('show');">
+                    <span data-feather="message-square" class="align-text-bottom"></span> Support Chat
+                  </a>
+              </li>
+              {% endif %}
             </ul>
+
         </div>
         <div class="card-footer p-0 border-top">
             <ul class="nav d-flex flex-column my-3">
+
+
               {% comment %}
+
               <li class="nav-item"><a class="nav-link px-3" href="#!">Add another account  </a></li>
                 <!--li class="nav-item"><a class="nav-link px-3" href="#!">Switch account  </a></li-->
               {% endcomment %}
@@ -43,7 +55,7 @@
                 </ul>
             </div>
             <div class="my-2 text-center"><small>
-                <a class="text-600 me-1 termslink"  href="JavaScript:void(0);"  onclick="window.location='{% url 'privacy_policy' %}';">Privacy policy</a>•<a class="text-600 mx-1 termslink"  href="JavaScript:void(0);"  onclick="window.location='{% url 'terms' %}';">Terms</a>•<a class="text-600 mx-1 termslink">v1.0.0</a></small>
+                <a class="text-600 me-1 termslink"  href="JavaScript:void(0);"  onclick="window.location='{% url 'privacy_policy' %}';">Privacy Policy</a>•<a class="text-600 mx-1 termslink"  href="JavaScript:void(0);"  onclick="window.location='{% url 'terms' %}';">Terms</a>•<a class="text-600 mx-1 termslink">v1.0.0</a></small>
             </div>
         </div>
     </div>

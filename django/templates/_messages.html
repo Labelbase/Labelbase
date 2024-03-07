@@ -1,6 +1,7 @@
 {% load sekizai_tags %}
 
-<div id="user-messages" style="padding-top: .25rem; margin-left: -22px; position: fixed; z-index: 1000;">
+{#  margin-left: -22px;  ->  right: .25rem; #}
+<div id="user-messages" style="padding-top: .25rem; right: .25rem; position: fixed; z-index: 1000;">
   {% comment %}
 
   <!-- old message rendering, delete later -->
@@ -41,7 +42,7 @@ function show_message(type, message) {
   $('#user-messages').append(alertElement);
   setTimeout(function () {
     alertElement.alert('close');
-  }, 3338);
+  }, 4000);
 
 }
 

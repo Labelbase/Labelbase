@@ -10,6 +10,7 @@ RUN apt-get update && \
     apt-get install -y \
         default-libmysqlclient-dev \
         build-essential \
+        cron vim logrotate \
         libpcre3-dev \
         default-mysql-client \
     && rm -rf /var/lib/apt/lists/* \

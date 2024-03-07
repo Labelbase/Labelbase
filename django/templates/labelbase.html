@@ -9,7 +9,22 @@
 
 {% include "_labelbase_header_info_menu.html" %}
 
+
 {% if labelbase %}
+{% if request.GET.tag %}
+  Hashtag filter is active:
+  <span class="badge badge-hashtag badge-hashtag-nohover">
+      <tt style="pointer-events: none;">{{ request.GET.tag }}</tt>
+      <button onclick="window.location='{% url 'labelbase' labelbase.id %}'";
+              type="button"
+              class="btn-close"
+              style="padding-left: 0.4rem; margin-right: -0.1rem; font-size: .6rem; font-weight: bolder !important;"
+              ></button>
+  </span>
+{% else %}
+{% endif %}
+
+
   <div class="table-responsive" style="padding-top:1em" >
     {% if label_list %}
     <table id="bip329labels" class="table table-striped table-sm">
@@ -36,7 +51,7 @@
 
 {% if labelbase %}
 
-{% include "_modal_add_label.html" %} 
+{% include "_modal_add_label.html" %}
 
 <!-- modal -->
 <div class="modal" tabindex="-1" id="editLabelbaseModal">
@@ -194,6 +209,11 @@
       });
 
     });
+
+    function removeHashtag() {
+        alert("Hashtag removed!"); // Example alert
+    }
+
     {% endaddtoblock %}
   </script>
 

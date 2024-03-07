@@ -112,11 +112,11 @@ urlpatterns = [
         login_required(LabelbaseMergeView.as_view()),
         name="labelbase_merge"
     ),
-    path(
-        "labelbase/<int:labelbase_id>/portfolio/",
-        login_required(LabelbasePortfolioView.as_view()),
-        name="labelbase_portfolio"
-    ),
+    #path(
+    #    "labelbase/<int:labelbase_id>/portfolio/",
+    #    login_required(LabelbasePortfolioView.as_view()),
+    #    name="labelbase_portfolio"
+    #),
     path(
         "labelbase/<int:labelbase_id>/edit/",
         login_required(LabelbaseUpdateView.as_view()),

@@ -53,6 +53,14 @@ async def interact_addr(conn, server_info, method, addr):
     finally:
         conn.close()
 
+def is_valid_output_ref(ref):
+    """
+    """
+    if not ref:
+        return False
+    if ":" in ref:
+        return True
+    return False
 
 def checkup_label(label_id, loop):
     if label_id and loop:
@@ -62,11 +70,14 @@ def checkup_label(label_id, loop):
         elem = Label.objects.get(id=label_id)
         output = OutputStat.objects.filter(type_ref_hash=elem.type_ref_hash, network=elem.labelbase.network).last()
         if not output:
+            print("Creating OutputStat")
             output = OutputStat(type_ref_hash=elem.type_ref_hash, network=elem.labelbase.network, value=0)
-        if elem.type == "output" and output.spent is not True:
+        print("Using OutputStat id {}".format(output))
+
+        if elem.type == "output" and is_valid_output_ref(elem.ref) and output.spent is not True:
             electrum_hostname = elem.labelbase.user.profile.electrum_hostname
             if not electrum_hostname:
-                electrum_hostname = "bitcoin.lu.ke"
+                electrum_hostname = "electrum.emzy.de"
             electrum_ports = elem.labelbase.user.profile.electrum_ports
             if not electrum_ports:
                 electrum_ports = "s50002"
@@ -78,14 +89,29 @@ def checkup_label(label_id, loop):
             utxo_resp = loop.run_until_complete(interact(conn, server_info, "blockchain.transaction.get", utxo))
             blocktime = 0
             if utxo_resp:
+                print("utxo_resp {}".format(utxo_resp))
                 txid, index, address, value, blocktime = utxo_resp
                 if blocktime:
+                    print("Found blocktime {} for label id {}.".format(blocktime, label_id))
                     HistoricalPrice.get_or_create_from_api(timestamp=blocktime)
-                unspents = loop.run_until_complete(interact_addr(
+                try:
+                    unspents = loop.run_until_complete(interact_addr(
                                 conn, server_info, "blockchain.address.listunspent", address))
+                except:
+                    # TODO: Review this if needed.
+                    # It seems some Electrum versions have issues using "blockchain.address.listunspent"
+                    #   File "/usr/local/lib/python3.9/asyncio/selector_events.py", line 500, in sock_connect
+                    #    return await fut
+                    #  File "/usr/local/lib/python3.9/asyncio/selector_events.py", line 535, in _sock_connect_cb
+                    #    raise OSError(err, f'Connect call failed {address}')
+                    # ConnectionRefusedError: [Errno 111] Connect call failed ('198.244.201.86', 50002)
+                    unspents = loop.run_until_complete(interact_addr(
+                                conn, server_info, "blockchain.scripthash.listunspent", address))
+
                 unspent_utxo = False
                 utxo_value = 0
                 utxo_height = 0
+                print("unspents: {}".format(unspents))
                 for unspent in unspents:
                     if unspent.get('tx_hash') == tx_hash and \
                         unspent.get('tx_pos') == int(tx_pos) and \
@@ -94,7 +120,7 @@ def checkup_label(label_id, loop):
                         unspent_utxo = True
                         utxo_value = unspent.get('value')
                         utxo_height = unspent.get('height')
-                        logger.debug("found {}".format(unspent))
+                        print("found unspent: {}".format(unspent))
                         break
                 if output:
                     output.network = elem.labelbase.network
@@ -111,6 +137,7 @@ def checkup_label(label_id, loop):
                     else:
                         output.spent = True
                     output.save()
+                    print("output id {} saved".format(output.id))
     else:
         if not label_id:
             logger.error("Can't get label_id! {}".format(label_id))

@@ -12,11 +12,12 @@
 <p class="fs-6 text-muted">
   Update your Electrum server information.
   <br><br>
+  <!-- Trusting Craig on this one. https://github.com/sparrowwallet/sparrow/blob/f003b6d732bd73d93fe904659e61e0d56f6cb280/src/main/java/com/sparrowwallet/sparrow/net/PublicElectrumServer.java -->
   If you don't run your own Electrum server, here are some community trusted mainnet servers: <br>
   <ul>
+    <li> electrum.emzy.de / s50002</li>
     <li> electrum.blockstream.info / s50002</li>
-    <li> bitcoin.lu.ke / s50002</li>
-    <li> electrum.emzy.de / s50002</li> 
+    <li> <s>bitcoin.lu.ke / s50002</s></li>
   </ul>
   <form action="" method="POST">
     {% csrf_token %}

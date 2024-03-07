@@ -11,6 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@0.2.3"></script>
 
+
 {% if labelbase.is_testnet %}
 <div class="alert alert-dismissible bd-callout bd-callout-info">
   <button type="button" class="btn-close" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -88,10 +89,12 @@ function red_or_greem_fromValue(value, index, border) {
 }
 
 window.records = [
+
   {% for label in label_list %}
+    {% if action == "unspent-spendable-outputs" and label.spendable or action == "unspent-outputs" %}
     {
-      'spendable': {% if label.spendable %}"true"{% else %}"false"{% endif %},
-      "spent": '{{ label.get_finance_output_metrics_dict.spent }}',
+      'spendable': {% if  label.spendable is None %}'Undefined'{% else %}'{{ label.spendable }}'{% endif %},
+      'spent': '{{ label.get_finance_output_metrics_dict.spent }}',
       'ref': '{{ label.ref }}',
       'label': '{{ label.label }}',
       'fiat_value_old': {{ label.get_finance_output_metrics_dict.fiat_value_old|floatformat:"2" }},
@@ -106,6 +109,8 @@ window.records = [
       'is_tracked': {{label.get_finance_output_metrics_dict.is_tracked|lower }} // tracked value
 
     },
+    {% else %}
+    {% endif %}
   {% endfor %}
 ];
 
@@ -143,7 +148,7 @@ options: {
   maintainAspectRatio: false,
   title: {
     display: true,
-    text: "Unspent outputs"
+    text: "Unspent {% if action == "unspent-spendable-outputs" %}Spendable {% endif %}Outputs"
   },
   legend: {
      display: false
@@ -170,6 +175,21 @@ document.getElementById("chart-area").onclick = function(evt) {
 // Define popover content
 function getPopoverContent(index) {
     if (index >= 0 && index < window.records.length) {
+
+      /*
+        var is_spent = "no";
+        if (window.records[index].spent) {
+          is_spent = "yes";
+        }
+
+        var is_spendable = "no";
+        if (window.records[index].spendable) {
+          is_spendable = "yes";
+        }
+
+*/
+
+
         var content = '<div class="popover-content">';
         content += '<div><strong>Label:</strong> ' + window.records[index].label + '</div>';
         content += '<div><strong>Output:</strong> ' + window.records[index].ref + '</div>';
@@ -182,6 +202,11 @@ function getPopoverContent(index) {
         content += '<div><strong>Output value in sats:</strong> ' + window.records[index].sats + '</div>';
         content += '<div><strong>Current value:</strong> ' + window.records[index].fiat_cur + ' ' + window.records[index].current_price + '</div>';
         content += '<div><strong>Performance:</strong> ' + window.records[index].performance + '%</div>';
+        content += '<div><strong>Spent:</strong> ' + window.records[index].spent + '</div>';
+        content += '<div><strong>Spendable:</strong> ' + window.records[index].spendable + '</div>';
+
+
+
         content += '</div>';
         return content;
     }

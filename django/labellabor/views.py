@@ -276,12 +276,15 @@ class TreeMapsView(ListView):
     context_object_name = "label_list"
 
     def get_template_names(self):
-        if 'action' in self.kwargs:
-            action = self.kwargs['action']
-            if action == 'unspent-outputs':
-                return "labelbase_tree_maps_unspent_outputs.html"
-            elif action == 'unspent-spendable-outputs':
-                return "labelbase_tree_maps_unspent_outputs.html"
+        # TODO: "action" has no at the moment, it's all redundend code.
+        # The template processes each output and adds or drops it.
+
+        #if 'action' in self.kwargs:
+        #    action = self.kwargs['action']
+        #    if action == 'unspent-outputs':
+        #        return "labelbase_tree_maps_unspent_outputs.html"
+        #    elif action == 'unspent-spendable-outputs':
+        #        return "labelbase_tree_maps_unspent_outputs.html"
         return "labelbase_tree_maps_unspent_outputs.html"
 
     def get_context_data(self, **kwargs):
@@ -297,8 +300,7 @@ class TreeMapsView(ListView):
         return context
 
     def get_queryset(self):
-        # action = self.kwargs.get('action', 'unspent-outputs')
-
+        #action = self.kwargs.get('action', 'unspent-outputs')
         label_ids = []
 
         qs = Label.objects.filter(
@@ -312,9 +314,13 @@ class TreeMapsView(ListView):
                                             type_ref_hash=l.type_ref_hash,
                                             network=l.labelbase.network).last()
                 if output and output.spent is False:
-                    # if action == 'unspent-spendable-outputs' and l.spendable == True:
+                    # FIXME: redundend code.
+                    # The template processes each output and adds or drops it,
+                    # depending of its state.
+
+                    #if action == 'unspent-spendable-outputs' and l.spendable is True:
                     #    label_ids.append(l.id)
-                    # else:
+                    #else:
                     label_ids.append(l.id)
         if label_ids:
             qs = qs.filter(id__in=label_ids,
@@ -434,15 +440,17 @@ class FixAndMergeLabelsView(View):
                     'spendable': spendable_cal
                 }
                 resulting_duplicates_all_identical.append(res_rec) # nonsense, but counts
-        fix_suggestions = sum(map(len, [resulting_duplicates_type_and_ref,
-                                        resulting_duplicates_type_and_ref_and_label,
-                                        resulting_duplicates_all_identical,
+        fix_suggestions = sum(map(len, [#resulting_duplicates_type_and_ref,
+                                        #resulting_duplicates_type_and_ref_and_label,
+                                        #resulting_duplicates_all_identical,
                                         resulting_empty_label_records,
-                                        resulting_too_long_label_records]))
+                                        #resulting_too_long_label_records
+                                        ]))
         return render(request, self.template_name, {
             "labelbase": labelbase,
             "fix_suggestions": fix_suggestions,
             "resulting_duplicates_all_identical_final_record_count": len(resulting_duplicates_all_identical),
+
             "resulting_duplicates_all_identical_current_record_count": len(all_identical_records),
             "all_identical_records": all_identical_records, # the unique identical records where all fields are the same
 

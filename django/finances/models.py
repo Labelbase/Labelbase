@@ -6,6 +6,8 @@ import datetime
 from pymempool import MempoolAPI
 from labelbase.receivers import compute_type_ref_hash
 from django.conf import settings
+from jsonfield import JSONField
+from django.contrib.auth.models import User
 
 
 import logging
@@ -24,17 +26,9 @@ class OutputStat(models.Model):
 
     * There is no sensitive information stored in these records.
 
-    * There is no direct link between a user and those objects.
 
-    * Those objects are shared among all service users (one the same server)
-      because those fields reflect a global state of a transaction output.
-
-    * If you self-host Labelbase, its all yours. In the cloud version or if
-       multiple user are sharing an instance, a single output is hiding in
-       the crowd.
-
-    Not the perfect solution, but a trade of between performance, efficiency and privacy.
     """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     type_ref_hash = models.CharField(max_length=64,
                                      blank=True,
                                      help_text="Reflects type + ref, where type is Output")
@@ -46,6 +40,8 @@ class OutputStat(models.Model):
     value = models.IntegerField()  # tx output, in sats
     confirmed_at_block_height = models.IntegerField(default=0)
     confirmed_at_block_time = models.IntegerField(default=0)
+
+    last_error = JSONField(default={})
 
     MAINNET = 'mainnet'
     TESTNET = 'testnet'
@@ -61,6 +57,18 @@ class OutputStat(models.Model):
         default='mainnet',
         help_text="Choose the network for this labelbase."
     )
+
+    class Meta:
+        unique_together = (("user", "type_ref_hash"),)
+
+    @property
+    def get_spent_status(self):
+        if self.confirmed_at_block_time == 0:
+            return "unconfirmed"
+        if self.spent:
+            return "spent"
+        if not self.spent:
+            return "unspent"
 
     def output_metrics_dict(self, tracked_fiat_value=0, fiat_currency="USD"):
         """
@@ -165,6 +173,7 @@ class OutputStat(models.Model):
 
     @classmethod
     def get_or_create_from_api(cls,
+                               user,
                                type_ref_hash=None,
                                network='mainnet',
                                txid=None,
@@ -205,7 +214,7 @@ class OutputStat(models.Model):
             if res:
                 value, spent, confirmed_at_block_height, confirmed_at_block_time = res
                 print("called data {} {} for type_ref_hash {}".format(value, spent, type_ref_hash))
-                obj, created = cls.objects.get_or_create(
+                obj, created = cls.objects.get_or_create(user=user,
                         type_ref_hash=type_ref_hash, network=network,
                                 defaults={
                                 'spent': spent,

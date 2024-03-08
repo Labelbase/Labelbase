@@ -138,7 +138,7 @@
 
 
           <!-- -->
-          <div class="">
+          <div class="" style="padding-bottom:2.1rem;">
             {% comment %}
               <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
                 <span>Your account</span>
@@ -215,7 +215,21 @@
               <li class="nav-item  ">
                 <a class="nav-link" href="{% url 'terms' %}"><span data-feather="list" class="align-text-bottom"></span> Terms</a>
               <li>
+
+                <li class="nav-item  ">
+                  <a class="nav-link" href="https://bip329.org"><span data-feather="external-link" class="align-text-bottom"></span> bip329.org</a>
+                <li>
+
+
             </ul>
+            {% comment %}
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item  ">
+                <a class="nav-link" href="{% url 'terms' %}"><span data-feather="heart" class="align-text-bottom" style="color:red;"></span> Special Thanks</a>
+              <li>
+            </ul>
+            <br>
+            {% endcomment %}
           </div>
 
         </div>
@@ -426,12 +440,12 @@
                   websiteToken: '3FzpAuguuLCaaEcBf5awz6EG',
                   baseUrl: BASE_URL
               })
+
           }
           // Hide the modal after loading chat
           if (hide_modal_and_store == true) {
               var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
               $('#chatModal').modal('hide');
-              console.log("1")
               $.ajax({
                   type: 'POST',
                   url: '{% url "userprofile" %}',
@@ -439,6 +453,7 @@
                   data: { toggleId: 'use_chatwoot', toggleValue: 'true' },
                   success: function (response) {
                       show_message("success", "<strong>Success!</strong> " + response.message)
+                      window.$chatwoot.toggle("open"); 
                   },
                   error: function (xhr, status, error) {
                       console.error(error);
@@ -446,7 +461,6 @@
 
                   }
               });
-              console.log("2")
           }
 
       }

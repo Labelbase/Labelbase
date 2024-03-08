@@ -24,6 +24,8 @@ from bip329.bip329_writer import BIP329JSONLWriter, BIP329JSONLEncryptedWriter
 from django.urls import reverse
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.template.loader import render_to_string
+from django.contrib import messages
+
 
 from .utils import hashtag_to_badge, extract_fiat_value
 from finances.models import OutputStat
@@ -288,6 +290,13 @@ class TreeMapsView(ListView):
         return "labelbase_tree_maps_unspent_outputs.html"
 
     def get_context_data(self, **kwargs):
+
+
+        # Store nearest price information.
+        # TODO: This should be done on new blocks.
+        from finances.models import HistoricalPrice
+        HistoricalPrice.get_or_create_from_api(-1)
+
         context = super().get_context_data(**kwargs)
 
         labelbase_id = self.kwargs["pk"]
@@ -311,6 +320,7 @@ class TreeMapsView(ListView):
         for l in qs:
             if l.type == "output":
                 output = OutputStat.objects.filter(
+                                            user=l.labelbase.user,
                                             type_ref_hash=l.type_ref_hash,
                                             network=l.labelbase.network).last()
                 if output and output.spent is False:
@@ -545,7 +555,11 @@ class ExportLabelsView(View):
             os.remove(temp_file.name)
             return response
 
-        # TODO: error message
+        messages.add_message(
+            request,
+            messages.ERROR,
+            "Could not export labels. Please try again."
+        )
         return HttpResponseRedirect(labelbase.get_absolute_url())
 
 
@@ -577,7 +591,9 @@ class LabelUpdateView(UpdateView):
                 context["res_tx"] = mempool_api.get_transaction(self.object.ref)
 
         if self.object.type == "output":
-            context["output"] = OutputStat.objects.filter(type_ref_hash=self.object.type_ref_hash).last()
+            context["output"] = OutputStat.objects.filter(
+                                    user=self.object.labelbase.user,
+                                    type_ref_hash=self.object.type_ref_hash).last()
 
         return context
 

@@ -108,6 +108,7 @@ INSTALLED_APPS = [
     "finances",
     "background_task",
     "connectrum",
+    "knowledge_base",
 ]
 
 

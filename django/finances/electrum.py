@@ -21,18 +21,14 @@ async def interact(conn, server_info, method, utxo):
                 try:
                     blocktime = int(txn.get('blocktime', 0))
                     logger.debug("blocktime: {}".format(blocktime))
-
                 except Exception as ex:
                     blocktime = 0
                     logger.error("Can't get blocktime: {}".format(ex))
-                print(txn.get('vout'))
                 address = txn.get('vout')[int(index)].get('scriptPubKey', {}).get('address')
                 value = txn.get('vout')[int(index)].get('value')*100000000
                 return (txid, index, address, value, blocktime)
-            else:
-                print("Failed to fetch transaction.")
         except ElectrumErrorResponse as ex:
-            print(ex)
+            logger.error("ERROR: {} {}".format(ex, conn.last_error))
     finally:
         conn.close()
 
@@ -54,8 +50,6 @@ async def interact_addr(conn, server_info, method, addr):
         conn.close()
 
 def is_valid_output_ref(ref):
-    """
-    """
     if not ref:
         return False
     if ":" in ref:
@@ -64,16 +58,17 @@ def is_valid_output_ref(ref):
 
 def checkup_label(label_id, loop):
     if label_id and loop:
-        """
-        [ ] get_or_create() OutputStat using unspent payload
-        """
         elem = Label.objects.get(id=label_id)
-        output = OutputStat.objects.filter(type_ref_hash=elem.type_ref_hash, network=elem.labelbase.network).last()
+        output = OutputStat.objects.filter(user=elem.labelbase.user,
+                                            type_ref_hash=elem.type_ref_hash,
+                                            network=elem.labelbase.network).last()
         if not output:
             print("Creating OutputStat")
-            output = OutputStat(type_ref_hash=elem.type_ref_hash, network=elem.labelbase.network, value=0)
+            output = OutputStat(user=elem.labelbase.user,
+                                type_ref_hash=elem.type_ref_hash,
+                                network=elem.labelbase.network, value=0)
         print("Using OutputStat id {}".format(output))
-
+        print("elem.type {} {} {} {}".format(elem.type, is_valid_output_ref(elem.ref), elem.ref, output.spent))
         if elem.type == "output" and is_valid_output_ref(elem.ref) and output.spent is not True:
             electrum_hostname = elem.labelbase.user.profile.electrum_hostname
             if not electrum_hostname:
@@ -81,7 +76,9 @@ def checkup_label(label_id, loop):
             electrum_ports = elem.labelbase.user.profile.electrum_ports
             if not electrum_ports:
                 electrum_ports = "s50002"
+            print("going for server_info")
             server_info = ServerInfo(electrum_hostname, electrum_hostname, ports=((electrum_ports)))
+            print("server_info: {}".format(server_info))
             conn = StratumClient()
             assert elem.type_ref_hash
             utxo = elem.ref
@@ -95,33 +92,26 @@ def checkup_label(label_id, loop):
                     print("Found blocktime {} for label id {}.".format(blocktime, label_id))
                     HistoricalPrice.get_or_create_from_api(timestamp=blocktime)
                 try:
-                    unspents = loop.run_until_complete(interact_addr(
-                                conn, server_info, "blockchain.address.listunspent", address))
+                    unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.address.listunspent", address))
                 except:
-                    # TODO: Review this if needed.
-                    # It seems some Electrum versions have issues using "blockchain.address.listunspent"
-                    #   File "/usr/local/lib/python3.9/asyncio/selector_events.py", line 500, in sock_connect
-                    #    return await fut
-                    #  File "/usr/local/lib/python3.9/asyncio/selector_events.py", line 535, in _sock_connect_cb
-                    #    raise OSError(err, f'Connect call failed {address}')
-                    # ConnectionRefusedError: [Errno 111] Connect call failed ('198.244.201.86', 50002)
-                    unspents = loop.run_until_complete(interact_addr(
-                                conn, server_info, "blockchain.scripthash.listunspent", address))
+                    conn.last_error = None # reset error if needed
+                    unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.scripthash.listunspent", address))
 
                 unspent_utxo = False
                 utxo_value = 0
                 utxo_height = 0
                 print("unspents: {}".format(unspents))
-                for unspent in unspents:
-                    if unspent.get('tx_hash') == tx_hash and \
-                        unspent.get('tx_pos') == int(tx_pos) and \
-                        unspent.get('height') > 0 and \
-                        unspent.get('value') > 0:
-                        unspent_utxo = True
-                        utxo_value = unspent.get('value')
-                        utxo_height = unspent.get('height')
-                        print("found unspent: {}".format(unspent))
-                        break
+                if unspents:
+                    for unspent in unspents:
+                        if unspent.get('tx_hash') == tx_hash and \
+                            unspent.get('tx_pos') == int(tx_pos) and \
+                            unspent.get('height') > 0 and \
+                            unspent.get('value') > 0:
+                            unspent_utxo = True
+                            utxo_value = unspent.get('value')
+                            utxo_height = unspent.get('height')
+                            print("found unspent: {}".format(unspent))
+                            break
                 if output:
                     output.network = elem.labelbase.network
                     if utxo_height:
@@ -136,8 +126,18 @@ def checkup_label(label_id, loop):
                         output.spent = False
                     else:
                         output.spent = True
-                    output.save()
-                    print("output id {} saved".format(output.id))
+                    output.last_error = {}
+            elif conn.last_error:
+                # Damn...
+                output.last_error = conn.last_error
+            else:
+                output.last_error = {}
+            output.save()
+            print("output id {} saved".format(output.id))
+            try:
+                conn.close()
+            except:
+                pass
     else:
         if not label_id:
             logger.error("Can't get label_id! {}".format(label_id))

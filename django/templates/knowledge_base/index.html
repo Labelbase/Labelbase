@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Knowledge Base</title>
+</head>
+<body>
+    <h1>Categories</h1>
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a></li>
+        {% empty %}
+        Your knowledge base is empty. You can download the latest knowledge here and import it.
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+'kb-index'

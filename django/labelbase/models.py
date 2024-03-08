@@ -129,6 +129,7 @@ class Label(models.Model):
         (TYPE_OUTPUT, "output"),
         (TYPE_XPUT, "xpub"),
     ]
+
     type = models.CharField(
         max_length=16,
         choices=TYPE_CHOICES,
@@ -178,6 +179,7 @@ class Label(models.Model):
     def get_finance_output_metrics_dict(self):
         type_ref_hash = compute_type_ref_hash(self.type, self.ref)
         output, _ = OutputStat.get_or_create_from_api(
+                                user=self.labelbase.user,
                                 type_ref_hash=type_ref_hash,
                                 network=self.labelbase.network)
 

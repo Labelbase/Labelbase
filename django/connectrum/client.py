@@ -20,8 +20,8 @@ from collections import defaultdict
 from .exc import ElectrumErrorResponse
 import logging
 
-logger = logging.getLogger('connectrum')
-
+#logger = logging.getLogger('connectrum')
+logger = logging.getLogger('labelbase')
 
 class StratumClient:
 
@@ -50,7 +50,7 @@ class StratumClient:
         self.loop = loop or asyncio.get_event_loop()
 
         self.reconnect = None       # call connect() first
-
+        self.last_error = None
         # next step: call connect()
 
     def _connection_lost(self, protocol):
@@ -360,11 +360,14 @@ class StratumClient:
 
         if 'error' in msg:
             err = msg['error']
-
+            try:
+                self.last_error = {**err, **req}
+            except TypeError:
+                self.last_error = {'message': err, 'code': None}
             logger.info("Error response: '%s'" % err)
             rv.set_exception(ElectrumErrorResponse(err, req))
-
         else:
+            self.last_error = None
             rv.set_result(result)
 
     def RPC(self, method, *params):

@@ -225,6 +225,11 @@ box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 
         }
 
+    .bd-callout-danger {
+        --bd-callout-bg: rgba(var(--bs-danger-rgb), .075);
+        --bd-callout-border: rgba(var(--bs-danger-rgb), .5)
+    }
+
 
     .bd-callout-warning {
         --bd-callout-color: var(--bs-warning-text-emphasis);
@@ -232,6 +237,11 @@ box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
         --bd-callout-border: var(--bs-warning-border-subtle);
     }
 
+    .bd-callout-good { 
+        --bd-callout-color: var(--bs-success-text-emphasis);
+        --bd-callout-bg: #d9fbd0;
+        --bd-callout-border: #bee8be;
+    }
 
 
     .bd-callout-info {

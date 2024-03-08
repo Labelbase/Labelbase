@@ -69,20 +69,51 @@
 
 
 
-
-
   {% endswitch %}
 
 </ul>
 
 <div style="padding-top: 0rem; padding-bottom: 2.1rem; ">
 
-  {% if  output.spent %}
 
-  <div class="bd-callout bd-callout-warning">
-    <strong>Output spent!</strong> Blockchain records indicate that this output has been spent in another transaction.
+  <div class="alert bd-callout bd-callout-danger ">
+    <div class="btn-group" role="group" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;">
+      <button type="button" class="btn btn-sm btn-outline-danger dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
+        Actions
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Reset output and check again</a></li>
+        <li><a class="dropdown-item" href="#">Mark output as spent</a></li>
+        <li><a class="dropdown-item" href="#">Mark output as unspent</a></li>
+      </ul>
+    </div>
+    <div style=" padding-right: 1.8rem"><strong>Output spent! </strong> Blockchain records indicate that this output has been spent in another transaction.
 
   </div>
+  </div>
+
+
+  {% if output.last_error %}
+    <div class="bd-callout bd-callout-danger">
+      <strong>Ouch!</strong> Got "{{ output.last_error.message }}{% if output.last_error.code %} (code {{ output.last_error.code }}){% endif %}" from Electrum.
+    </div>
+  {% else %}
+    {% if form.instance.type == "output" %}
+      {% switch output.get_spent_status %}
+      {% case "spent" %}
+        <div class="bd-callout bd-callout-warning">
+          <strong>Output spent!</strong> Blockchain records indicate that this output has been spent in another transaction.
+        </div>
+      {% case "unspent" %}
+        <div class="bd-callout bd-callout-good">
+          <strong>Output unspent!</strong> Blockchain records indicate that this output has not been spent yet.
+        </div>
+      {% case "unconfirmed" %}
+        <div class="bd-callout bd-callout-info">
+          <strong>Output unconfirmed!</strong> Blockchain records indicate that this output has not been confirmed yet.
+        </div>
+      {% endswitch %}
+    {% endif %}
   {% endif %}
 
 <!--div class="bd-callout bd-callout-warning">

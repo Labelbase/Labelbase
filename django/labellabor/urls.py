@@ -235,6 +235,10 @@ urlpatterns = [
         include(tf_urls)
     ),
     path(
+        "knowledge-base/",
+        include('knowledge_base.urls')
+    ),
+    path(
         "",
         include("user_sessions.urls", "user_sessions")
     ),

@@ -1,0 +1,32 @@
+{% extends "_base.html" %}
+{% load bootstrap %}
+{% load i18n %}
+{% load sekizai_tags %}
+
+{% block content %}
+<ul class="nav nav-tabs" style="padding-top: 2rem; ">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page">Hashtag Detail</a>
+  </li>
+</ul>
+<div style="padding-top: 2.1rem; padding-bottom: 2.1rem; " >
+  <form method="post">
+      {% csrf_token %}
+      {{ form|bootstrap }}
+      <br>
+      <div  style="padding-top: 1em;">
+        <a href="{{ form.instance.labelbase.get_hashtags_url }}"
+            type="button" class="btn btn-link">Back to Hashtags</a>
+        <!--a href="#" data-bs-toggle="modal" data-bs-target="#deleteHashtagModal"
+            type="button" class="btn btn-danger ">Delete</a-->
+        <input type="submit"  class="btn btn-primary" value="Save">
+      </div>
+  </form>
+</div>
+<script>
+{% addtoblock "js" %}
+{% endaddtoblock %}
+</script>
+
+
+{% endblock %}

@@ -15,8 +15,11 @@
   <link href="{% static 'css/dataTables.bootstrap5.min.css' %}" rel="stylesheet">
   <link href="{% static 'css/labelbase.css' %}" rel="stylesheet">
   {% block extra_media %}{% endblock %}
+  
+  <style media="screen">
   {% block css %}{% endblock %}
   {% render_block "css" %}
+  </style>
 
 
 </head>
@@ -120,7 +123,7 @@
                     <li><a class="nav-link" style="font-size: .875rem;"><span data-feather="dollar-sign" class="align-text-bottom"></span> Fiat Finances</a></li>
                     {% endif %}
                     {% if labelbase.user.profile.use_hashtags %}
-                      <li><a class="nav-link" style="font-size: .875rem;"><span data-feather="hash" class="align-text-bottom"></span> Hashtags</a></li>
+                      <li><a href="{{ labelbase.get_hashtags_url }}" class="nav-link" style="font-size: .875rem;"><span data-feather="hash" class="align-text-bottom"></span> Hashtags</a></li>
                     {% endif %}
                   </ul>
 
@@ -178,15 +181,17 @@
               <span>Community</span>
             </h6>
 
-
+            <li class="nav-item  ">
+              <a class="nav-link" href="{% url "donate" %}"><span data-feather="heart" class="align-text-bottom"></span> Donate</a>
+            <li>
 
             <li class="nav-item  ">
               <a class="nav-link" href="https://labelbase.space/newsletter/"><span data-feather="mail" class="align-text-bottom"></span> Newsletter</a>
             <li>
 
-            <li class="nav-item  ">
+            <!--li class="nav-item  ">
               <a class="nav-link" href="https://labelbase.space/#/"><span data-feather="mic" class="align-text-bottom"></span> Podcast</a>
-            <li>
+            <li-->
 
             <li class="nav-item  ">
               <a class="nav-link" href="https://github.com/Labelbase/Labelbase/"><span data-feather="github" class="align-text-bottom"></span> Code on GitHub</a>
@@ -205,7 +210,7 @@
               <li>
               -->
               <li class="nav-item  ">
-                <a class="nav-link" href="{% url 'faq' %}"><span data-feather="book" class="align-text-bottom"></span> FAQ & Knowledge</a>
+                <a class="nav-link" href="{% url 'kb-index' %}"><span data-feather="book" class="align-text-bottom"></span> Knowledge Base</a>
               <li>
 
               <li class="nav-item  ">
@@ -222,18 +227,10 @@
 
 
             </ul>
-            {% comment %}
-            <ul class="nav flex-column mb-2">
-              <li class="nav-item  ">
-                <a class="nav-link" href="{% url 'terms' %}"><span data-feather="heart" class="align-text-bottom" style="color:red;"></span> Special Thanks</a>
-              <li>
-            </ul>
-            <br>
-            {% endcomment %}
+
           </div>
 
         </div>
-
         </nav>
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           {% include "_messages.html" %}
@@ -453,7 +450,7 @@
                   data: { toggleId: 'use_chatwoot', toggleValue: 'true' },
                   success: function (response) {
                       show_message("success", "<strong>Success!</strong> " + response.message)
-                      window.$chatwoot.toggle("open"); 
+                      window.$chatwoot.toggle("open");
                   },
                   error: function (xhr, status, error) {
                       console.error(error);

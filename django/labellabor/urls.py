@@ -12,6 +12,8 @@ from userprofile.views import (ProfileView,
                                ElectrumInfoUpdateView)
 from userprofile.views import APIKeyView
 
+from hashtags.views import HashtagListView, HashtagUpdateView, LabelbaseProxyView
+
 
 from .views import (
     LabelbaseView,
@@ -27,7 +29,7 @@ from .views import (
     RegistrationView,
     LabelbaseFormView,
     LabelbaseUpdateView,
-    FaqView,
+    DonationView,
     AboutView,
     EncryptionView,
     InteroperationalView,
@@ -37,6 +39,7 @@ from .views import (
     FixAndMergeLabelsView,
     LabelbaseDatatableView,
     LabelbasePortfolioView,
+    OutputStatUpdateRedirectView,
 )
 
 from importer.views import upload_labels
@@ -98,6 +101,21 @@ urlpatterns = [
         "labelbase/<int:labelbase_id>/",
         login_required(LabelbaseView.as_view()),
         name="labelbase"
+    ),
+    path(
+        "labelbase/<int:labelbase_id>/hashtags/",
+        login_required(HashtagListView.as_view()),
+        name="labelbase_hashtags"
+    ),
+    path(
+        "labelbase/<int:labelbase_id>/hashtags/proxy/",
+        login_required(LabelbaseProxyView.as_view()),
+        name="labelbase_hashtags_proxy"
+    ),
+    path(
+        "labelbase/hashtag/<int:pk>/edit/",
+        login_required(HashtagUpdateView.as_view()),
+        name="hashtag_edit"
     ),
     path(
         "labelbase/<int:labelbase_id>/data/",
@@ -206,9 +224,9 @@ urlpatterns = [
         name="terms"
     ),
     path(
-        "faq",
-        FaqView.as_view(),
-        name="faq"
+        "donate",
+        DonationView.as_view(),
+        name="donate"
     ),
     path(
         "about",
@@ -224,6 +242,11 @@ urlpatterns = [
         "interoperational",
         InteroperationalView.as_view(),
         name="interoperational"
+    ),
+    path(
+        "outputstat/<int:output_stats_id>/update/<int:label_id>/",
+        login_required(OutputStatUpdateRedirectView.as_view()),
+        name='outputstat_update_redirect'
     ),
     path(
         "",

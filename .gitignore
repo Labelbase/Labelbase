@@ -2,6 +2,7 @@
 db.sqlite3
 config.ini
 labelbase.log
+labelbase.log.*
 bgt.log
 db/
 *.pyc

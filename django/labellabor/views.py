@@ -12,24 +12,24 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import DeleteView
 from django.views.generic.edit import UpdateView
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.http import FileResponse
+from django.urls import reverse
+from django.template.loader import render_to_string
+from django.contrib import messages
+from django_datatables_view.base_datatable_view import BaseDatatableView
 from two_factor.views import OTPRequiredMixin
 from two_factor.views.utils import class_view_decorator
+from rest_framework.authtoken.models import Token
+from bip329.bip329_writer import BIP329JSONLWriter, BIP329JSONLEncryptedWriter
 from labelbase.models import Label, Labelbase
 from labelbase.forms import LabelForm, LabelbaseForm
 from labelbase.forms import ExportLabelsForm
-from django.http import HttpResponseRedirect
-from django.http import FileResponse
-from rest_framework.authtoken.models import Token
-from bip329.bip329_writer import BIP329JSONLWriter, BIP329JSONLEncryptedWriter
-from django.urls import reverse
-from django_datatables_view.base_datatable_view import BaseDatatableView
-from django.template.loader import render_to_string
-from django.contrib import messages
-
-
-from .utils import hashtag_to_badge, extract_fiat_value
 from finances.models import OutputStat
 from finances.tasks import check_all_outputs
+from .utils import hashtag_to_badge, extract_fiat_value
+
+
 
 
 class AboutView(TemplateView):
@@ -56,8 +56,8 @@ class TermsView(TemplateView):
     template_name = "terms.html"
 
 
-class FaqView(TemplateView):
-    template_name = "faq.html"
+class DonationView(TemplateView):
+    template_name = "donate.html"
 
 
 class LabelDeleteView(DeleteView):
@@ -648,3 +648,49 @@ class RegistrationCompleteView(TemplateView):
 @class_view_decorator(never_cache)
 class ExampleSecretView(OTPRequiredMixin, TemplateView):
     template_name = "secret.html"
+
+
+class OutputStatUpdateRedirectView(View):
+    def get(self, request, output_stats_id, label_id):
+        try:
+            output_stat = OutputStat.objects.get(id=output_stats_id)
+        except OutputStat.DoesNotExist:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                "<strong>Hmmmm....</srong> Could not modify label data."
+            )
+            return redirect('edit_label', pk=label_id)
+        try:
+            label = Label.objects.get(id=label_id, labelbase__user_id=self.request.user.id)
+        except Label.DoesNotExist:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                "Can't find what you are looking for.."
+            )
+            return redirect("home")
+
+        spent = request.GET.get('force-spent', None)
+
+        if spent not in ["true", "false", "none"]:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                "<strong>Hmmmm....</srong> This action is unknown."
+            )
+            return redirect('edit_label', pk=label_id)
+        if spent == "true":
+            spent = True
+        elif spent == "false":
+            spent = False
+        elif spent == "none":
+            spent = None
+        OutputStat.objects.filter(id=output_stat.id).update(spent=spent)
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "<strong>Okay!</strong> Verifying output status now."
+        )
+        label.save() # will trigger a check agains Electrum
+        return redirect('edit_label', pk=label_id)

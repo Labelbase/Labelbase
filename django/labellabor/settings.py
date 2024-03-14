@@ -109,6 +109,7 @@ INSTALLED_APPS = [
     "background_task",
     "connectrum",
     "knowledge_base",
+    "hashtags",
 ]
 
 

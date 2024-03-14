@@ -14,6 +14,7 @@ import logging
 logger = logging.getLogger('labelbase')
 
 
+
 class OutputStat(models.Model):
     """
     These fields are unencrypted. Why?

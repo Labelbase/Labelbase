@@ -1,0 +1,40 @@
+{% if labelbase %}
+  <div class="row">
+    <div  class="col float-start">
+      <h2 style="padding-top: 1em;">{% block title %}{{ labelbase.name }} {% endblock %}</h2>
+      {% if labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }} </tt>{% endif %}
+      {% if labelbase.about %}
+      <p>{{ labelbase.about}}</p>
+      {% endif %}
+    </div>
+    <div class="col float-end" >
+          <div class="btn-group float-end" role="group" style="padding-top: 2em;">
+
+            {% comment %}
+            <button type="button" class="rounded-start  btn btn-sm btn-outline-secondary "
+                    data-bs-toggle="modal"  data-bs-target="#addLabelModal">New Hashtag</button>
+            {% endcomment %}
+
+
+          <div class="btn-group" role="group">
+          <button type="button" class="{#d-none d-md-block #} btn btn-sm btn-outline-secondary dropdown-toggle rounded-end me-2" data-bs-toggle="dropdown" aria-expanded="false">
+              Hashtag Actions
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item" href="{% url "labelbase_hashtags_proxy" labelbase_id=labelbase.id %}?sync=yes">
+                  Collect & Sync Hashtags
+                </a>
+            </li>
+        </ul>
+      </div>
+
+
+      </div>
+
+
+      </div>
+    </div>
+{% else %}
+  <p>There is no such labelbase.</p>
+{% endif %}

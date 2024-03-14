@@ -14,6 +14,8 @@ class ExportSnapshot(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    desc = models.CharField(max_length=280, default="")
+    order = models.IntegerField(default=0)
     slug = models.SlugField(unique=True, max_length=100)
     exclude_from_export = models.BooleanField(default=False)
 
@@ -27,6 +29,7 @@ class Category(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
+    order = models.IntegerField(default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True, max_length=100)
     exclude_from_export = models.BooleanField(default=False)

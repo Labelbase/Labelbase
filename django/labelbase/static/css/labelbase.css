@@ -237,7 +237,7 @@ box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
         --bd-callout-border: var(--bs-warning-border-subtle);
     }
 
-    .bd-callout-good { 
+    .bd-callout-good {
         --bd-callout-color: var(--bs-success-text-emphasis);
         --bd-callout-bg: #d9fbd0;
         --bd-callout-border: #bee8be;
@@ -285,17 +285,10 @@ box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
     }
 
 
-        .modal-footer {
-          border-top: 0;
-        }
-        .modal-header {
-        border-bottom: 0;
-        }
-
-/*
-<style>
-  .help-block {
-    display: none;
+  .modal-footer {
+    border-top: 0;
   }
 
-</style>*/
+  .modal-header {
+    border-bottom: 0;
+  }

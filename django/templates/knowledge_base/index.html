@@ -1,19 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Knowledge Base</title>
-</head>
-<body>
-    <h1>Categories</h1>
-    <ul>
-        {% for category in categories %}
-            <li><a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a></li>
-        {% empty %}
-        Your knowledge base is empty. You can download the latest knowledge here and import it.
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends "_base.html" %}
+{% load markdown_extras %}
+{% load breadcrumb_tags %}
+{% load i18n %}
+{% load static %}
+{% load sekizai_tags %}
+{% block title %}Knowledge Base Categories | Labelbase{% endblock %}
+{#% block nav_home %}active{% endblock %#}
 
-'kb-index'
+{% block content %}
+
+<style>
+{% addtoblock "css" %}
+
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  }
+
+  .card-body:hover {
+    background-color: #f8f9fa; /* or any light color of your choice */
+  }
+{% endaddtoblock %}
+</style>
+
+
+    <nav style="padding-top: 0.76rem; --bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+
+      <ol class="breadcrumb">
+
+        <li class="breadcrumb-item active" aria-current="page">Knowledge Base</li>
+
+      </ol>
+    </nav>
+
+    <div class="p-3 pb-md-4 mx-auto text-center">
+      <h2 class="display-8 fw-bold text-muted" style="padding-bottom: 0.9em;">Knowledge Base</h2>
+
+      <p class="lb-header mx-auto text-center fs-5 text-muted">Browse through the categories below.</p>
+      <p class="lb-header mx-auto text-center fs-5 text-muted">If you have unanswered questions, are confused, or just want to understand
+         Labelbase better – just get in touch using our {% if request.user.profile.use_chatwoot %}
+
+         <a href="JavaScript:void(0);" onclick="window.$chatwoot.toggle('open');">
+             support chat</a>.
+         {% else %}
+
+             <a href="JavaScript:void(0);" onclick="$('#chatModal').modal('show');">
+                 support chat</a>.
+
+         {% endif %}</p>
+    </div>
+
+
+
+
+    <div class="row">
+    {% for category in categories %}
+    {% if category.article_set.count %}
+    <div class="col-sm-6">
+    <a href="{% url 'category_detail' category.slug %}" style="text-decoration: none; color: inherit;">
+        <div class="card" style="margin-bottom: 1rem !important; transition: transform 0.2s, box-shadow 0.2s;">
+            <div class="card-body text-center" style="transition: background-color 0.2s;">
+                <h5 class="card-title">{{ category.name }}</h5>
+                <p class="card-text">{{ category.desc }}</p>
+            </div>
+        </div>
+    </a>
+    </div>
+    {% endif %}
+
+
+
+
+
+
+    {% empty %}
+    Your knowledge base is empty. You can download the latest knowledge here and import it.
+    {% endfor %}
+    </div>
+
+{% endblock %}

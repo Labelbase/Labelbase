@@ -13,7 +13,6 @@ class ExportJSONView(View):
         for category in categories:
             articles = list(category.article_set.all().exclude(exclude_from_export=True).values())
             data[category.name] = articles
-
         export_snapshot = ExportSnapshot.objects.create(
             exported_data=data
         )
@@ -37,7 +36,8 @@ class ImportJSONView(View):
                     try:
                         category = Category.objects.get(slug=slugify(category_name))
                     except Category.DoesNotExist:
-                        category = Category.objects.create(name=category_name, slug=slugify(category_name))
+                        category = Category.objects.create(name=category_name,
+                                                            slug=slugify(category_name))
 
                     for article_data in articles:
                         try:
@@ -47,8 +47,10 @@ class ImportJSONView(View):
                             article.category = category
                             article.save()
                         except Article.DoesNotExist:
-                            Article.objects.create(title=article_data['title'], content=article_data['content'], category=category, slug=article_data['slug'])
-
+                            Article.objects.create(title=article_data['title'],
+                                                    content=article_data['content'],
+                                                    category=category,
+                                                    slug=article_data['slug'])
                 return JsonResponse({'message': 'Import successful'})
             except json.JSONDecodeError:
                 return JsonResponse({'error': 'Invalid JSON format'}, status=400)

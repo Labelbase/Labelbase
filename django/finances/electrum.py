@@ -58,6 +58,79 @@ def is_valid_output_ref(ref):
 
 def checkup_label(label_id, loop):
     if label_id and loop:
+        try:
+            elem = Label.objects.get(id=label_id)
+            output = OutputStat.objects.filter(user=elem.labelbase.user,
+                                                type_ref_hash=elem.type_ref_hash,
+                                                network=elem.labelbase.network).last()
+            if not output:
+                output = OutputStat(user=elem.labelbase.user,
+                                    type_ref_hash=elem.type_ref_hash,
+                                    network=elem.labelbase.network, value=0)
+
+            if elem.type == "output" and is_valid_output_ref(elem.ref)  and \
+                    (output.spent is not True or output.confirmed_at_block_time == 0):
+                electrum_hostname = elem.labelbase.user.profile.electrum_hostname or "electrum.emzy.de"
+                electrum_ports = elem.labelbase.user.profile.electrum_ports or "s50002"
+                server_info = ServerInfo(electrum_hostname, electrum_hostname, ports=(electrum_ports))
+
+                conn = StratumClient()
+                utxo = elem.ref
+                utxo_resp = loop.run_until_complete(interact(conn, server_info, "blockchain.transaction.get", utxo))
+
+                if utxo_resp:
+                    txid, index, address, value, blocktime = utxo_resp
+                    if blocktime:
+                        HistoricalPrice.get_or_create_from_api(timestamp=blocktime)
+
+                    unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.address.listunspent", address))
+
+
+                    utxo_value = 0
+                    utxo_height = 0
+
+                    if unspents:
+                        for unspent in unspents:
+                            if unspent.get('tx_hash') == txid and \
+                                   unspent.get('tx_pos') == int(index) and \
+                                   unspent.get('height') > 0 and \
+                                   unspent.get('value') > 0: # Output is confirmed, but not spent yet
+                                output.spent = False
+                                utxo_value = unspent.get('value')
+                                utxo_height = unspent.get('height')
+
+                                output.network = elem.labelbase.network
+                                if utxo_height:
+                                    output.confirmed_at_block_height = utxo_height
+                                if blocktime:
+                                    output.confirmed_at_block_time = blocktime
+                                if utxo_value:
+                                    output.value = utxo_value
+                                elif value:
+                                    output.value = value
+                                break
+                    #
+                elif conn.last_error:
+                    output.last_error = conn.last_error
+                else:
+                    output.last_error = {}
+                output.save()
+                try:
+                    conn.close()
+                except:
+                    pass
+
+        except Exception as e:
+            logger.error("Error processing label {}: {}".format(label_id, e))
+    else:
+        if not label_id:
+            logger.error("Can't get label_id! {}".format(label_id))
+        if not loop:
+            logger.error("Can't get loop!")
+
+
+def checkup_label_buggy(label_id, loop):
+    if label_id and loop:
         elem = Label.objects.get(id=label_id)
         output = OutputStat.objects.filter(user=elem.labelbase.user,
                                             type_ref_hash=elem.type_ref_hash,
@@ -69,7 +142,8 @@ def checkup_label(label_id, loop):
                                 network=elem.labelbase.network, value=0)
         print("Using OutputStat id {}".format(output))
         print("elem.type {} {} {} {}".format(elem.type, is_valid_output_ref(elem.ref), elem.ref, output.spent))
-        if elem.type == "output" and is_valid_output_ref(elem.ref) and output.spent is not True:
+        if elem.type == "output" and is_valid_output_ref(elem.ref) and \
+                (output.spent is not True or output.confirmed_at_block_time == 0):
             electrum_hostname = elem.labelbase.user.profile.electrum_hostname
             if not electrum_hostname:
                 electrum_hostname = "electrum.emzy.de"
@@ -101,6 +175,7 @@ def checkup_label(label_id, loop):
                 utxo_value = 0
                 utxo_height = 0
                 print("unspents: {}".format(unspents))
+
                 if unspents:
                     for unspent in unspents:
                         if unspent.get('tx_hash') == tx_hash and \

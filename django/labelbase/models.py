@@ -108,6 +108,8 @@ class Labelbase(models.Model):
     def get_absolute_url(self):
         return reverse("labelbase", args=[self.id])
 
+    def get_hashtags_url(self):
+        return reverse('labelbase_hashtags', kwargs={'labelbase_id': self.id})
 
 class Label(models.Model):
     """
@@ -192,6 +194,7 @@ class Label(models.Model):
         This brings us back to the labelbase once the lable was saved.
         """
         return self.labelbase.get_absolute_url()
+
 
     def get_mempool_url(self):
         if self.labelbase and self.labelbase.network != "mainnet":

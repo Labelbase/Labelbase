@@ -1,0 +1,38 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load labelbase_tags %}
+{% load importer_tags %}
+{% load sekizai_tags %}
+{% load bootstrap %}
+
+{% block content %}
+
+{% include "hashtags/_labelbase_header_info_menu_hashtag_list.html" %}
+<h4>Known Hashtags</h4>
+
+
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Hashtag</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for hashtag in object_list %}
+    <tr>
+      <td><a href="{{ hashtag.get_absolute_url }}">{{ hashtag.pk }}{# <small>(edit)</small>#}</a></td>
+      <td><a href="{% url "labelbase" labelbase_id=active_labelbase_id %}?tag={{ hashtag.name }}" class="badge badge-hashtag">{{ hashtag.name }}</a></td>
+      <td>{{ hashtag.description }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+
+{% endblock %}

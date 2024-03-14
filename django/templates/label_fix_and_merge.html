@@ -1,0 +1,343 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load labelbase_tags %}
+{% load importer_tags %}
+{% load sekizai_tags %}
+{% load bootstrap %}
+
+{% block content %}
+
+{#% include "_labelbase_header_info_menu.html" %#}
+{# TODO: Models / Forms aren't loaded if included like that ^^^ – using a simplified header #}
+{# TODO: Fix & merge is a bit a mess, rework this ASAP. #}
+{% if labelbase %}
+  <div class="row">
+    <div  class="col float-start">
+      <h2 style="padding-top: 1em;">{% block title %}{{ labelbase.name }} {% endblock %}</h2>
+      {% if labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }} </tt>{% endif %}
+      {% if labelbase.about %}
+      <p>{{ labelbase.about}}</p>
+      {% endif %}
+    </div>
+  </div>
+{% else %}
+  <p>There is no such labelbase.</p>
+{% endif %}
+{#  simplified header #}
+
+
+<div class="col">
+
+{% if fix_suggestions %}
+{% if fix_suggestions == 1 %}
+<strong>There is {{ fix_suggestions }} suggestsion!</strong>
+{% else %}
+<strong>There are {{ fix_suggestions }} suggestions!</strong>
+{% endif %}
+
+
+<!--
+<div class="alert alert-dismissible bd-callout bd-callout-info ">
+  <div style=" padding-right: 1.8rem"><strong>There are {{ fix_suggestions }} suggestions!</strong>
+
+    "Automatically Consolidate Duplicate Labels
+  <i>Fix & manage</i> has identified multiple labels with identical type, reference, label, origin, and spendable attributes within the same labelbase. As an efficiency measure, we have automatically merged XX of these duplicate labels, reducing them to YY unique labels."
+  </div>
+</div>
+
+<div class="alert alert-dismissible bd-callout bd-callout-info">
+  <div style="padding-right: 1.8rem">
+    <strong>{{ fix_suggestions }} suggestions available!</strong>
+    <p>
+      <i>Automatically Consolidate Duplicate Labels</i>
+    </p>
+    <p>
+      <em>Fix & Manage</em> has identified multiple labels with identical type, reference, label, origin, and spendable attributes within the same labelbase. As an efficiency measure, we have automatically merged {{ duplicate_labels_count }} of these duplicate labels, reducing them to {{ unique_labels_count }} unique labels.
+    </p>
+  </div>
+</div>
+
+-->
+
+
+    {% comment %}
+    {% if resulting_duplicates_all_identical_current_record_count %}
+
+    <div class="card mt-3">
+      <div class="card-header">
+        <h5 class="card-title">Merge duplicate with identical attributes</h5>
+      </div>
+      <div class="card-body">
+
+        <p class="card-text">
+          Multiple labels with identical <tt>type</tt>, <tt>ref</tt>, <tt>label</tt>, <tt>origin</tt> and <tt>spendable</tt> attributes exists within the same labelbase.
+        </p>
+        <p>
+          Automatically merge {{ resulting_duplicates_all_identical_current_record_count }} labels into {{ resulting_duplicates_all_identical_final_record_count }} unique labels.
+
+        </p>
+
+        <tt>TODO: Show hint for auto cleanup (profile settings).</tt>
+
+      </div>
+      <div class="card-footer">
+        <div class="d-flex justify-content-end">
+          <a href="{% url "labelbase_merge" labelbase_id=labelbase.id %}?type={{ problem.type }}&ref={{ problem.ref }}&label={{ problem.label }}" class="btn btn-outline-primary">Merge</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endcomment %}
+
+    {% comment %}
+    {% for problem in all_identical_records %}
+    <div class="card mt-3">
+      <div class="card-header">
+        <h5 class="card-title"> all_identical_records Merge duplicate with identical type, ref and label</h5>
+      </div>
+      <div class="card-body">
+
+        <p class="card-text">
+          Multiple labels with the same type <tt>'{{ problem.type }}'</tt>, ref <tt>'{{ problem.ref }}'</tt> and label <tt>'{{ problem.label }}'</tt> exist within the same labelbase.
+        </p>
+        <br>
+        <tt>TODO: Depending on the attrs it's totally safe to automerge these recods.</tt>
+        <br>
+        <tt>TODO: Group those instead of listening one after the other, eg. 109 indentical records.</tt>
+        <br>
+        <tt>TODO: Show hint for auto cleanup (profile settings).</tt>
+
+      </div>
+      <div class="card-footer">
+        <div class="d-flex justify-content-end">
+          <a href="">Review & Merge</a> (<- this works in some cases , eg. addr,ref,label)
+          <a href="{% url "labelbase_merge" labelbase_id=labelbase.id %}?type={{ problem.type }}&ref={{ problem.ref }}&label={{ problem.label }}" class="btn btn-outline-primary">Review & Merge</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% endcomment %}
+
+    {% comment %}
+    {% for problem in resulting_duplicates_type_and_ref_and_label %}
+    <div class="card mt-3">
+      <div class="card-header">
+        <h5 class="card-title">Merge duplicate with identical type, ref and label</h5>
+      </div>
+      <div class="card-body">
+
+        <p class="card-text">
+          Multiple labels with the same type <tt>'{{ problem.type }}'</tt>, ref <tt>'{{ problem.ref }}'</tt> and label <tt>'{{ problem.label }}'</tt> exist within the same labelbase.
+        </p>
+        <br>
+        <tt>TODO: Depending on the attrs it's totally safe to automerge these recods.</tt>
+        <br>
+        <tt>TODO: Group those instead of listening one after the other, eg. 109 indentical records.</tt>
+        <br>
+        <tt>TODO: Show hint for auto cleanup (profile settings).</tt>
+
+      </div>
+      <div class="card-footer">
+        <div class="d-flex justify-content-end">
+          <a href="">Review & Merge</a> (<- this works in some cases , eg. addr,ref,label)
+          <a href="{% url "labelbase_merge" labelbase_id=labelbase.id %}?type={{ problem.type }}&ref={{ problem.ref }}&label={{ problem.label }}" class="btn btn-outline-primary">Review & Merge</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% endcomment %}
+
+    {% comment %}
+    {% for problem in resulting_duplicates_type_and_ref %}
+    <div class="card mt-3">
+      <div class="card-header">
+        <h5 class="card-title">Merge duplicate{# .. with different attributes" #}{# vs "Merge duplicate with identical attributes" #}</h5>
+      </div>
+      <div class="card-body">
+
+        <p class="card-text">
+          Multiple labels with the same type <tt>'{{ problem.type }}'</tt> and ref <tt>'{{ problem.ref }}'</tt> exist within the same labelbase.
+        </p>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex justify-content-end">
+          <a href="{% url "labelbase_merge" labelbase_id=labelbase.id %}?type={{ problem.type }}&ref={{ problem.ref }}" class="btn btn-outline-primary">Review & Merge</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+
+    {% endcomment %}
+
+{% if fix_suggestions %}
+{% else %}
+Well done! Nothing to complain.
+{% endif  %}
+
+    {% comment %}
+    <div class="card mt-3">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse1">
+            <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                <span>Merge duplicate with identical attributes</span>
+                <button class="btn btn-primary">Fix Now</button>
+            </h5>
+        </div>
+        <div id="collapse1" class="collapse">
+            <div class="card-body">
+              {{ problem.type }} / {{ problem.ref }}
+                <p>You have duplicated labels in your system. Please review and remove duplicates.</p>
+            </div>
+        </div>
+    </div>
+    {% endcomment %}
+
+
+    {% comment %}
+    <!-- Problem Card 1 - Collapsed -->
+    <div class="card mt-3">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse1">
+            <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                <span>Duplicated Labels</span>
+                <button class="btn btn-primary">Fix Now</button>
+            </h5>
+        </div>
+        <div id="collapse1" class="collapse">
+            <div class="card-body">
+                <p>You have duplicated labels in your system. Please review and remove duplicates.</p>
+            </div>
+        </div>
+    </div>
+    {% endcomment %}
+    {% if resulting_empty_label_records %}
+    <div class="card mt-3">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse_empty_labels">
+            <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                <span>{{ resulting_empty_label_records|length }} Empty Labels</span>
+                <button class="btn btn-primary">Fix Now</button>
+            </h5>
+            <p>There are empty label texts in your labelbase. Add a label text to these labels for better organization.</p>
+        </div>
+        <div id="collapse_empty_labels" class="collapse">
+            <div class="card-body">
+                <ul>
+                    {% for problem in resulting_empty_label_records %}
+                        <li>
+                            Record with type <tt>'{{ problem.type }}'</tt> and <br>
+                            ref <tt>'{{ problem.ref }}'</tt> has an empty label text.
+                            <span class="d-flex justify-content-end" style="margin-top: -2rem;">
+                                <a href="{% url "edit_label" problem.id %}"
+                                   class="btn btn-outline-primary">Edit Label</a>
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if resulting_too_long_label_records %}
+    <div class="card mt-3">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse_too_long_labels">
+            <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                <span>{{ resulting_too_long_label_records|length }} Labels are too long</span>
+                <button class="btn btn-primary">Fix Now</button>
+            </h5>
+            <p>There are too long label texts in your labelbase.</p>
+        </div>
+        <div id="collapse_too_long_labels" class="collapse">
+            <div class="card-body">
+              <p><strong>BIP-329 suggests:</strong> Importing wallet may ignore records it does not store, and truncate labels if necessary.
+              A suggested default for maximum label length is 255 characters, and an importing wallet should consider warning the user if truncation is applied.
+              </p>
+                <ul>
+                    {% for problem in resulting_too_long_label_records %}
+                        <li>
+                            Record with type <tt>'{{ problem.type }}'</tt> and <br>
+                            ref <tt>'{{ problem.ref }}'</tt> has a too long label text.
+                            <span class="d-flex justify-content-end" style="margin-top: -2rem;">
+                                <a href="{% url "edit_label" problem.id %}"
+                                   class="btn btn-outline-primary">Edit Label</a>
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+
+
+    {% comment %}
+    <!-- Problem Card 2 - Collapsed -->
+    <div class="card mt-3">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse_too_long_labels">
+            <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                <span>Label too long</span>
+
+            </h5>
+        </div>
+        <div id="collapse_too_long_labels" class="collapse">
+            <div class="card-body">
+
+                <p><!--Some labels exceed the maximum length of 255 characters.-->
+                  This label exceeds the maximum length of 255 characters for this record.
+  </p>
+
+
+        <button class="btn btn-primary">Fix Now (label edit page)</button>
+            </div>
+
+        </div>
+    </div>
+    {% endcomment %}
+
+
+    {% comment %}
+    <!-- Problem Card 3 - Collapsed -->
+    <div class="card mt-3">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse3">
+            <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                <span>Incorrect Labels</span>
+                <button class="btn btn-primary">Fix Now</button>
+            </h5>
+        </div>
+        <div id="collapse3" class="collapse">
+            <div class="card-body">
+                <p>Some labels have incorrect information. Please update them for accuracy.</p>
+            </div>
+        </div>
+    </div>
+    {% endcomment %}
+
+    {% comment %}
+    <!-- Problem Card 4 - Collapsed -->
+    <div class="card mt-3">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse4">
+            <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                <span>Missing Labels</span>
+                <button class="btn btn-primary">Fix Now</button>
+            </h5>
+        </div>
+        <div id="collapse4" class="collapse">
+            <div class="card-body">
+                <p>Some labels are missing in your addresses derived from the XPUB. Add them for better organization.</p>
+            </div>
+        </div>
+    </div>
+    {% endcomment %}
+
+{% else %} {# fix_suggestions  #}
+All good. Great job!
+{% endif %} {# no fix_suggestions  #}
+</div>
+
+
+<script>
+  {% addtoblock "js" %}
+  {% endaddtoblock %}
+</script>
+
+{% endblock %}

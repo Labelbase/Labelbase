@@ -1,11 +1,11 @@
 import random
 import time
+from django.db import close_old_connections
 from django.core.management.base import BaseCommand
 import asyncio
 
 from background_task.tasks import tasks, autodiscover
 from background_task.utils import SignalManager
-from django.db import close_old_connections
 from background_task.recovery import start_recovery
 
 import logging

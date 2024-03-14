@@ -8,6 +8,5 @@ urlpatterns = [
     path('article/<slug:slug>/', ArticleDetailView.as_view(), name='article_detail'),
     #TODO: staff only,
     path('export', ExportJSONView.as_view(), name='export_json'),
-    #TODO: staff only,
     path('import', ImportJSONView.as_view(), name='import_json'),
 ]

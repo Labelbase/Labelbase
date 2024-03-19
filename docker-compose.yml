@@ -47,7 +47,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - ./django:/app
       - web_static:/app/static/:ro

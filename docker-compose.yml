@@ -23,7 +23,9 @@ services:
       context: ./django
       dockerfile: Dockerfile
     expose:
-      - "8000:8000"
+      - "8000"
+    ports:
+      - "8000"
     volumes:
       - ./django:/app
       - db_data:/var/lib/mysql

@@ -27,19 +27,19 @@
 
 <!-- v1 -->
 {% if latest_status_message %}
-
 <div style="background: {{ latest_status_message.color }}; z-index: 999999;position: relative;" class="d-block px-3 py-1  text-center text-bold skippy">
   <a href="#" class="text-white text-decoration-none">{{ latest_status_message.message }}</a>
 </div>
 {% endif %}
 <!-- end v1 -->
+
 <!-- v2 --
 <div style="background: rgb(33, 37, 41);z-index: 999999;position: relative;/*! padding: 11px; */" class="d-block px-3 py-1  text-center text-bold skippy">
  <span style="background: goldenrod;display: inline-block;padding: 10px 20px;border-radius: 20px;/*! background-color: #007bff; */marign-top: -7px;margin: 10px;font-weight: bold;"> <a href="#" class="text-white text-decoration-none">💥 Run your self-hosted Labelbase! <u>Learn more</u></a></span>
 </div>
 <!-- end v2 -->
 
-  {% block content_wrapper %}
+{% block content_wrapper %}
 
   {% url 'registration' as reg_url %}
   {% url 'two_factor:login' as login_url %}

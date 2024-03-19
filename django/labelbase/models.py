@@ -71,7 +71,8 @@ class Labelbase(models.Model):
         max_length=10,
         choices=OPERATION_MODE_CHOICES,
         default='duplicate',
-        help_text="Choose the operation mode for handling entries with the same 'type' and 'ref'. The default mode is to create duplicate entries."
+        help_text=("Choose the operation mode for handling entries with the same"
+                   "'type' and 'ref'. The default mode is to create duplicate entries.")
     )
 
     MAINNET = 'mainnet'
@@ -110,6 +111,7 @@ class Labelbase(models.Model):
 
     def get_hashtags_url(self):
         return reverse('labelbase_hashtags', kwargs={'labelbase_id': self.id})
+
 
 class Label(models.Model):
     """

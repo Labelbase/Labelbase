@@ -16,7 +16,6 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - db_data:/run/mysqld
-      #- db_data:/run/secrets
     networks:
       - compose_network
   labelbase_django:
@@ -30,14 +29,12 @@ services:
       - db_data:/var/lib/mysql
       - db_data:/run/mysqld
       - web_static:/app/static/
-      #- db_data:/run/secrets
     depends_on:
       - labelbase_mysql
     restart: always
     networks:
       - compose_network
     environment:
-#      - DB_PASSWORD=${DB_PASSWORD}
       - MYSQL_USER=ulabelbase
       - MYSQL_DATABASE=labelbase
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
@@ -48,7 +45,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - ./django:/app
       - web_static:/app/static/:ro

@@ -6,6 +6,7 @@ from .models import Category, Article, ExportSnapshot
 from .forms import JSONUploadForm
 from django.utils.text import slugify
 
+
 class ExportJSONView(View):
     def get(self, request):
         categories = Category.objects.all().exclude(exclude_from_export=True)
@@ -13,7 +14,7 @@ class ExportJSONView(View):
         for category in categories:
             articles = list(category.article_set.all().exclude(exclude_from_export=True).values())
             data[category.name] = articles
-        export_snapshot = ExportSnapshot.objects.create(
+        ExportSnapshot.objects.create(
             exported_data=data
         )
         return JsonResponse(data)
@@ -37,8 +38,7 @@ class ImportJSONView(View):
                         category = Category.objects.get(slug=slugify(category_name))
                     except Category.DoesNotExist:
                         category = Category.objects.create(name=category_name,
-                                                            slug=slugify(category_name))
-
+                            slug=slugify(category_name))
                     for article_data in articles:
                         try:
                             article = Article.objects.get(slug=article_data['slug'])
@@ -48,9 +48,9 @@ class ImportJSONView(View):
                             article.save()
                         except Article.DoesNotExist:
                             Article.objects.create(title=article_data['title'],
-                                                    content=article_data['content'],
-                                                    category=category,
-                                                    slug=article_data['slug'])
+                                content=article_data['content'],
+                                category=category,
+                                slug=article_data['slug'])
                 return JsonResponse({'message': 'Import successful'})
             except json.JSONDecodeError:
                 return JsonResponse({'error': 'Invalid JSON format'}, status=400)
@@ -63,11 +63,13 @@ class IndexView(ListView):
     template_name = 'knowledge_base/index.html'
     context_object_name = 'categories'
 
+
 class CategoryDetailView(DetailView):
     model = Category
     template_name = 'knowledge_base/category_detail.html'
     context_object_name = 'category'
     slug_url_kwarg = 'slug'
+
 
 class ArticleDetailView(DetailView):
     model = Article

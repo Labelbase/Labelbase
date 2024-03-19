@@ -38,7 +38,7 @@ from .views import (
     TreeMapsView,
     FixAndMergeLabelsView,
     LabelbaseDatatableView,
-    LabelbasePortfolioView,
+    #LabelbasePortfolioView,
     OutputStatUpdateRedirectView,
 )
 

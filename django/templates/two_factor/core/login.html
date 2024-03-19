@@ -9,8 +9,11 @@
 {% block content %}
   <h2 style="padding-top: 1em;">{% block title %}{% trans "Sign in" %}{% endblock %}</h2>
 
+
   {% if wizard.steps.current == 'auth' %}
     <p>{% blocktrans %}Enter your credentials.{% endblocktrans %}</p>
+
+
   {% elif wizard.steps.current == 'token' %}
     <p>{{ device|as_verbose_action }}</p>
   {% elif wizard.steps.current == 'backup' %}
@@ -18,6 +21,8 @@
       These tokens have been generated for you to print and keep safe. Please
       enter one of these backup tokens to login to your account.{% endblocktrans %}</p>
   {% endif %}
+
+
 
   <form action="" method="post">{% csrf_token %}
     {% include "two_factor/_wizard_forms.html" %}
@@ -39,6 +44,14 @@
     {% include "two_factor/_wizard_actions.html" %}
   </form>
 
+  {% if request.user.is_authenticated %}
+  {% else %}
+  <p style="padding-top: 2.1em;">
+      {% url 'registration' as reg_url %}
+      First time here? Let's <a href="{{ reg_url }}">get started</a>.
+  </p>
+  {% endif %}
+
   {% block 'backup_tokens' %}
     {% if backup_tokens %}
        <hr>
@@ -54,4 +67,5 @@
        </div>
     {% endif %}
   {% endblock %}
+
 {% endblock %}

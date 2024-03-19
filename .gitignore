@@ -10,3 +10,4 @@ __pycache__
 django/importer/uploadeddata/*
 #_scratches
 exports.sh
+.last_git_commit

@@ -74,8 +74,15 @@
 
 
     {% empty %}
-    Your knowledge base is empty. You can download the latest knowledge here and import it.
-    {% endfor %}
+    <div class="col-sm-6">
+    <p>
+      Your knowledge base is empty.
+    </p>
+    <p>
+      You can download the latest knowledge here and <a href="{% url "import_json" %}">import it here</a>.
+    </p>
+    </div>
+  {% endfor %}
     </div>
 
 {% endblock %}

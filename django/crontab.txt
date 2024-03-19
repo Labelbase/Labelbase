@@ -1,2 +1,1 @@
 * * * * * /usr/sbin/logrotate /app/logrotate.conf
-1 0 * * * /usr/local/bin/python /app/manage.py remove_completed

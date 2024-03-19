@@ -8,9 +8,9 @@
 {% block content %}
 
   <div class=" p-3 pb-md-4 mx-auto text-left">
-    <h2 class="display-8 fw-normal">Support Labelbase: Make a Difference with Your Donation</h2>
+    <h2 class="display-8 fw-normal">Support Labelbase: Make a difference with your donation</h2>
     <br>
-  <p class="fs-5 text-muted">Every Contribution Helps Us Build a Better Bitcoin Labeling Experience</p>
+  <p class="fs-5 text-muted">Every contribution helps us build a better Bitcoin labeling experience.</p>
   <p class="fs-5 text-muted">
 Choose the amount you'd like to donate to Labelbase.
 </p>  <p class="fs-5 text-muted">
@@ -20,32 +20,7 @@ Your generosity ensures that our project continues to thrive and evolve, directl
 Thank you for your support!
     </p>
 
-    <style>
-    {% addtoblock "css" %}
 
-     .btcpay-form { display: inline-flex; align-items: center; justify-content: center; } .btcpay-form--inline { flex-direction: row; } .btcpay-form--block { flex-direction: column; } .btcpay-form--inline .submit { margin-left: 15px; } .btcpay-form--block select { margin-bottom: 10px; } .btcpay-form .btcpay-custom-container{ text-align: center; }.btcpay-custom { display: flex; align-items: center; justify-content: center; } .btcpay-form .plus-minus { cursor:pointer; font-size:25px; line-height: 25px; background: #DFE0E1; height: 30px; width: 45px; border:none; border-radius: 60px; margin: auto 5px; display: inline-flex; justify-content: center; } .btcpay-form select { -moz-appearance: none; -webkit-appearance: none; appearance: none; color: currentColor; background: transparent; border:1px solid transparent; display: block; padding: 1px; margin-left: auto; margin-right: auto; font-size: 11px; cursor: pointer; } .btcpay-form select:hover { border-color: #ccc; } .btcpay-form option { color: #000; background: rgba(0,0,0,.1); } .btcpay-input-price { -moz-appearance: textfield; border: none; box-shadow: none; text-align: center; font-size: 25px; margin: auto; border-radius: 5px; line-height: 35px; background: #fff; }.btcpay-input-price::-webkit-outer-spin-button, .btcpay-input-price::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-
-     {% endaddtoblock %}
-     </style>
-
-      <form method="POST" action="http://178.194.166.112:3003/api/v1/invoices" class="btcpay-form btcpay-form--block">
-      <input type="hidden" name="storeId" value="77qPp3s5bGFQMfuStNWuWXmdKfn4t4tSQpvucQ4UdzKx" />
-      <input type="hidden" name="jsonResponse" value="true" />
-      <input type="hidden" name="notifyEmail" value="labelbase.space@proton.me" />
-      <div class="btcpay-custom-container">
-        <div class="btcpay-custom">
-          <input class="btcpay-input-price" type="number" name="price" min="1" max="210000" step="1" value="1" data-price="1" style="width:2em;" />
-        </div>
-        <select name="currency">
-          <option value="USD" selected>USD</option>
-          <option value="GBP">GBP</option>
-          <option value="EUR">EUR</option>
-          <option value="BTC">BTC</option>
-        </select>
-      </div>
-    <button type="submit" class="submit" name="submit" style="min-width:146px;min-height:40px;border-radius:4px;border-style:none;background-color:#0f3b21;cursor:pointer;" title="Pay with BTCPay Server, a Self-Hosted Bitcoin Payment Processor"><span style="color:#fff">Donate with</span>
-    <img src="http://178.194.166.112:3003/img/paybutton/logo.svg" style="height:40px;display:inline-block;padding:5% 0 5% 5px;vertical-align:middle;">
-    </button></form>
 
 
 
@@ -53,69 +28,5 @@ Thank you for your support!
 
 {% addtoblock "js" %}
 
-    if (!window.btcpay) {
-        var script = document.createElement('script');
-        script.src = "http://178.194.166.112:3003/modal/btcpay.js";
-        document.getElementsByTagName('head')[0].append(script);
-    }
-    function handleFormSubmit(event) {
-        event.preventDefault();
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200 && this.responseText) {
-                window.btcpay.appendInvoiceFrame(JSON.parse(this.responseText).invoiceId);
-            }
-        };
-        xhttp.open('POST', event.target.getAttribute('action'), true);
-        xhttp.send(new FormData(event.target));
-    }
-    document.querySelectorAll(".btcpay-form").forEach(function(el) {
-        if (!el.dataset.initialized) {
-            el.addEventListener('submit', handleFormSubmit);
-            el.dataset.initialized = true;
-        }
-    });
-
-    function handlePlusMinus(event) {
-        event.preventDefault();
-        const root = event.target.closest('.btcpay-form');
-        const el = root.querySelector('.btcpay-input-price');
-        const step = parseInt(event.target.dataset.step) || 1;
-        const min = parseInt(event.target.dataset.min) || 1;
-        const max = parseInt(event.target.dataset.max);
-        const type = event.target.dataset.type;
-        const price = parseInt(el.value) || min;
-        if (type === '-') {
-            el.value = price - step < min ? min : price - step;
-        } else if (type === '+') {
-            el.value = price + step > max ? max : price + step;
-        }
-    }
-    document.querySelectorAll(".btcpay-form .plus-minus").forEach(function(el) {
-        if (!el.dataset.initialized) {
-            el.addEventListener('click', handlePlusMinus);
-            el.dataset.initialized = true;
-        }
-    });
-
-    function handlePriceInput(event) {
-        event.preventDefault();
-        const root = event.target.closest('.btcpay-form');
-        const price = parseInt(event.target.dataset.price);
-        if (isNaN(event.target.value)) root.querySelector('.btcpay-input-price').value = price;
-        const min = parseInt(event.target.getAttribute('min')) || 1;
-        const max = parseInt(event.target.getAttribute('max'));
-        if (event.target.value < min) {
-            event.target.value = min;
-        } else if (event.target.value > max) {
-            event.target.value = max;
-        }
-    }
-    document.querySelectorAll(".btcpay-form .btcpay-input-price").forEach(function(el) {
-        if (!el.dataset.initialized) {
-            el.addEventListener('input', handlePriceInput);
-            el.dataset.initialized = true;
-        }
-    });
 {% endaddtoblock %}
 {% endblock %}

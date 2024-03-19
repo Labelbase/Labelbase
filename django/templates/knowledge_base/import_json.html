@@ -1,14 +1,31 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Upload JSON</title>
-</head>
-<body>
-    <h1>Upload JSON File</h1>
+{% extends "_base.html" %}
+{% load sekizai_tags %}
+{% load i18n %}
+{% load bootstrap %}
+{% block title %}Upload Knowledge Base{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+
+  <div class=" p-3 pb-md-4 mx-auto text-left">
+    <h2 class="display-8 fw-normal">Upload Knowledge Base (JSON file)</h2>
+    <br>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload and import</button>
+        {{ form|bootstrap  }}
+        <br>
+        <button type="submit" class="btn btn-primary ">Upload and import</button>
     </form>
-</body>
-</html>
+    </p>
+
+
+
+
+  </div>
+
+{% addtoblock "js" %}
+
+
+{% endaddtoblock %}
+{% endblock %}

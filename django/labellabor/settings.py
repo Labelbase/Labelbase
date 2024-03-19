@@ -110,6 +110,7 @@ INSTALLED_APPS = [
     "connectrum",
     "knowledge_base",
     "hashtags",
+    "statusapp",
 ]
 
 
@@ -146,6 +147,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "sekizai.context_processors.sekizai",
+                "statusapp.context_processors.latest_status_message",
             ],
         },
     },

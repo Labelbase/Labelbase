@@ -35,7 +35,7 @@ class Profile(models.Model):
     auto_cleanup = models.BooleanField(default=False)
     use_hashtags = models.BooleanField(default=True)
     use_treemap = models.BooleanField(default=True)
-    use_sentry = models.BooleanField(default=False)
+    use_sentry = models.BooleanField(default=True)
     use_chatwoot = models.BooleanField(default=False)
     use_fiatfinances = models.BooleanField(default=True)
     update_utxo_on_login = models.BooleanField(default=True)
@@ -44,7 +44,7 @@ class Profile(models.Model):
                                    choices=CURRENCY_CHOICES,
                                    default='USD')
 
-    has_seen_welcome_popup = models.BooleanField(default=False)                                        
+    has_seen_welcome_popup = models.BooleanField(default=False)
     def labelbases(self):
         return Labelbase.objects.filter(user_id=self.user_id)
 

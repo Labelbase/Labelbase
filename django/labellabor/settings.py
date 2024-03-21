@@ -2,6 +2,8 @@ import os
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from .mysentry import before_send
+
 
 from pathlib import Path
 from configparser import RawConfigParser
@@ -32,15 +34,16 @@ SECRET_KEY = proj_config.get("internal", "secret_key")
 CRYPTOGRAPHY_SALT = proj_config.get("internal", "crypto_salt")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # proj_config.getboolean("internal", "debug")
+DEBUG = False # proj_config.getboolean("internal", "debug")
 #if DEBUG:
 ALLOWED_HOSTS = ["*"] # we don't know your host config, keep like that at the moment.
 #else:
 #    ALLOWED_HOSTS = [proj_config.get("internal", "allowed_host")]
 
-SENTRY_DSN = "https://3b833ae08ccc4ff68793e961fff4921c@o4504646963232768.ingest.sentry.io/4504646967361536"
+#SENTRY_DSN = "https://3b833ae08ccc4ff68793e961fff4921c@o4504646963232768.ingest.sentry.io/4504646967361536"
 
-from .mysentry import before_send
+SENTRY_DSN = proj_config.get("internal", "sentry_dsn")
+
 
 sentry_sdk.init(
     dsn=SENTRY_DSN,
@@ -56,7 +59,8 @@ sentry_sdk.init(
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True, # must be true, for before_send logic
 )
-sentry_sdk.set_tag("version", "0.23.1")
+sentry_sdk.set_tag("version", "2.0.0")
+
 
 LOGGING = {
     'version': 1,

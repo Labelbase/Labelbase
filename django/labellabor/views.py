@@ -66,6 +66,7 @@ class LabelDeleteView(DeleteView):
     error_url = "/#failed"
 
     def post(self, request, *args, **kwargs):
+        1/0
         self.object = self.get_object()
         if self.object.labelbase.user != self.request.user:
             return redirect(self.error_url)

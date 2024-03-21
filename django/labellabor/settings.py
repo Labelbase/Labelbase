@@ -47,17 +47,12 @@ SENTRY_DSN = proj_config.get("internal", "sentry_dsn")
 
 sentry_sdk.init(
     dsn=SENTRY_DSN,
+    #integrations=[
+    #    DjangoIntegration(),
+    #],
     before_send=before_send,
-    integrations=[
-        DjangoIntegration(),
-    ],
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
     traces_sample_rate=1.0,
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True, # must be true, for before_send logic
+    send_default_pii=True, # must be "True" here, will skip or omit in `before_send` callback
 )
 sentry_sdk.set_tag("version", "2.0.0")
 
@@ -87,7 +82,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-    },
+    }
 }
 
 # Application definition

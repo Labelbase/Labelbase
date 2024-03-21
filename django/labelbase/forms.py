@@ -1,6 +1,5 @@
 from django import forms
 from django.utils.safestring import mark_safe
-
 from .models import Label, Labelbase
 
 
@@ -37,7 +36,7 @@ class LabelForm(forms.ModelForm):
         for field_name in self.fields:
             self.fields[field_name].label = mark_safe(
                 f'<label class="bip329-attr">{self.fields[field_name].label}</label>')
-
+     
 
 class ExportLabelsForm(forms.Form):
     """ """
@@ -47,7 +46,6 @@ class ExportLabelsForm(forms.Form):
     input_checkbox = forms.BooleanField(required=False, initial=True, label="input")
     output_checkbox = forms.BooleanField(required=False, initial=True, label="output")
     xpub_checkbox = forms.BooleanField(required=False, initial=True, label="xpub")
-
     encrypt_checkbox = forms.BooleanField(required=False, label="encrypt")
     passphrase = forms.CharField(widget=forms.PasswordInput, required=False)
 

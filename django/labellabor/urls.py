@@ -11,6 +11,7 @@ from userprofile.views import (ProfileView,
                                ProfileCurrencyUpdateView,
                                ElectrumInfoUpdateView)
 from userprofile.views import APIKeyView
+from userprofile.views import has_seen_welcome_popup
 
 from hashtags.views import HashtagListView, HashtagUpdateView, LabelbaseProxyView
 
@@ -265,6 +266,12 @@ urlpatterns = [
         "",
         include("user_sessions.urls", "user_sessions")
     ),
+    path(
+        "has_seen_welcome_popup/",
+        has_seen_welcome_popup,
+        name='has_seen_welcome_popup'
+    ),
+
 ]
 
 urlpatterns.append(path("admin/", admin.site.urls))

@@ -9,6 +9,20 @@ from .models import Profile
 from .forms import ProfileAvatarForm, ProfileCurrencyForm, ElectrumServerInfoForm
 
 
+
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from .models import Profile
+
+@require_POST
+@login_required
+def has_seen_welcome_popup(request):
+    profile = Profile.objects.get(user=request.user)
+    profile.has_seen_welcome_popup = True
+    profile.save()
+    return JsonResponse({'status': 'success'})
+
+
 class ProfileView(TemplateView):
     """ """
     template_name = "profile.html"

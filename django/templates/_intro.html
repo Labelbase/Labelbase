@@ -47,7 +47,7 @@
        <div class="modal-content">
          <div class="modal-header">
            <h3 class="modal-title" id="introTourModalLabel">Welcome to Labelbase!</h3>
-           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           <button type="button" class="btn-close ok-welcome-message" data-bs-dismiss="modal" aria-label="Close"></button>
 
          </div>
          <div class="modal-body">
@@ -59,29 +59,37 @@
              <div class="carousel-inner">
 
                <div class="carousel-item active">
+                  <h5>Sentry Error Tracking</h5>
+                  <p>
+  We use Sentry for anonymized error tracking to improve service reliability. This is enabled by default in our new release. Rest assured, no personal data is collected.
+</p>
+<p>
+  You can opt out of this feature in your <a href="{% url 'userprofile' %}">profile settings</a>.
+</p>
+                </div>
+
+               <!--div class="carousel-item active">
                  <h5>Customizable Settings</h5>
                  <p>Personalize your experience with customizable settings. Tailor your Labelbase to fit your workflow seamlessly.
                  </p>
                  <p>
                    <a href="{% url 'userprofile' %}">Profile Settings</a>
                  </p>
-               </div>
+               </div-->
 
-               <div class="carousel-item ">
+                <div class="carousel-item ">
                  <h5>Mempool and Electrum Server</h5>
                  <p>
-                   If you would like to set up your own Mempool or Electrum server for privacy reasons, please visit the dedicated settings section.
+                   If you would like to set up your own Mempool or Electrum server for privacy reasons, please visit the dedicated settings section in your  <a href="{% url 'userprofile' %}">profile settings</a>.
                  </p>
-                 <p>
-                   <a href="{% url 'userprofile' %}">Profile Settings</a><!-- TODO: direct link -->
-                 </p>
+
                </div>
 
-               <div class="carousel-item">
+               <!--div class="carousel-item">
                  <h5>Tree Maps and Analytics</h5>
                  <p>Access detailed Tree Maps and analytics to make data-driven decisions which UTXO to spend next.</p>
 
-               </div>
+               </div-->
 
 
                <div class="carousel-item">
@@ -91,11 +99,8 @@
                </div>
 
 
-               <div class="carousel-item">
-                 <h5>Donate</h5>
-                 <p>Before upgrading to a newer version, backup your data by exporting your labels as a BIP-329 file or an encrypted archive.</p>
 
-               </div>
+
 
              </div>
 
@@ -110,19 +115,47 @@
              </button>
            </div>
          </div>
-         <div class="modal-footer">
+         <div class="modal-footer" style="zIndex:9999;">
            <ol class="carousel-indicators">
              <li data-bs-target="#carouselIntroduction" data-bs-slide-to="0"></li>
              <li data-bs-target="#carouselIntroduction" data-bs-slide-to="1"></li>
              <li data-bs-target="#carouselIntroduction" data-bs-slide-to="2"></li>
-             <li data-bs-target="#carouselIntroduction" data-bs-slide-to="3"></li>
            </ol>
-           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Get Started</button>
+           <button type="button" class="btn btn-primary ok-welcome-message" style="zIndex:9999;" data-bs-dismiss="modal">Get Started</button>
          </div>
        </div>
      </div>
    </div>
 
- <!--
- $('#introTourModal').modal('show');
- -->
+
+
+ <script>
+{% addtoblock "js" %}
+     $(document).ready(function() {
+         $('.ok-welcome-message').click(function() {
+             $.ajax({
+                 url: '{% url "has_seen_welcome_popup" %}',
+                 type: 'POST',
+                 data: {},  // Pass any necessary data
+                 headers: {
+                     'X-CSRFToken': '{{ csrf_token }}',
+                     'Content-Type': 'application/json',
+                 },
+                 success: function(data) {
+                     console.log(data);
+                     // Handle success (e.g., close modal, show message)
+                 },
+                 error: function(error) {
+                     console.error(error);
+
+                 }
+             });
+         });
+         {% if request.user.profile.has_seen_welcome_popup %}
+         {% else %}
+          $('#introTourModal').modal('show');
+         {% endif %}
+     });
+
+{% endaddtoblock %}
+ </script>

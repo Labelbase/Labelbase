@@ -44,6 +44,7 @@ class Profile(models.Model):
                                    choices=CURRENCY_CHOICES,
                                    default='USD')
 
+    has_seen_welcome_popup = models.BooleanField(default=False)                                        
     def labelbases(self):
         return Labelbase.objects.filter(user_id=self.user_id)
 

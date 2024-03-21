@@ -9,7 +9,6 @@ from labellabor.utils import extract_fiat_value
 from labelbase.utils import compute_type_ref_hash
 from finances.models import OutputStat
 
-
 class Labelbase(models.Model):
     """
     NOTE: Currently not available, see

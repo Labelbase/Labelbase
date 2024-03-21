@@ -7,18 +7,18 @@
 
 <ul class="nav nav-tabs" style="padding-top: 2rem; ">
   <li class="nav-item">
-    <a class="nav-link {% if action == "update" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}">Label Detail</a>
+    <a class="nav-link {% if action == "update" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}">Label Detail</a>
   </li>
 
   {% comment %}<!--
 
   <li class="nav-item">
-    <a class="nav-link {% if action == "history" %}active" aria-current="page"{% else %}"{% endif %} href="{#% url 'edit_label' label.id %#}">Label History</a>
+    <a class="nav-link {% if action == "history" %}active" aria-current="page"{% else %}"{% endif %} href="{#% url 'edit_label' object.id %#}">Label History</a>
   </li>
   -->{% endcomment %}
 
 
-  {% switch form.instance.type %}
+  {% switch object.type %}
       {% case "addr" %}
 
       {% comment %}<!--
@@ -29,23 +29,23 @@
 
       {% case "tx" %}
       <li class="nav-item">
-        <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}labeling/">Transaction Labeling</a>
+        <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Transaction Labeling</a>
       </li>
 
       {% comment %}<!--
       <li class="nav-item">
-        <a class="nav-link {% if action == "detail" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}labeling/">Transaction Detail</a>
+        <a class="nav-link {% if action == "detail" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Transaction Detail</a>
       </li>
       -->{% endcomment %}
       {% case "output" %}
       <li class="nav-item">
-        <a class="nav-link {% if action == "output-details" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}output-details/">Output Details</a>
+        <a class="nav-link {% if action == "output-details" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}output-details/">Output Details</a>
       </li>
 
       {% comment %}<!--
 
       <li class="nav-item">
-        <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' label.id %}labeling/">Derived Addresses Labeling</a>
+        <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Derived Addresses Labeling</a>
       </li>
       -->{% endcomment %}
 
@@ -82,15 +82,15 @@
           Actions
         </button>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=form.instance.id %}?force-spent=none">Verify output status</a></li>
-          <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=form.instance.id %}?force-spent=true">Mark output as spent</a></li>
-          <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=form.instance.id %}?force-spent=false">Mark output as unspent</a></li>
+          <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=none">Verify output status</a></li>
+          <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=true">Mark output as spent</a></li>
+          <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=false">Mark output as unspent</a></li>
         </ul>
       </div>
       <strong>Ouch!</strong> Got "{{ output.last_error.message }}{% if output.last_error.code %} (code {{ output.last_error.code }}){% endif %}" from Electrum.
     </div>
   {% endif %}
-  {% if form.instance.type == "output" %}
+  {% if object.type == "output" %}
     {% switch output.get_spent_status %}
     {% case "spent" %}
       <div class="bd-callout bd-callout-warning">
@@ -107,7 +107,7 @@
             Actions
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=form.instance.id %}?force-spent=none">
+            <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=none">
                 Verify output status</a></li>
           </ul>
         </div>
@@ -122,7 +122,7 @@
 </div-->
 
 {% comment %}
-{% if form.instance.type == "addr" %}
+{% if object.type == "addr" %}
 <div class="bd-callout bd-callout-warning">
   <strong>Heads up!</strong> There are multiple transaction outputs sent to this address. For privacy reasons, do not reuse addresses.
 </div>
@@ -157,7 +157,7 @@
          This action will permanently delete the label and cannot be undone. Are you sure you want to proceed?
         </div>
       </div>
-      <form method="post" action="{% url 'del_label' form.instance.pk %}">{% csrf_token %}
+      <form method="post" action="{% url 'del_label' object.pk %}">{% csrf_token %}
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
         <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">DELETE</button>

@@ -686,7 +686,7 @@ class OutputStatUpdateRedirectView(View):
             spent = False
         elif spent == "none":
             spent = None
-        OutputStat.objects.filter(id=output_stat.id).update(spent=spent)
+        OutputStat.objects.filter(id=output_stat.id).update(spent=spent, last_error={})
         messages.add_message(
             request,
             messages.SUCCESS,

@@ -92,9 +92,9 @@ Access Labelbase locally at http://127.0.0.1:8080 or http://localhost:8080.
 For server access on localhost, install lynx and run `lynx 127.0.0.1:8080`.
 
 ### From the Internet
-Configure nginx to link to Labelbase:
+Configure nginx to link your domain to the running Labelbase instance.
 
-Edit `/etc/nginx/sites-enabled/default`. Replace the existing `location /` block with:
+Edit `/etc/nginx/sites-enabled/default` and replace the existing `location /` block with:
 
 ```bash
 location / {

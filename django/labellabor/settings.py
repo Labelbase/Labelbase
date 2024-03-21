@@ -34,7 +34,8 @@ SECRET_KEY = proj_config.get("internal", "secret_key")
 CRYPTOGRAPHY_SALT = proj_config.get("internal", "crypto_salt")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False # proj_config.getboolean("internal", "debug")
+DEBUG = True # proj_config.getboolean("internal", "debug")
+TEMPLATE_DEBUG = False
 #if DEBUG:
 ALLOWED_HOSTS = ["*"] # we don't know your host config, keep like that at the moment.
 #else:
@@ -43,7 +44,6 @@ ALLOWED_HOSTS = ["*"] # we don't know your host config, keep like that at the mo
 #SENTRY_DSN = "https://3b833ae08ccc4ff68793e961fff4921c@o4504646963232768.ingest.sentry.io/4504646967361536"
 
 SENTRY_DSN = proj_config.get("internal", "sentry_dsn")
-
 
 sentry_sdk.init(
     dsn=SENTRY_DSN,
@@ -124,7 +124,6 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django_otp.middleware.OTPMiddleware",
-    #"labellabor.middleware.SentryUserMiddleware",
     # "django.middleware.cache.FetchFromCacheMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",

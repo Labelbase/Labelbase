@@ -11,6 +11,7 @@
 <h4>Known Hashtags</h4>
 
 
+<p>To collect or sync the hashtags, click on "Hashtag Actions" at the top right and then "Collect & Sync Hashtags".</p>
 
 
 <table class="table">
@@ -28,6 +29,8 @@
       <td><a href="{% url "labelbase" labelbase_id=active_labelbase_id %}?tag={{ hashtag.name }}" class="badge badge-hashtag">{{ hashtag.name }}</a></td>
       <td>{{ hashtag.description }}</td>
     </tr>
+    {% empty %}
+
     {% endfor %}
   </tbody>
 </table>

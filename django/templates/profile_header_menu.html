@@ -11,7 +11,11 @@
   </li>
   <li class="nav-item">
     {% url 'userprofile_electrum' as electrum_url %}
-    <a class="nav-link {% if request.path == electrum_url %}active" aria-current="page" {% else %}"{% endif %} href="{{electrum_url }}">Electrum</a>
+    <a class="nav-link {% if request.path == electrum_url %}active" aria-current="page" {% else %}"{% endif %} href="{{ electrum_url }}">Electrum</a>
+  </li>
+  <li class="nav-item">
+    {% url 'userprofile_mempool' as mempool_url %}
+    <a class="nav-link {% if request.path == mempool_url %}active" aria-current="page" {% else %}"{% endif %} href="{{ mempool_url }}">Mempool</a>
   </li>
   {% if request.user.profile.use_fiatfinances %}
   <li class="nav-item">

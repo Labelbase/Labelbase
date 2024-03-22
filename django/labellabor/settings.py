@@ -35,7 +35,7 @@ CRYPTOGRAPHY_SALT = proj_config.get("internal", "crypto_salt")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True # proj_config.getboolean("internal", "debug")
-TEMPLATE_DEBUG = False
+
 #if DEBUG:
 ALLOWED_HOSTS = ["*"] # we don't know your host config, keep like that at the moment.
 #else:

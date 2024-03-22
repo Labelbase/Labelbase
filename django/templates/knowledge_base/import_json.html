@@ -10,7 +10,10 @@
   <div class=" p-3 pb-md-4 mx-auto text-left">
     <h2 class="display-8 fw-normal">Upload Knowledge Base (JSON file)</h2>
     <br>
+    <p>
+      You can download the latest version of the Knowledge Base <a href="https://raw.githubusercontent.com/Labelbase/Labelbase-Knowledge-Base/main/export.json">here</a>.
 
+    </p>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|bootstrap  }}

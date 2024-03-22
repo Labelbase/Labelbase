@@ -6,7 +6,12 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import UpdateView
 from django.contrib import messages
 from .models import Profile
-from .forms import ProfileAvatarForm, ProfileCurrencyForm, ElectrumServerInfoForm
+
+from .forms import (
+    ProfileAvatarForm,
+    ProfileCurrencyForm,
+    ElectrumServerInfoForm,
+    MempoolForm)
 
 
 
@@ -89,6 +94,26 @@ class ElectrumInfoUpdateView(UpdateView):
             profile.electrum_ports = profile._meta.get_field('electrum_ports').get_default()
         profile.save()
         messages.success(self.request, "<strong>Success!</strong> Electrum ServerInfo updated successfully.")
+        return super().form_valid(form)
+
+
+class MempoolUpdateView(UpdateView):
+    model = Profile
+    form_class = MempoolForm
+    template_name = 'mempool_update.html'
+
+    def get_success_url(self):
+        return reverse_lazy('userprofile_mempool')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Profile, user=self.request.user)
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        if not profile.mempool_endpoint:
+            profile.mempool_endpoint = profile._meta.get_field('mempool_endpoint').get_default()
+        profile.save()
+        messages.success(self.request, "<strong>Success!</strong> Mempool endpoint updated successfully.")
         return super().form_valid(form)
 
 

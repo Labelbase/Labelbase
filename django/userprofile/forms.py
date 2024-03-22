@@ -11,6 +11,15 @@ class ProfileAvatarForm(forms.ModelForm):
         }
 
 
+class MempoolForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['mempool_endpoint']
+        labels = {
+            'mempool_endpoint': 'Mempool Endpoint',
+        }
+
+
 class ElectrumServerInfoForm(forms.ModelForm):
     class Meta:
         model = Profile

@@ -34,17 +34,14 @@ apt-get install python3-certbot-nginx --yes
 # Check installed versions
 docker --version
 nginx -v
-
-
 ```
 
-Then create a certificate for your domain. We are using my.labelbase.space in this example.
+Then create a certificate unsing Certbot for your domain.
+
+We are using my.labelbase.space as domain in this example.
 
 ```bash
-
-# Set up Certbot with nginx
 certbot --nginx -d my.labelbase.space
-
 ```
 
 ## Get the Sources from GitHub

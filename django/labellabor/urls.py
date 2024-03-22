@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from userprofile.views import (ProfileView,
                                ProfileAvatarUpdateView,
                                ProfileCurrencyUpdateView,
+                               MempoolUpdateView,
                                ElectrumInfoUpdateView)
 from userprofile.views import APIKeyView
 from userprofile.views import has_seen_welcome_popup
@@ -82,6 +83,11 @@ urlpatterns = [
         "account/userprofile-electrum/",
         login_required(ElectrumInfoUpdateView.as_view()),
         name="userprofile_electrum",
+    ),
+    path(
+        "account/userprofile-mempool/",
+        login_required(MempoolUpdateView.as_view()),
+        name="userprofile_mempool",
     ),
     path(
         "account/userprofile-currency/",

@@ -46,7 +46,7 @@ certbot --nginx -d my.labelbase.space
 
 ## Get the Sources from GitHub
 
-Clone the Labelbase repository:
+Clone the Labelbase repository and change working directory:
 
 ```bash
 git clone https://github.com/Labelbase/Labelbase/
@@ -105,3 +105,12 @@ location / {
 ```
 
 Restart `nginx`, then access your domain (or IP address) in your browser.
+
+
+
+
+## Upgrade to the latest code base
+```bash
+cd Labelbase
+source exports.sh && ./build-and-run-labelbase.sh
+```

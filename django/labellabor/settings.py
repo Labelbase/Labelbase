@@ -82,7 +82,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-    }
+    },
+    'django.security.DisallowedHost': {
+        'handlers': ['null'],
+        'propagate': False,
+    },
 }
 
 # Application definition

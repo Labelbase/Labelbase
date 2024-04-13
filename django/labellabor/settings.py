@@ -36,6 +36,7 @@ CRYPTOGRAPHY_SALT = proj_config.get("internal", "crypto_salt")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True # proj_config.getboolean("internal", "debug")
 
+SELF_HOSTED = proj_config.getboolean("internal", "self_hosted", fallback=True)
 #if DEBUG:
 ALLOWED_HOSTS = ["*"] # we don't know your host config, keep like that at the moment.
 #else:
@@ -54,7 +55,7 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     send_default_pii=True, # must be "True" here, will skip or omit in `before_send` callback
 )
-sentry_sdk.set_tag("version", "2.0.0")
+sentry_sdk.set_tag("version", "2.1.0")
 
 
 LOGGING = {
@@ -117,6 +118,7 @@ INSTALLED_APPS = [
     "knowledge_base",
     "hashtags",
     "statusapp",
+    "attachments",
 ]
 
 

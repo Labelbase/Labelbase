@@ -1,8 +1,13 @@
 {% extends "_base.html" %}
 {% load i18n %}
 {% load sekizai_tags %}
+{% load labelbase_tags %}
+
+
+
+
 {% block content %}
-<div >
+<div>
   {% include "profile_header_menu.html" %}
 
 <div style="padding-top: 2rem; ">
@@ -11,7 +16,7 @@
 </div>
 
 
-
+{% is_self_hosted as my_labelbase_is_self_hosted %}
 <div  class="">
 
   <h4>Extensions</h4>
@@ -35,12 +40,26 @@
                   </div>
               </td>
           </tr>
-          <tr >
+          <tr>
               <td style="width:21%;"><b>Tree Map</b></td>
               <td style="width:75%;"><small>Enable or disable Tree Map.</small></td>
               <td>
                   <div class="form-check form-switch">
-                      <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_treemap %}checked="checked"{% endif %} id="use_treemap">
+                    <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_treemap %}checked="checked"{% endif %} id="use_treemap">
+                  </div>
+              </td>
+          </tr>
+
+          <tr >
+              <td style="width:21%;"><b>Attachments</b></td>
+              <td style="width:75%;"><small>Enable or disable attachments. This extension is available only for self-hosted Labelbase instances.</small></td>
+              <td>
+                  <div class="form-check form-switch">
+                    {% if my_labelbase_is_self_hosted %}
+                      <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_attachments %}checked="checked"{% endif %} id="use_attachments">
+                    {% else %}
+                      <input class="form-check-input " type="checkbox" id="use_attachments" disabled>
+                      {% endif %}
                   </div>
               </td>
           </tr>
@@ -81,15 +100,14 @@
           <td style="width:75%;">
             <small>Check and update all unspent outputs using <a href="/account/userprofile-electrum/">Electrum</a>.</small></td>
           <td>
-            <td>
+
                 <div class="form-check form-switch">
                     <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.update_utxo_on_login %}checked="checked"{% endif %} id="update_utxo_on_login">
                 </div>
             </td>
-          </td>
+         
       </tr>
   </table>
-
 
 
  </div>

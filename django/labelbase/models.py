@@ -8,6 +8,7 @@ from pymempool import MempoolAPI
 from labellabor.utils import extract_fiat_value
 from labelbase.utils import compute_type_ref_hash
 from finances.models import OutputStat
+from attachments.models import LabelAttachment
 
 class Labelbase(models.Model):
     """
@@ -188,6 +189,14 @@ class Label(models.Model):
 
         val, cur = extract_fiat_value(self.label)
         return output.output_metrics_dict(tracked_fiat_value=val, fiat_currency=cur)
+
+    def get_label_attachment(self):
+        type_ref_hash = compute_type_ref_hash(self.type, self.ref)
+        label_attachment, _ = LabelAttachment.objects.get_or_create(
+                                    user=self.labelbase.user,
+                                    type_ref_hash=type_ref_hash,
+                                    network=self.labelbase.network)
+        return label_attachment
 
     def get_absolute_url(self):
         """

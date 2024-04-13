@@ -92,6 +92,10 @@ class ElectrumInfoUpdateView(UpdateView):
             profile.electrum_hostname = profile._meta.get_field('electrum_hostname').get_default()
         if not profile.electrum_ports:
             profile.electrum_ports = profile._meta.get_field('electrum_ports').get_default()
+        if not profile.electrum_hostname_test:
+            profile.electrum_hostname_test = profile._meta.get_field('electrum_hostname_test').get_default()
+        if not profile.electrum_ports_test:
+            profile.electrum_ports_test = profile._meta.get_field('electrum_ports_test').get_default()
         profile.save()
         messages.success(self.request, "<strong>Success!</strong> Electrum ServerInfo updated successfully.")
         return super().form_valid(form)

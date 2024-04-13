@@ -10,35 +10,59 @@
 </div>
 
 <p class="fs-6 text-muted">
-  Update your Electrum server information.
-  <br><br>
   <!-- Trusting Craig on this one. https://github.com/sparrowwallet/sparrow/blob/f003b6d732bd73d93fe904659e61e0d56f6cb280/src/main/java/com/sparrowwallet/sparrow/net/PublicElectrumServer.java -->
-  If you don't run your own Electrum server, here are some community trusted mainnet servers: <br>
-  <ul>
-    <li> electrum.emzy.de / s50002</li>
-    <li> electrum.blockstream.info / s50002</li>
-    <li> <s>bitcoin.lu.ke / s50002</s></li>
-    <!--li> umbrel.local / t50001</s> <sup>1</sup></li-->
-
-  </ul>
-  <form action="" method="POST">
-    {% csrf_token %}
-    <table>
-      {{ form|bootstrap }}
-      <tr>
-        <td>&nbsp;</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td colspan="2" style="text-align: center;">
-          <button class="btn btn-primary" type="submit">Update Electrum ServerInfo</button>
-        </td>
-      </tr>
-    </table>
-  </form>
-
-  <!--hr>
-  <small><sup>1</sup> Access your local Umbrel node, within your local network. </small-->
-
+  If you don't operate your own Electrum server, you have the option to connect to a community-trusted server.<br>
+  However, keep in mind that using a public server allows it to view your outputs and transactions.
 </p>
+
+
+<div class="row" style="padding-top: 1.1rem;">
+  <h5 class="text-muted">Community-trusted Electrum servers</h5>
+  <div class="col-md-6">
+      <p class="fs-6 text-muted">
+        <strong>Mainnet: </strong>
+        <ul>
+          <li>electrum.emzy.de / s50002</li>
+          <li>electrum.blockstream.info / s50002</li>
+        </ul>
+      </p>
+    </div>
+    <div class="col-md-6">
+      <p class="fs-6 text-muted">
+        <strong>Testnet:</strong>
+        <ul>
+          <li>testnet.qtornado.com / s51002</li>
+          <li>testnet.aranguren.org / s51002</li>
+        </ul>
+      </p>
+    </div>
+</div>
+
+
+<div class="row">
+  <form action="" method="POST">
+  {% csrf_token %}
+      <p class="fs-6 text-muted">
+          <table>
+            {{ form|bootstrap }}
+            <tr>
+              <td>&nbsp;</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align: center;">
+                <button class="btn btn-primary" type="submit">Update Electrum Server</button>
+              </td>
+            </tr>
+          </table>
+
+      </p>
+  </form>
+</div>
+
+
+
+<div class="row" style="padding-top: 2.1rem;">
+</div>
+
 {% endblock %}

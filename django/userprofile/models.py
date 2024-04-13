@@ -26,6 +26,10 @@ class Profile(models.Model):
     electrum_hostname = models.CharField(max_length=255, default="electrum.emzy.de", blank=True)
     electrum_ports = models.CharField(max_length=6, default="s50002", blank=True)
 
+    # electrum testnet
+    electrum_hostname_test = models.CharField(max_length=255, default="testnet.qtornado.com", blank=True)
+    electrum_ports_test = models.CharField(max_length=6, default="s51002", blank=True)
+
     avatar_url = models.CharField(max_length=160,
                                   default="/static/avatar.jpg",
                                   blank=True,
@@ -35,6 +39,7 @@ class Profile(models.Model):
     auto_cleanup = models.BooleanField(default=False)
     use_hashtags = models.BooleanField(default=True)
     use_treemap = models.BooleanField(default=True)
+    use_attachments = models.BooleanField(default=True)
     use_sentry = models.BooleanField(default=True)
     use_chatwoot = models.BooleanField(default=False)
     use_fiatfinances = models.BooleanField(default=True)

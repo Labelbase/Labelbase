@@ -273,6 +273,10 @@ urlpatterns = [
         include("user_sessions.urls", "user_sessions")
     ),
     path(
+        "attachments/",
+        include('attachments.urls', namespace='attachments')
+    ),
+    path(
         "has_seen_welcome_popup/",
         has_seen_welcome_popup,
         name='has_seen_welcome_popup'

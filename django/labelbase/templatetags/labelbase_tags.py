@@ -1,10 +1,16 @@
 from django import template
 from django.template import Library, Node, VariableDoesNotExist
+from django.conf import settings
+
 from labelbase.forms import LabelbaseForm
 from labelbase.forms import ExportLabelsForm
 
 register = template.Library()
 
+
+@register.simple_tag
+def is_self_hosted():
+    return settings.SELF_HOSTED
 
 @register.simple_tag
 def labelbaseform():

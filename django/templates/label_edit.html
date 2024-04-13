@@ -2,14 +2,38 @@
 {% load i18n %}
 {% load sekizai_tags %}
 {% load labelbase_tags %}
+{% load backgroundtask_tags %}
+{% load attachments_tags %}
+
+{% block title %}{{ object.type }} {{ object.ref }}{% endblock %}
+
 
 {% block content %}
 
+{% get_attachments_for object.get_label_attachment as my_attachments %}
 <ul class="nav nav-tabs" style="padding-top: 2rem; ">
   <li class="nav-item">
     <a class="nav-link {% if action == "update" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}">Label Detail</a>
   </li>
 
+  {% is_self_hosted as my_labelbase_is_self_hosted %}
+  {% if object.labelbase.user.profile.use_attachments %}
+  <li class="nav-item">
+    {% if  my_labelbase_is_self_hosted %}
+    <a class="nav-link {% if action == "attachments" %}active " aria-current="page" {% else %}"{% endif %}
+        href="{% url 'edit_label' object.id %}attachments/">
+        Attachments
+       {% if my_attachments.count %}
+      <span class="badge text-bg-secondary top-0 rounded-pill " >{% attachments_count object.get_label_attachment %}</span>
+      {% endif %}
+    </a>
+    {% else %}
+
+    <a class="nav-link disabled">Attachments</a>
+
+    {% endif %}
+  </li>
+  {% endif %}
   {% comment %}<!--
 
   <li class="nav-item">
@@ -69,7 +93,16 @@
 
 
 
+
   {% endswitch %}
+
+
+
+  {% if object.ref == "54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713" %}
+  <li class="nav-item">
+    <a class="nav-link" href="/static/bitcoin.pdf">Bitcoin White Paper</a>
+  </li>
+  {% endif %}
 
 </ul>
 
@@ -90,31 +123,56 @@
       <strong>Ouch!</strong> Got "{{ output.last_error.message }}{% if output.last_error.code %} (code {{ output.last_error.code }}){% endif %}" from Electrum.
     </div>
   {% endif %}
-  {% if object.type == "output" %}
-    {% switch output.get_spent_status %}
-    {% case "spent" %}
-      <div class="bd-callout bd-callout-warning">
-        <strong>Output spent!</strong> Blockchain records indicate that this output has been spent in another transaction.
-      </div>
-    {% case "unspent" %}
-      <div class="bd-callout bd-callout-good">
-        <strong>Output unspent!</strong> Blockchain records indicate that this output has not been spent yet.
-      </div>
-    {% case "unconfirmed" %}
-      <div class="alert bd-callout bd-callout-info">
-        <div class="btn-group" role="group" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;">
-          <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
-            Actions
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=none">
-                Verify output status</a></li>
-          </ul>
-        </div>
-        <strong>Output unconfirmed!</strong> Blockchain records indicate that this output has not been confirmed yet.
-      </div>
-    {% endswitch %}
+
+  {% is_label_id_in_queue object.id as is_in_queue %}
+  {% if is_in_queue %}
+  <div class="alert bd-callout bd-callout-info">
+    <!--div class="btn-group" role="group" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;">
+      <button type="button" class="btn btn-sm btn-outline-danger dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
+        Actions
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=none">Verify output status</a></li>
+        <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=true">Mark output as spent</a></li>
+        <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=false">Mark output as unspent</a></li>
+      </ul>
+    </div-->
+    <strong>Output in queue!</strong> This output is currently in the processing queue. It will be checked shortly.
+  </div>
+  {% else %}
+
+
+        {% if object.type == "output" %}
+          {% switch output.get_spent_status %}
+          {% case "spent" %}
+            <div class="bd-callout bd-callout-warning">
+              <strong>Output spent!</strong> Blockchain records indicate that this output has been spent in another transaction.
+            </div>
+          {% case "unspent" %}
+            <div class="bd-callout bd-callout-good">
+              <strong>Output unspent!</strong> Blockchain records indicate that this output has not been spent yet.
+            </div>
+          {% case "unconfirmed" %}
+            <div class="alert bd-callout bd-callout-info">
+              <div class="btn-group" role="group" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;">
+                <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
+                  Actions
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=none">
+                      Verify output status</a></li>
+                </ul>
+              </div>
+              <strong>Output unconfirmed!</strong> Blockchain records indicate that this output has not been confirmed yet.
+            </div>
+          {% endswitch %}
+        {% endif %}
+
+
+
   {% endif %}
+
+
 
 
 <!--div class="bd-callout bd-callout-warning">
@@ -128,6 +186,7 @@
 </div>
 {% endif %}
 {% endcomment %}
+
 {% block label_edit_content %}
 {% endblock %}
 

@@ -24,11 +24,13 @@ async def interact(conn, server_info, method, utxo):
                 except Exception as ex:
                     blocktime = 0
                     logger.error("Can't get blocktime: {}".format(ex))
+                utxo = txn.get('vout')[int(index)]
                 address = txn.get('vout')[int(index)].get('scriptPubKey', {}).get('address')
                 value = txn.get('vout')[int(index)].get('value')*100000000
-                return (txid, index, address, value, blocktime)
+                return (txid, index, address, value, blocktime, utxo)
         except ElectrumErrorResponse as ex:
             logger.error("ERROR: {} {}".format(ex, conn.last_error))
+
     finally:
         conn.close()
 
@@ -70,20 +72,33 @@ def checkup_label(label_id, loop):
 
             if elem.type == "output" and is_valid_output_ref(elem.ref)  and \
                     (output.spent is not True or output.confirmed_at_block_time == 0):
-                electrum_hostname = elem.labelbase.user.profile.electrum_hostname or "electrum.emzy.de"
-                electrum_ports = elem.labelbase.user.profile.electrum_ports or "s50002"
+                if elem.labelbase.is_mainnet:
+                    electrum_hostname = elem.labelbase.user.profile.electrum_hostname or "electrum.emzy.de"
+                    electrum_ports = elem.labelbase.user.profile.electrum_ports or "s50002"
+                elif elem.labelbase.is_testnet:
+                    electrum_hostname = elem.labelbase.user.profile.electrum_hostname_test or "testnet.qtornado.com"
+                    electrum_ports = elem.labelbase.user.profile.electrum_ports_test or "s51002"
                 server_info = ServerInfo(electrum_hostname, electrum_hostname, ports=(electrum_ports))
 
                 conn = StratumClient()
                 utxo = elem.ref
+                utxo_data = {}
                 utxo_resp = loop.run_until_complete(interact(conn, server_info, "blockchain.transaction.get", utxo))
 
                 if utxo_resp:
-                    txid, index, address, value, blocktime = utxo_resp
+                    txid, index, address, value, blocktime, utxo_data = utxo_resp
+                    if utxo_data:
+                        output.next_input_attributes = utxo_data
                     if blocktime:
                         HistoricalPrice.get_or_create_from_api(timestamp=blocktime)
 
-                    unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.address.listunspent", address))
+                    try:
+                        unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.address.listunspent", address))
+                    except:
+                        conn.last_error = None # reset error if needed
+                        unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.scripthash.listunspent", address))
+
+
 
 
                     utxo_value = 0

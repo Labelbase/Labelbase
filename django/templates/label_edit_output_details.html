@@ -7,7 +7,7 @@
 <!--
 {{  res_tx|safe }}
 -->
-{% if action == "output-details" %}
+{% if action == "label-attachments" %}
   {% if form.instance.type == "output" %}
   <br>
   <pre>
@@ -16,8 +16,21 @@
     Confirmed at block height: {{ output.confirmed_at_block_height }}
     Confirmed at block time: {{ output.confirmed_at_block_time }}
     Network: {{ output.get_network_display }}
+    {% if output.next_input_attributes %}
+    Fee estimation will be made based on:
+
+      {{ output.next_input_attributes }}
+
+      {% if output.next_input_attributes.input_n %}
+        * Assuming {{ output.next_input_attributes.input_m }}-of-{{ output.next_input_attributes.input_n }} multisig
+      {% else %}
+      {% endif %}
+    {% endif %}
+
   </pre>
   {% endif %}
+
+
 {% endif %}
 
 {% endblock %}

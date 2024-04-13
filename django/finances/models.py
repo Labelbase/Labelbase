@@ -43,7 +43,7 @@ class OutputStat(models.Model):
     confirmed_at_block_time = models.IntegerField(default=0)
 
     last_error = JSONField(default={})
-
+    next_input_attributes = JSONField(default={}) # will be used for fee estimation
     MAINNET = 'mainnet'
     TESTNET = 'testnet'
 
@@ -56,7 +56,7 @@ class OutputStat(models.Model):
         max_length=10,
         choices=NETWORK_CHOICES,
         default='mainnet',
-        help_text="Choose the network for this labelbase."
+        help_text="Choose the network for this labelbase's label output."
     )
 
     class Meta:

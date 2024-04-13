@@ -572,6 +572,9 @@ class LabelUpdateView(UpdateView):
             action = self.kwargs['action']
             if action == 'labeling':
                 return "label_edit_labeling.html"
+            if action == 'attachments' and settings.SELF_HOSTED and \
+                self.object.labelbase.user.profile.use_attachments:
+                return "label_edit_attachments.html"
             elif action == 'output-details':
                 return "label_edit_output_details.html"
 

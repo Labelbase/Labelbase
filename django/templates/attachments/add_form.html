@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load bootstrap %}
+
+{% if form %}
+<form method="post" enctype="multipart/form-data" action="{{ form_url }}" class="add-attachment">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}"/>
+    {{ form|bootstrap }}
+    <br>
+    <input type="submit"  class="btn btn-primary"  value="{% trans "Add attachment" %}"/>
+
+</form>
+
+{% endif %}

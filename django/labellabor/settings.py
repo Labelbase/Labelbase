@@ -227,6 +227,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600  # Up to 100 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # Up to 100 MB
+DELETE_ATTACHMENTS_FROM_DISK = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

@@ -1,7 +1,24 @@
 {% extends "label_edit.html" %}
 {% load bootstrap %}
 {% load i18n %}
+{% load static %}
 {% load attachments_tags %}
+{% load sekizai_tags %}
+
+
+{% block extra_media %}
+<link href="{% static 'lightbox/css/lightbox.css' %}" rel="stylesheet">
+<style>
+
+    .table img {
+        width: 66%;
+        height: auto;
+    }
+    .pdf-viewer { 
+        height: 666px;
+    }
+</style>
+{% endblock %}
 
 
 {% block label_edit_content %}
@@ -10,6 +27,7 @@
 
 
 {% if my_attachments %}
+
 <table class="table">
   <thead>
     <tr>
@@ -19,16 +37,28 @@
     </tr>
   </thead>
   <tbody>
-    {% for attachment in my_attachments %}
-    <tr>
-      <td>{{ attachment.id }}</td>
-      <td><a href="{{ attachment.attachment_file.url }}">{{ attachment.filename }}</a></td>
-      <td>{% attachment_delete_link attachment %}</td>
-    </tr>
-    {% empty %}
-
-    {% endfor %}
-  </tbody>
+     {% for attachment in my_attachments %}
+     <tr>
+       <td>{{ attachment.id }}</td>
+       <td>
+         {% if attachment.attachment_file.url|lower|endswith:".pdf" %}
+         <!-- PDFObject Viewer Setup -->
+         <div id="pdf-viewer-{{ attachment.id }}" class="pdf-viewer"></div>
+         {% else %}
+         <!-- Image Viewer Setup -->
+         <a href="{{ attachment.attachment_file.url }}" data-lightbox="image-set" data-title="{{ attachment.filename }}">
+             <img src="{{ attachment.attachment_file.url }}" alt="{{ attachment.filename }}">
+         </a>
+         {% endif %}
+       </td>
+       <td>{% attachment_delete_link attachment %}</td>
+     </tr>
+     {% empty %}
+     <tr>
+       <td colspan="3">No attachments found.</td>
+     </tr>
+     {% endfor %}
+   </tbody>
 </table>
 
 {% else %}
@@ -42,4 +72,28 @@ Label has {% attachments_count object.get_label_attachment %} attachments.
 
 {% attachment_form form.instance %}
 
+
+<script>
+
+  {% addtoblock "js" %}
+
+
+    $(document).ready(function () {
+
+      {% for attachment in my_attachments %}
+
+          {% if attachment.attachment_file.url|lower|endswith:".pdf" %}
+          PDFObject.embed("{{ attachment.attachment_file.url }}", "#pdf-viewer-{{ attachment.id }}");
+          {% endif %}
+      {% endfor %}
+    document.addEventListener("DOMContentLoaded", function(event) {
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true
+        })
+    });
+      });
+    {% endaddtoblock %}
+
+    </script>
 {% endblock %}

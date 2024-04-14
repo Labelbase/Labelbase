@@ -7,6 +7,12 @@ from ..views import add_url_for_obj
 
 register = Library()
 
+@register.filter(name='endswith')
+def endswith(value, arg):
+    """Checks if the value ends with a certain string."""
+    if isinstance(value, str):
+        return value.endswith(arg)
+    return False
 
 @register.inclusion_tag("attachments/add_form.html", takes_context=True)
 def attachment_form(context, obj, **kwargs):
@@ -20,7 +26,7 @@ def attachment_form(context, obj, **kwargs):
         return {
             "form": AttachmentForm(),
             "form_url": add_url_for_obj(obj),
-            "next": kwargs.get("next", context.request.build_absolute_uri()),
+            "next": context.request.path,
         }
     else:
         return {"form": None}
@@ -42,7 +48,7 @@ def attachment_delete_link(context, attachment, **kwargs):
         and context["user"].has_perm("attachments.delete_attachment")
     ):
         return {
-            "next": kwargs.get("next", context.request.build_absolute_uri()),
+            "next": context.request.path,
             "delete_url": reverse(
                 "attachments:delete", kwargs={"attachment_pk": attachment.pk}
             ),

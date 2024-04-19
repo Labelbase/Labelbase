@@ -14,7 +14,6 @@ import logging
 logger = logging.getLogger('labelbase')
 
 
-
 class OutputStat(models.Model):
     """
     These fields are unencrypted. Why?
@@ -193,7 +192,7 @@ class OutputStat(models.Model):
                                              network=network).last()
 
         if cached_data:
-            print("found cached data {} for type_ref_hash {}".format(cached_data, type_ref_hash))
+            print("found cached data {} for type_ref_hash {}, created {}".format(cached_data, type_ref_hash, created))
             return cached_data, False
 
         def get_value_and_spent(txid, vout):
@@ -264,7 +263,7 @@ class HistoricalPrice(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
-
+        
     @classmethod
     def get_or_create_from_api(cls, timestamp=-1):
         print("running get_or_create_from_api @ timestamp {}".format(timestamp))

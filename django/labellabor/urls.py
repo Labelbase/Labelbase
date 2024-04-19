@@ -18,6 +18,8 @@ from hashtags.views import HashtagListView, HashtagUpdateView, LabelbaseProxyVie
 
 
 from .views import (
+    UTXOsHealthView,
+    LabelbaseHealthDatatableView,
     LabelbaseView,
     LabelbaseViewActionView,
     LabelbaseMergeView,
@@ -99,6 +101,15 @@ urlpatterns = [
         login_required(ProfileView.as_view()),
         name="userprofile",
     ),
+    path(
+        "labelbase/<int:labelbase_id>/health/",
+        login_required(UTXOsHealthView.as_view()),
+        name="labelbase_health"
+    ),
+    path(
+        "labelbase/<int:labelbase_id>/health/data/",
+        login_required(LabelbaseHealthDatatableView.as_view()),
+        name="labelbase_health_label_data"),
     path(
         "labelbase/<pk>/delete/",
         login_required(LabelbaseDeleteView.as_view()),

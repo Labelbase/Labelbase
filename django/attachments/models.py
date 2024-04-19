@@ -15,13 +15,7 @@ import logging
 logger = logging.getLogger('labelbase')
 
 def attachment_upload(instance, filename):
-    """Stores the attachment in a "per module/appname/primary key" folder"""
-    return "attachments/{app}_{model}/{pk}/{filename}".format(
-        app=instance.content_object._meta.app_label,
-        model=instance.content_object._meta.object_name.lower(),
-        pk=instance.content_object.pk,
-        filename=filename,
-    )
+    pass # used for compatibility / migrations only.
 
 
 class AttachmentManager(models.Manager):
@@ -35,6 +29,7 @@ class AttachmentManager(models.Manager):
 class Attachment(models.Model):
     objects = AttachmentManager()
 
+
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.CharField(db_index=True, max_length=64)
     content_object = GenericForeignKey("content_type", "object_id")
@@ -45,7 +40,7 @@ class Attachment(models.Model):
         on_delete=models.CASCADE,
     )
     attachment_file = models.FileField(
-        _("attachment"), upload_to=upload_to # attachment_upload
+        _("attachment"), upload_to=upload_to
     )
     created = models.DateTimeField(_("created"), auto_now_add=True, db_index=True)
     modified = models.DateTimeField(_("modified"), auto_now=True, db_index=True)
@@ -83,7 +78,7 @@ class Attachment(models.Model):
 
         if update_path:
             old_path = self.attachment_file.path
-            self.attachment_file.name = upload_to # attachment_upload(self, self.filename)
+            self.attachment_file.name = upload_to
             self.attachment_file.save()
 
             os.makedirs(

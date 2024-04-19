@@ -172,6 +172,82 @@ class LabelbaseDatatableView(BaseDatatableView):
         return qs
 
 
+
+class LabelbaseHealthDatatableView(BaseDatatableView):
+    columns = ["id", "ref", "label", "value"]
+
+    order_columns = ["id", "ref", "label"]
+
+    def get_initial_queryset(self):
+        labelbase_id = self.kwargs["labelbase_id"]
+
+        search_tag = self.request.GET.get('tag', None)
+
+        qs = Label.objects.filter(type=Label.TYPE_OUTPUT,
+                                  labelbase__user_id=self.request.user.id,
+                                  labelbase_id=labelbase_id).order_by("id")
+
+        if search_tag:
+            # Due to encryption, we need to use a super slow process here...
+            res_ids = []
+            search = f'#{search_tag}'
+
+            for record in qs:
+                if record.label and search in record.label:
+                    res_ids.append(record.id)
+                    continue
+            qs = qs.filter(id__in=res_ids)
+        return qs
+
+    def render_column(self, row, column):
+        if column == 'id':
+            return f'<tt><a href="{reverse("edit_label", args=[row.id])}">{row.id}</a></tt>'
+        elif column == 'type':
+            return "<tt>{}</tt>".format(row.get_type_display())
+        elif column == 'ref':
+            ctx = {
+                'row': row,
+                'mempool_url': row.get_mempool_url(),
+            }
+            return render_to_string('labelbase_dt_ref.html', context=ctx, request=self.request)
+        elif column == 'label':
+            if row.label is None:
+                return ""
+            if row.labelbase.user.profile.use_hashtags:
+                return hashtag_to_badge(f'<tt>{row.label}</tt>')
+            else:
+                return f'<tt>{row.label}</tt>'
+        elif column == 'value':
+            try:
+                return row.get_finance_output_metrics_dict().get('value')
+            except Exception as ex:
+                return "{}".format(ex)
+        else:
+            return super(LabelbaseHealthDatatableView, self).render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            # Due to encryption, we need to use a super slow process here...
+            res_ids = []
+            search = search.lower()
+            for record in qs:
+                if record.type and search in record.type.lower():
+                    res_ids.append(record.id)
+                    continue
+                if record.ref and search in record.ref.lower():
+                    res_ids.append(record.id)
+                    continue
+                if record.label and search in record.label.lower():
+                    res_ids.append(record.id)
+                    continue
+                if search in "{}".format(record.get_finance_output_metrics_dict().get('value')):
+                    res_ids.append(record.id)
+                    continue
+            return qs.filter(id__in=res_ids)
+        return qs
+
+
 class LabelbaseViewActionView(View):
     def get(self, request, *args, **kwargs):
         labelbase = get_object_or_404(
@@ -213,6 +289,32 @@ class LabelbaseView(ListView):
             label = labelform.save()
             return HttpResponseRedirect(label.labelbase.get_absolute_url())
 
+
+
+class UTXOsHealthView(ListView):
+    template_name = "utxos_health.html"
+    context_object_name = "label_list"
+
+    def get_queryset(self):
+        qs = Label.objects.filter(
+            type=Label.TYPE_OUTPUT,
+            labelbase__user_id=self.request.user.id,
+            labelbase_id=self.kwargs["labelbase_id"],
+        )
+        return qs.order_by("id")
+
+    def get_context_data(self, **kwargs):
+        labelbase_id = self.kwargs["labelbase_id"]
+        context = super(UTXOsHealthView, self).get_context_data(**kwargs)
+        context["labelbase"] = get_object_or_404(
+            Labelbase, id=labelbase_id, user_id=self.request.user.id
+        )
+        context["active_labelbase_id"] = labelbase_id
+        context["labelform"] = LabelForm(
+            request=self.request, labelbase_id=labelbase_id
+        )
+        context["api_token"] = Token.objects.get(user_id=self.request.user.id)
+        return context
 
 class LabelbaseMergeView(LabelbaseView):
     template_name = "labelbase_merge.html"

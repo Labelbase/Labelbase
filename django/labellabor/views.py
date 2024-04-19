@@ -669,6 +669,11 @@ class LabelUpdateView(UpdateView):
     model = Label
     fields = ["type", "ref", "label", "origin", "spendable"]
 
+    def get_object(self):
+        user_id = self.request.user.id
+        pk = self.kwargs["pk"]
+        return get_object_or_404(Label, labelbase__user_id=self.request.user.id, pk=pk)
+
     def get_template_names(self):
         if 'action' in self.kwargs:
             action = self.kwargs['action']

@@ -49,10 +49,6 @@ def add_attachment(
         extra_context=None,
     ):
     next_ = request.POST.get("next", "/")
-
-    if not request.user.has_perm("attachments.add_attachment"):
-        return HttpResponseRedirect(next_)
-
     model = apps.get_model(app_label, model_name)
     obj = get_object_or_404(model, pk=pk)
     obj = obj.get_label_attachment() # our label to attachment proxy
@@ -71,17 +67,13 @@ def add_attachment(
         "next": next_,
     }
     template_context.update(extra_context or {})
-
     return render(request, template_name, template_context)
 
 
 @login_required
 def delete_attachment(request, attachment_pk):
     g = get_object_or_404(Attachment, pk=attachment_pk)
-    if (
-        request.user.has_perm("attachments.delete_attachment")
-        and request.user == g.creator
-    ) or request.user.has_perm("attachments.delete_foreign_attachments"):
+    if request.user == g.creator:
         remove_file_from_disk(g.attachment_file)
         g.delete()
         messages.success(request, gettext("Your attachment was deleted."))

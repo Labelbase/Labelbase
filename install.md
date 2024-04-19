@@ -102,6 +102,12 @@ location / {
     proxy_set_header Host $host;
     proxy_cache_bypass $http_upgrade;
 }
+
+```
+Add `client_max_body_size` just below the `location / { }` block to enable attachment uploads up to 100M.
+
+```bash
+client_max_body_size 100M;
 ```
 
 Restart `nginx`, then access your domain (or IP address) in your browser.

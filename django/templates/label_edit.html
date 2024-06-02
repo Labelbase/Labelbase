@@ -139,7 +139,7 @@
     <li class="nav-item">
       <a class="nav-link {% if action == "update" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}">Label Detail</a>
     </li>
-
+    <!-- object.type: {{ object.type }} -->
     {% switch object.type %}
       {% case "addr" %}
       {% case "tx" %}

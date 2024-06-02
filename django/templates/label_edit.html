@@ -129,7 +129,7 @@
 
 </div>
 {% endcomment %}
-
+{% comment %} <!-- 2 -->
 <div class="row">
   <ul class="nav nav-tabs" style="padding-top: 2rem;">
     <li class="nav-item">
@@ -188,8 +188,43 @@
     {% endif %}
   </ul>
 </div>
+{% endcomment %}
 
+<div class="row">
+  <ul class="nav nav-tabs" style="padding-top: 2rem;">
+    <li class="nav-item">
+      <a class="nav-link {% if action == "update" %}active{% endif %}" aria-current="page" href="{% url 'edit_label' object.id %}">Label Detail</a>
+    </li>
 
+    {% if object.type == "tx" %}
+      <li class="nav-item">
+        <a class="nav-link {% if action == "labeling" %}active{% endif %}" href="{% url 'edit_label' object.id %}labeling/">Transaction Labeling</a>
+      </li>
+    {% endif %}
+
+    {% if object.labelbase.user.profile.use_attachments %}
+      <li class="nav-item">
+        {% is_self_hosted as my_labelbase_is_self_hosted %}
+        {% if my_labelbase_is_self_hosted %}
+          <a class="nav-link {% if action == "attachments" %}active{% endif %}" aria-current="page" href="{% url 'edit_label' object.id %}attachments/">
+            Attachments
+            {% if my_attachments.count %}
+              <span class="badge text-bg-secondary top-0 rounded-pill">{% attachments_count object.get_label_attachment %}</span>
+            {% endif %}
+          </a>
+        {% else %}
+          <a class="nav-link disabled">Attachments</a>
+        {% endif %}
+      </li>
+    {% endif %}
+
+    {% if object.ref == "54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713" %}
+      <li class="nav-item">
+        <a class="nav-link" href="/static/bitcoin.pdf">Bitcoin White Paper</a>
+      </li>
+    {% endif %}
+  </ul>
+</div>
 
 <div style="padding-top: 0rem; padding-bottom: 2.1rem; ">
 

@@ -1,0 +1,171 @@
+{% extends "label_edit.html" %}
+{% load bootstrap %}
+{% load sekizai_tags %}
+{% load i18n %}
+{% load labelbase_tags %}
+
+
+{% block label_edit_content %}
+
+{% include "_modal_add_label.html" %}
+
+
+
+
+
+<div class="lb-header mt-3">
+        <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#collapse_empty_labels" aria-expanded="false">
+            <h4 class="mb-4 d-flex justify-content-between align-items-center">
+                <span>Address Derivation Configuration</span>
+                <!--button class="btn btn-primary   ">Configure</button-->
+            </h4>
+            You can create new labels by using the 'New "addr" Label' button on the right side, or <a href="javascript:void(0);">change configuration</a>.
+
+            {% switch request.GET.derivation %}
+            {% case "m/44" %}
+                <p>Currently, {{ address_count }} BIP 44 - Legacy Addresses (P2PKH) addresses are derived using derivation path m/44'/0'/0'.</p>
+            {% case "m/49" %}
+                <p>Currently, {{ address_count }} BIP 49 - SegWit Addresses (P2SH) addresses are derived using derivation path m/49'/0'/0'.</p>
+            {% case "m/84" %}
+                <p>Currently, {{ address_count }} BIP 84 - Native SegWit Addresses (Bech32) addresses are derived using derivation path m/84'/0'/0'.</p>
+            {% else %}
+                <p>Configuration not loaded.</p>
+            {% endswitch %}
+
+        </div>
+        <div id="collapse_empty_labels" class="collapse">
+            <div class="card-body">
+
+              <form action="{% url 'edit_label' object.id %}derive-addresses/" method="GET">
+                <div class="mb-3">
+                    <label for="derivationPath" class="form-label">Derivation Path and Script Type </label>
+                    <select class="form-select" id="derivationPath" name="derivation"
+                      {% switch request.GET.derivation %}
+                      {% case "m/44" %}
+                          disabled>
+                          <option value="m/44" selected>BIP 44 - Legacy Addresses (P2PKH)</option>
+                          <option value="m/49" >BIP 49 - SegWit Addresses (P2SH)</option>
+                          <option value="m/84" >BIP 84 - Native SegWit Addresses (Bech32)</option>
+                      {% case "m/49" %}
+                          disabled>
+                          <option value="m/44" >BIP 44 - Legacy Addresses (P2PKH)</option>
+                          <option value="m/49" selected>BIP 49 - SegWit Addresses (P2SH)</option>
+                          <option value="m/84" >BIP 84 - Native SegWit Addresses (Bech32)</option>
+                      {% case "m/84" %}
+                          disabled>
+                          <option value="m/44" >BIP 44 - Legacy Addresses (P2PKH)</option>
+                          <option value="m/49" >BIP 49 - SegWit Addresses (P2SH)</option>
+                          <option value="m/84" selected>BIP 84 - Native SegWit Addresses (Bech32)</option>
+                      {% else %}
+                          > {# keep this! #}
+                          <option value="m/44" {% if form.instance.ref|slice:":4" == "xpub" %}selected{% endif %}>BIP 44 - Legacy Addresses (P2PKH)</option>
+                          <option value="m/49" {% if form.instance.ref|slice:":4" == "ypub" %}selected{% endif %}>BIP 49 - SegWit Addresses (P2SH)</option>
+                          <option value="m/84" {% if form.instance.ref|slice:":4" == "zpub" %}selected{% endif %}>BIP 84 - Native SegWit Addresses (Bech32)</option>
+                      {% endswitch %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="amountOut" class="form-label">Amount of Addresses</label>
+                    <input type="number" class="form-control" id="amountOut" name="address_count" value="{{ address_count }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="offset" class="form-label">Offset Index</label>
+                    <input type="number" class="form-control" id="offset" name="offset"  value="{{ offset }}" required {#placeholder="Leave blank for next available index"#}>
+                </div>
+                <button type="submit" id="submit-config" class="btn btn-primary">Update Derived Addresses</button>
+            </form>
+
+            </div>
+        </div>
+
+        {{ form.instance.ref }}
+
+    </div>
+
+
+
+<div class="table-responsive" style="padding-top:1em" >
+    <table id="derived_addesses" class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+
+        </tr>
+      </thead>
+
+      <tbody>
+      </tbody>
+    </table>
+
+</div>
+
+<hr>
+
+
+
+
+
+  <script>
+    {% addtoblock "js" %}
+    $(document).ready(function () {
+      {% if request.GET.derivation %}
+
+
+          const dt_table = $('#derived_addesses').DataTable({
+              order: [[0, "asc"]],
+              columns: [
+                  { data: 'index', title: 'Index', orderable: false, searchable: true },
+                  { data: 'path', title: 'Path', orderable: false, searchable: true },
+                  {
+                      data: 'address',
+                      title: 'Address',
+                      orderable: false,
+                      searchable: false,
+                      render: function(data, type, row) {
+                          return `${data} <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm open-modal"
+                                   data-label=""
+                                   data-type="addr"
+                                   style="float:right;"
+                                   data-ref="${data}">New "addr" Label</a>`;
+                      }
+                  }
+              ],
+              searching: true,
+              processing: false,
+              serverSide: true,
+              stateSave: true,
+              responsive: true,
+              ajax: {
+                {% with policy_type=request.GET.policy_type|default:"Single Signature" derivation=request.GET.derivation|default:"m/84" address_count=request.GET.address_count|default:"{{ address_count }}" offset=request.GET.offset|default:"{{ offset }}"  %}
+                  url: "{% url 'label_derived_addresses' form.instance.id %}?policy_type={{ policy_type }}&derivation={{ derivation }}&address_count={{ address_count }}",
+                {% endwith %}
+                type: 'GET',
+                dataSrc: 'data'
+              }
+          });
+      {% else %}
+        $("#submit-config").click();
+      {% endif %}
+
+      $('#derived_addesses').on('click', '.open-modal', function() {
+          var label = $(this).data('label');
+          var type = $(this).data('type');
+          var ref = $(this).data('ref');
+
+          $('#id_label').val(label);
+          $('#id_type').val(type);
+          $('#id_ref').val(ref);
+
+          $('#addLabelModal').modal('show');
+          $('#id_type').change(); // update readonly fields based on type
+      });
+
+  });
+
+
+  {% endaddtoblock %}
+  </script>
+
+{% endblock %}

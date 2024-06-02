@@ -73,31 +73,27 @@
 
       {% case "xpub" %}
 
-      <li class="nav-item">
+        <li class="nav-item">
 
 
 
-        {% switch object.ref|slice:":4" %}
-            {% case "xpub" %}
-            <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %}
-                  href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/44&address_count={{address_count}}&offset={{ offset }}">Derive Addresses</a>
-            {% case "ypub" %}
-            <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %}
-                  href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/49&address_count={{address_count}}&offset={{ offset }}">Derive Addresses</a>
-            {% case "zpub" %}
-            <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %}
-                  href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/84&address_count={{address_count}}&offset={{ offset }}">Derive Addresses</a>
-            {% else %}
-            <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %}
-                  href="{% url 'edit_label' object.id %}derive-addresses/">Derive Addresses</a>
-        {% endswitch %}
+          {% switch object.ref|slice:":4" %}
+              {% case "xpub" %}
+              <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %}
+                    href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/44&address_count={{address_count}}&offset={{ offset }}">Derive Addresses</a>
+              {% case "ypub" %}
+              <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %}
+                    href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/49&address_count={{address_count}}&offset={{ offset }}">Derive Addresses</a>
+              {% case "zpub" %}
+              <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %}
+                    href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/84&address_count={{address_count}}&offset={{ offset }}">Derive Addresses</a>
+              {% else %}
+              <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %}
+                    href="{% url 'edit_label' object.id %}derive-addresses/">Derive Addresses</a>
+          {% endswitch %}
 
 
-      </li>
-
-
-
-
+        </li>
 
 
   {% endswitch %}
@@ -142,15 +138,19 @@
     <!-- object.type: {{ object.type }} -->
     {% switch object.type %}
       {% case "addr" %}
+        <!-- object.type: {{ object.type }} (addr) -->
       {% case "tx" %}
+        <!-- object.type: {{ object.type }} (tx) -->
         <li class="nav-item">
           <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Transaction Labeling</a>
         </li>
       {% case "output" %}
+        <!-- object.type: {{ object.type }} (output) -->
         <li class="nav-item">
           <a class="nav-link {% if action == "output-details" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}output-details/">Output Details</a>
         </li>
       {% case "xpub" %}
+        <!-- object.type: {{ object.type }} (xpub) -->
         <li class="nav-item">
           {% switch object.ref|slice:":4" %}
             {% case "xpub" %}

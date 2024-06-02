@@ -33,14 +33,13 @@ except AssertionError:
 SECRET_KEY = proj_config.get("internal", "secret_key")
 CRYPTOGRAPHY_SALT = proj_config.get("internal", "crypto_salt")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # proj_config.getboolean("internal", "debug")
+DEBUG = proj_config.getboolean("internal", "debug")
 
 SELF_HOSTED = proj_config.getboolean("internal", "self_hosted", fallback=True)
-#if DEBUG:
-ALLOWED_HOSTS = ["*"] # we don't know your host config, keep like that at the moment.
-#else:
-#    ALLOWED_HOSTS = [proj_config.get("internal", "allowed_host")]
+if DEBUG:
+    ALLOWED_HOSTS = ["*"] # we don't know your host config, keep like that at the moment.
+else:
+    ALLOWED_HOSTS = [proj_config.get("internal", "allowed_host")]
 
 #SENTRY_DSN = "https://3b833ae08ccc4ff68793e961fff4921c@o4504646963232768.ingest.sentry.io/4504646967361536"
 

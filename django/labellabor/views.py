@@ -32,6 +32,133 @@ from .utils import hashtag_to_badge, extract_fiat_value
 
 
 
+
+from embit import bip32, script
+from embit.networks import NETWORKS
+
+from django.http import JsonResponse
+from django_datatables_view.base_datatable_view import BaseDatatableView
+from embit import bip32, script
+from embit.networks import NETWORKS
+
+DEFAULT_DERIVE_ADDRESS_COUNT = 100
+
+class BitcoinAddressDatatableView(BaseDatatableView):
+    label_id = None  # Variable to store label ID and verify if all is okay.
+
+
+    def get(self, request, *args, **kwargs):
+        self.label_id = kwargs.get('label_id')
+        return super().get(request, *args, **kwargs)
+
+    def get_initial_queryset(self):
+        return self.initialize_addresses()
+
+    def initialize_addresses(self):
+        addresses = []
+        if self.label_id is not None:
+            # Verify if the label belongs to the current user and get xpub
+            try:
+                label = Label.objects.get(id=self.label_id,
+                                          labelbase__user_id=self.request.user.id)
+            except Label.DoesNotExist:
+                return []
+            if label.type == "xpub":
+                xpub = label.ref
+                #policy_type = self.request.GET.get('policy_type', 'Single Signature')
+                derivation = self.request.GET.get('derivation', 'm/84')
+                offset = int(self.request.GET.get('offset', 0))
+                addresses = []
+
+                supported_policy_types = ['Single Signature']
+                supported_derivations = ['m/44', 'm/49', 'm/84']
+
+                #if policy_type not in supported_policy_types:
+                #    return []
+                if derivation not in supported_derivations:
+                    return []
+
+                if not xpub:
+                    return []
+
+                key = bip32.HDKey.from_base58(xpub)
+
+                for i in range(int(self.request.GET.get('address_count', DEFAULT_DERIVE_ADDRESS_COUNT))):
+                    idx = i + offset
+                    if derivation == 'm/44' and xpub.startswith("xpub"):
+                        # BIP 44 - Legacy Addresses (P2PKH)
+                        pub = key.derive(f"m/0/{idx}").key
+                        sc = script.p2pkh(pub)
+                        address = sc.address(NETWORKS["main"])
+                    elif derivation == 'm/49' and xpub.startswith("ypub"):
+                        # BIP 49 - SegWit Addresses (P2SH-P2WPKH)
+                        pub = key.derive(f"m/0/{idx}").key
+                        witness_script = script.p2wpkh(pub)
+                        sc = script.p2sh(witness_script)
+                        address = sc.address(NETWORKS["main"])
+                    elif derivation == 'm/84' and xpub.startswith("zpub"):
+                        # BIP 84 - Native SegWit Addresses (P2WPKH)
+                        pub = key.derive(f"m/0/{idx}").key
+                        sc = script.p2wpkh(pub)
+                        address = sc.address(NETWORKS["main"])
+                    else:
+                        continue
+
+                    addresses.append({
+                        'index': idx,
+                        'path': f"{derivation}'/0'/0'/0/{idx}",
+                        'address': address
+                    })
+
+
+        return addresses
+
+
+    def filter_queryset(self, qs):
+        query = self.request.GET.get('search[value]', '').lower()
+        q_qs = []
+        if query:
+            for item in qs:
+                if query in item['address'].lower():
+                    q_qs.append(item)
+            return q_qs
+        return qs
+
+
+    def ordering(self, qs):
+        # not supported right now
+        return qs
+
+    def paging(self, qs):
+        start = int(self.request.GET.get('start', 0))
+        length = int(self.request.GET.get('length', 10))
+        return qs[start:start + length]
+
+    def prepare_results(self, qs):
+        return qs
+
+    def count_total_records(self, qs=None):
+        return int(self.request.GET.get('address_count', DEFAULT_DERIVE_ADDRESS_COUNT))
+
+    def count_records(self, qs):
+        return len(qs)
+
+    def count_filtered_records(self, qs=None):
+        return len(qs)
+
+    def render_to_response(self, context, **response_kwargs):
+        qs = self.get_initial_queryset()
+        filtered_qs = self.filter_queryset(qs)
+        ordered_qs = self.ordering(filtered_qs)
+        page_qs = self.paging(ordered_qs)
+        return JsonResponse({
+            "draw": int(self.request.GET.get('draw', 1)),
+            "recordsTotal": self.count_total_records(qs),
+            "recordsFiltered": self.count_filtered_records(filtered_qs),
+            "data": page_qs
+        })
+
+
 class AboutView(TemplateView):
     template_name = "about.html"
 
@@ -679,9 +806,11 @@ class LabelUpdateView(UpdateView):
             action = self.kwargs['action']
             if action == 'labeling':
                 return "label_edit_labeling.html"
-            if action == 'attachments' and settings.SELF_HOSTED and \
+            elif action == 'attachments' and settings.SELF_HOSTED and \
                 self.object.labelbase.user.profile.use_attachments:
                 return "label_edit_attachments.html"
+            elif action == "derive-addresses":
+                return "label_derive_addresses.html"
             elif action == 'output-details':
                 return "label_edit_output_details.html"
 
@@ -692,13 +821,19 @@ class LabelUpdateView(UpdateView):
         context["active_labelbase_id"] = self.object.labelbase.id
         context["labelbase"] = self.object.labelbase
         context["action"] = self.kwargs.get('action', 'update')
-        if context["action"] == "labeling":
+        if context["action"] in ["labeling", "derive-addresses"]:
             context["labelform"] = LabelForm(
                 request=self.request, labelbase_id=self.object.labelbase.id
             )
             if self.object.type == "tx":
+                # used by "labeling"
                 mempool_api = self.object.labelbase.get_mempool_api()
                 context["res_tx"] = mempool_api.get_transaction(self.object.ref)
+
+
+        if self.object.type == "xpub":
+            context["address_count"] = self.request.GET.get("address_count", DEFAULT_DERIVE_ADDRESS_COUNT)
+            context["offset"] = int(self.request.GET.get("offset", 0))
 
         if self.object.type == "output":
             context["output"] = OutputStat.objects.filter(

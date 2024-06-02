@@ -8,6 +8,7 @@ from labelbase.forms import ExportLabelsForm
 register = template.Library()
 
 
+
 @register.simple_tag
 def is_self_hosted():
     return settings.SELF_HOSTED

@@ -112,6 +112,13 @@ class Labelbase(models.Model):
     def get_hashtags_url(self):
         return reverse('labelbase_hashtags', kwargs={'labelbase_id': self.id})
 
+    def get_xpub_url(self):
+        for label in self.label_set.all():
+            if label.type == "xpub": # and is_valid_xpub() ...
+                # returns the first xpub, works for single signature only at the moment.
+                return reverse('edit_label', kwargs={'pk': label.id})
+        return None
+
 
 class Label(models.Model):
     """
@@ -201,7 +208,7 @@ class Label(models.Model):
     def get_absolute_url(self):
         """
         Is used by "edit label" functionality.
-        This brings us back to the labelbase once the lable was saved.
+        This brings us back to the labelbase once the label was saved.
         """
         return self.labelbase.get_absolute_url()
 

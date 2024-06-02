@@ -44,6 +44,7 @@ from .views import (
     LabelbaseDatatableView,
     #LabelbasePortfolioView,
     OutputStatUpdateRedirectView,
+    BitcoinAddressDatatableView,
 )
 
 from importer.views import upload_labels
@@ -266,6 +267,13 @@ urlpatterns = [
         login_required(OutputStatUpdateRedirectView.as_view()),
         name='outputstat_update_redirect'
     ),
+
+    path(
+        "label-derived-addresses/<int:label_id>/",
+        login_required(BitcoinAddressDatatableView.as_view()),
+        name='label_derived_addresses'
+    ),
+
     path(
         "",
         HomeView.as_view(),

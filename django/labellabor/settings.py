@@ -54,7 +54,7 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     send_default_pii=True, # must be "True" here, will skip or omit in `before_send` callback
 )
-sentry_sdk.set_tag("version", "2.1.0")
+sentry_sdk.set_tag("version", "2.2.0")
 
 
 LOGGING = {

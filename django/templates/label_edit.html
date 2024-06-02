@@ -8,11 +8,41 @@
 {% block title %}{{ object.type }} {{ object.ref }}{% endblock %}
 
 
+{% comment %}<!--
+<li class="nav-item">
+  <a class="nav-link {% if action == "detail" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Transaction Detail</a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link {% if action == "history" %}active" aria-current="page"{% else %}"{% endif %} href="{#% url 'edit_label' object.id %#}">Label History</a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Transaction Output Labeling</a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Derived Addresses Labeling</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin Value</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin History</a>
+</li>
+
+
+
+  <div  class="col-{% if action == "derive-addresses-void" %}10{% else %}12{% endif %} float-start">
+
+-->{% endcomment %}
+
 {% block content %}
 
 {% get_attachments_for object.get_label_attachment as my_attachments %}
+
+{% comment %}
 <div class="row">
-  <div  class="col-{% if action == "derive-addresses-void" %}10{% else %}12{% endif %} float-start">
 
 <ul class="nav nav-tabs" style="padding-top: 2rem; ">
   <li class="nav-item">
@@ -20,54 +50,25 @@
   </li>
 
 
-  {% comment %}<!--
 
-  <li class="nav-item">
-    <a class="nav-link {% if action == "history" %}active" aria-current="page"{% else %}"{% endif %} href="{#% url 'edit_label' object.id %#}">Label History</a>
-  </li>
-  -->{% endcomment %}
 
 
   {% switch object.type %}
       {% case "addr" %}
 
-      {% comment %}<!--
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Transaction Output Labeling</a>
-      </li>
-      -->{% endcomment %}
+
 
       {% case "tx" %}
       <li class="nav-item">
         <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Transaction Labeling</a>
       </li>
 
-      {% comment %}<!--
-      <li class="nav-item">
-        <a class="nav-link {% if action == "detail" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Transaction Detail</a>
-      </li>
-      -->{% endcomment %}
-
       {% case "output" %}
       <li class="nav-item">
         <a class="nav-link {% if action == "output-details" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}output-details/">Output Details</a>
       </li>
 
-      {% comment %}<!--
 
-      <li class="nav-item">
-        <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Derived Addresses Labeling</a>
-      </li>
-      -->{% endcomment %}
-
-      {% comment %}<!--
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin Value</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin History</a>
-      </li>
-      -->{% endcomment %}
 
 
       {% case "xpub" %}
@@ -131,8 +132,61 @@
 </ul>
 
 </div>
+{% endcomment %}
 
+<div class="row">
+  <ul class="nav nav-tabs" style="padding-top: 2rem;">
+    <li class="nav-item">
+      <a class="nav-link {% if action == "update" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}">Label Detail</a>
+    </li>
 
+    {% switch object.type %}
+      {% case "addr" %}
+      {% case "tx" %}
+        <li class="nav-item">
+          <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Transaction Labeling</a>
+        </li>
+      {% case "output" %}
+        <li class="nav-item">
+          <a class="nav-link {% if action == "output-details" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}output-details/">Output Details</a>
+        </li>
+      {% case "xpub" %}
+        <li class="nav-item">
+          {% switch object.ref|slice:":4" %}
+            {% case "xpub" %}
+              <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/44&address_count={{ address_count }}&offset={{ offset }}">Derive Addresses</a>
+            {% case "ypub" %}
+              <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/49&address_count={{ address_count }}&offset={{ offset }}">Derive Addresses</a>
+            {% case "zpub" %}
+              <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/84&address_count={{ address_count }}&offset={{ offset }}">Derive Addresses</a>
+            {% else %}
+              <a class="nav-link {% if action == "derive-addresses" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}derive-addresses/">Derive Addresses</a>
+          {% endswitch %}
+        </li>
+    {% endswitch %}
+
+    {% is_self_hosted as my_labelbase_is_self_hosted %}
+    {% if object.labelbase.user.profile.use_attachments %}
+      <li class="nav-item">
+        {% if my_labelbase_is_self_hosted %}
+          <a class="nav-link {% if action == "attachments" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}attachments/">
+            Attachments
+            {% if my_attachments.count %}
+              <span class="badge text-bg-secondary top-0 rounded-pill">{% attachments_count object.get_label_attachment %}</span>
+            {% endif %}
+          </a>
+        {% else %}
+          <a class="nav-link disabled">Attachments</a>
+        {% endif %}
+      </li>
+    {% endif %}
+
+    {% if object.ref == "54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713" %}
+      <li class="nav-item">
+        <a class="nav-link" href="/static/bitcoin.pdf">Bitcoin White Paper</a>
+      </li>
+    {% endif %}
+  </ul>
 </div>
 
 

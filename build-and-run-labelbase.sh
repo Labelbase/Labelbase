@@ -7,16 +7,18 @@ docker-compose down # make sure Labelbase is terminated.
 if [[ -z "${MYSQL_ROOT_PASSWORD}" ]]; then
   echo "Error: MYSQL_ROOT_PASSWORD environment variable is not set"
   exit 1
-else
-  export $MYSQL_ROOT_PASSWORD
 fi
 
 if [[ -z "${MYSQL_PASSWORD}" ]]; then
   echo "Error: MYSQL_PASSWORD environment variable is not set"
   exit 1
-else
-  export $MYSQL_PASSWORD
 fi
+
+ 
+export MYSQL_ROOT_PASSWORD
+export MYSQL_PASSWORD
+
+
 
 # Check git next
 

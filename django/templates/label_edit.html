@@ -202,6 +202,27 @@
       </li>
     {% endif %}
 
+    {% if object.type == "output" %}
+      <li class="nav-item">
+        <a class="nav-link {% if action == "output-details" %}active{% endif %}" href="{% url 'edit_label' object.id %}output-details/">Output Details</a>
+      </li>
+    {% endif %}
+
+    {% if object.type == "xpub" %}
+      <li class="nav-item">
+        {% switch object.ref|slice:":4" %}
+          {% case "xpub" %}
+            <a class="nav-link {% if action == "derive-addresses" %}active{% endif %}" href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/44&address_count={{ address_count }}&offset={{ offset }}">Derive Addresses</a>
+          {% case "ypub" %}
+            <a class="nav-link {% if action == "derive-addresses" %}active{% endif %}" href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/49&address_count={{ address_count }}&offset={{ offset }}">Derive Addresses</a>
+          {% case "zpub" %}
+            <a class="nav-link {% if action == "derive-addresses" %}active{% endif %}" href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/84&address_count={{ address_count }}&offset={{ offset }}">Derive Addresses</a>
+          {% else %}
+            <a class="nav-link {% if action == "derive-addresses" %}active{% endif %}" href="{% url 'edit_label' object.id %}derive-addresses/">Derive Addresses</a>
+        {% endswitch %}
+      </li>
+    {% endif %}
+
     {% if object.labelbase.user.profile.use_attachments %}
       <li class="nav-item">
         {% is_self_hosted as my_labelbase_is_self_hosted %}

@@ -13,16 +13,13 @@ def read_file_content(file_path):
 
 
 def generate_random_string(length):
-    # Exclude curly braces '{}' from the pool of characters
     characters = string.ascii_letters + string.digits
     return ''.join(secrets.choice(characters) for _ in range(length))
 
 
 def generate_config_file(config_file_path="config.ini"):
     config = configparser.ConfigParser()
-    # Generate random values where needed
     dj_secret_key = generate_random_string(50)
-    #database_password = read_file_content("/run/secrets/mysql_password")
     database_password = os.getenv("MYSQL_PASSWORD")
     crypto_salt = 'labelbase_{}_'.format(generate_random_string(32))
 
@@ -32,7 +29,7 @@ def generate_config_file(config_file_path="config.ini"):
         'proj_name': 'labelbase',
         'crypto_salt': crypto_salt,
         'allowed_host': '*',
-        'debug': True,
+        'debug': False,
         'current_timestamp_seconds': int(time.time()),
         'sentry_dsn': 'https://3b833ae08ccc4ff68793e961fff4921c@o4504646963232768.ingest.sentry.io/4504646967361536',
     }

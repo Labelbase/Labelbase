@@ -36,7 +36,7 @@ class LabelForm(forms.ModelForm):
         for field_name in self.fields:
             self.fields[field_name].label = mark_safe(
                 f'<label class="bip329-attr">{self.fields[field_name].label}</label>')
-     
+
 
 class ExportLabelsForm(forms.Form):
     """ """

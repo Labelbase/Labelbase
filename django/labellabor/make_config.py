@@ -23,7 +23,6 @@ def generate_config_file(config_file_path="config.ini"):
     database_password = os.getenv("MYSQL_PASSWORD")
     crypto_salt = 'labelbase_{}_'.format(generate_random_string(32))
 
-    # Set the values in the configuration file
     config['internal'] = {
         'secret_key': '{}'.format(dj_secret_key),
         'proj_name': 'labelbase',
@@ -41,13 +40,11 @@ def generate_config_file(config_file_path="config.ini"):
     #    'host': '127.0.0.1'
     }
 
-    # Create the configuration file and write the values
     with open(config_file_path, 'w') as configfile:
         config.write(configfile)
 
 
 if __name__ == "__main__":
-    # Check if the config.ini file exists
     if not os.path.isfile(config_file_path):
         generate_config_file()
         print("Config file {} created.".format(config_file_path))

@@ -41,6 +41,26 @@
   {% render_block "css" %}
   </style>
 
+  <style>
+  .search-container {
+    position: relative;
+    margin-top:6px;
+    margin-bottom:6px;
+
+  }
+  .search-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+  }
+
+  .search-container {
+    display: none !important;
+  }
+</style>
+
 
 </head>
 <body>
@@ -70,7 +90,6 @@
       <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="{% url 'home' %}" style="background-color: transparent;">
           <img style="width:210px" src="{% static 'labelbase-logo-white.png' %}">
       </a>
-
       <div class="navbar-nav ms-auto">
           <div class="nav-item text-nowrap">
               {% if user.is_authenticated %}
@@ -84,6 +103,15 @@
       </div>
 
       {% if user.is_authenticated %}
+            <div class="search-container" style="margin-right: 16px; min-width: 21rem;">
+
+              <input type="text" id="searchInput" style="padding: .35rem !important; "
+                placeholder="Search your Labelbases" aria-label="Search"
+                 class="form-control form-control-dark d-none d-md-flex">
+              <button type="submit" id="searchButton" class="btn btn-primary search-button">Search</button>
+            </div>
+
+
           <div class="dropdown text-end d-none d-md-inline dd-avatar">
             <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle dd-avatar"
               data-bs-toggle="dropdown" aria-expanded="true">
@@ -109,7 +137,21 @@
           <span class="navbar-toggler-icon"></span>
       </button>
     </div>
+
+
+
 </header>
+
+<!-- small screen search -->
+<div class="d-block d-md-none px-3 py-2 bg-dark w-100">
+  <div class="search-container w-100" >
+    <input type="text" id="mobileSearchInput"
+        placeholder="Search your Labelbases"
+         aria-label="Search" class="form-control form-control-dark w-100">
+    <button type="submit" id="mobileSearchButton" class="btn btn-primary search-button w-auto">Search</button>
+  </div>
+</div>
+<!-- search ends here -->
 
   <div class="container-fluid">
       <div class="row">
@@ -347,6 +389,39 @@
       <script src="{% static 'js/pdfobject.min.js' %}"></script>
       <script src="{% static 'js/dataTables.bootstrap5.min.js' %}"></script>
       <script src="{% static 'lightbox/js/lightbox.js' %}"></script>
+
+
+
+
+      <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var searchInput = document.getElementById("searchInput");
+    var searchButton = document.getElementById("searchButton");
+    var mobileSearchInput = document.getElementById("mobileSearchInput");
+    var mobileSearchButton = document.getElementById("mobileSearchButton");
+
+    function toggleButtonVisibility(input, button) {
+      if (input.value.trim() !== "") {
+        button.style.display = "block";
+      } else {
+        button.style.display = "none";
+      }
+    }
+
+    searchInput.addEventListener("input", function() {
+      toggleButtonVisibility(searchInput, searchButton);
+    });
+
+    mobileSearchInput.addEventListener("input", function() {
+      toggleButtonVisibility(mobileSearchInput, mobileSearchButton);
+    });
+
+    toggleButtonVisibility(searchInput, searchButton);
+    toggleButtonVisibility(mobileSearchInput, mobileSearchButton);
+  });
+</script>
+
+
 
       <script type="text/javascript">
 

@@ -263,7 +263,7 @@ class HistoricalPrice(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
-        
+
     @classmethod
     def get_or_create_from_api(cls, timestamp=-1):
         print("running get_or_create_from_api @ timestamp {}".format(timestamp))

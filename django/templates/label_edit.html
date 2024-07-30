@@ -64,10 +64,13 @@
       <li class="nav-item">
         {% switch object.ref|slice:":4" %}
           {% case "xpub" %}
+          {% case "tpub" %}
             <a class="nav-link {% if action == "derive-addresses" %}active{% endif %}" href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/44&address_count={{ address_count }}&offset={{ offset }}">Derive Addresses</a>
           {% case "ypub" %}
+          {% case "upub" %}
             <a class="nav-link {% if action == "derive-addresses" %}active{% endif %}" href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/49&address_count={{ address_count }}&offset={{ offset }}">Derive Addresses</a>
           {% case "zpub" %}
+          {% case "vpub" %}
             <a class="nav-link {% if action == "derive-addresses" %}active{% endif %}" href="{% url 'edit_label' object.id %}derive-addresses/?derivation=m/84&address_count={{ address_count }}&offset={{ offset }}">Derive Addresses</a>
           {% else %}
             <a class="nav-link {% if action == "derive-addresses" %}active{% endif %}" href="{% url 'edit_label' object.id %}derive-addresses/">Derive Addresses</a>

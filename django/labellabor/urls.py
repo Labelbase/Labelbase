@@ -37,6 +37,7 @@ from .views import (
     AboutView,
     EncryptionView,
     InteroperationalView,
+    CloudView,
     ExportLabelsView,
     # StatsAndKPIView,
     TreeMapsView,
@@ -261,6 +262,11 @@ urlpatterns = [
         "interoperational",
         InteroperationalView.as_view(),
         name="interoperational"
+    ),
+    path(
+        "cloud",
+        CloudView.as_view(),
+        name="cloud"
     ),
     path(
         "outputstat/<int:output_stats_id>/update/<int:label_id>/",

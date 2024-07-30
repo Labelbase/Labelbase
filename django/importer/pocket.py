@@ -1,7 +1,5 @@
 import csv
-import json
-from labelbase.models import Label
-from labelbase.models import Labelbase
+import json 
 
 
 def validate_csv_format(csv_file_path):

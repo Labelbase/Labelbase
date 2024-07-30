@@ -178,6 +178,9 @@ DATABASES = {
         "PASSWORD": proj_config.get("database", "password"),
         'HOST': 'localhost',
         'PORT': 3306,
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
 

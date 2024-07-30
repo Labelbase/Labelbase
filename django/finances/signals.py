@@ -1,15 +1,10 @@
 from django.contrib.auth.signals import user_logged_in
+from django.contrib import messages
 from django.dispatch import receiver
 from finances.models import HistoricalPrice
 
-from django.contrib import messages
-
-
-
-
 @receiver(user_logged_in)
 def perform_tasks_on_login(sender, user, request, **kwargs):
-    """ """
     if user.profile.update_utxo_on_login:
         from finances.tasks import check_all_outputs
         from labelbase.models import Label
@@ -17,4 +12,7 @@ def perform_tasks_on_login(sender, user, request, **kwargs):
         if Label.objects.filter(labelbase__user_id=user.id).exists():
             messages.info(request, "<strong>Sync in progress:</strong> We are checking your unspent transaction outputs now.")
     # Store nearest price information.
-    HistoricalPrice.get_or_create_from_api(-1)
+    try:
+        HistoricalPrice.get_or_create_from_api(-1)
+    except Exception as ex:
+        logger.error(ex, exc_info=True)

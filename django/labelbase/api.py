@@ -10,6 +10,9 @@ from labelbase.models import Labelbase, Label
 from labelbase.serializers import LabelbaseSerializer, LabelSerializer
 
 
+import logging
+logger = logging.getLogger('labelbase')
+
 class LabelbaseAPIView(APIView):
     """
     Labelbase
@@ -90,7 +93,7 @@ class LabelAPIView(APIView):
             "spendable": request.data.get("spendable", "null"),
 
         }
-
+        #logger.debug(f"data: {data}")
         serializer = LabelSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

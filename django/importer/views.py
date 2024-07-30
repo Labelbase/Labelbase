@@ -30,7 +30,7 @@ def upload_labels(request):
                 file=request.FILES["file"],
             )
             # Schedule the background task to process the uploaded data
-            process_uploaded_data(uploaded_data.id)
+            process_uploaded_data(uploaded_data.id, passphrase=form.cleaned_data.get("passphrase", None))
             messages.add_message(
                 request,
                 messages.INFO,

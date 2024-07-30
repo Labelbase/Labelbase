@@ -18,9 +18,19 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+
+
+        <div class="alert alert-warning" style="display:none;" id="samourai-warning" role="alert">
+           <strong>Warning:</strong>
+           <br>
+           <br>
+           Importing a samourai.txt backup file will expose the seed and should only be done on your personal instance of Labelbase that you control!
+        </div>
+
         {% genericlabeluploadform labelbase.id as impform %}
         {{ impform|bootstrap  }}
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">OK</button>
@@ -31,11 +41,34 @@
 </div>
 
 {% addtoblock "js" %}
+
 $(document).ready(function () {
-  var form = $('#importLabelbaseModal form');
-  form.on('submit', function () {
-    // Disable the OK button on form submission
-    $('#importLabelbaseModal button[type="submit"]').prop('disabled', true);
+    var form = $('#importLabelbaseModal form');
+    var importTypeField = $('#id_import_type');
+    var passphraseFieldGroup = $('#id_passphrase').closest('.form-group');
+
+    function togglePassphraseField() {
+      if (importTypeField.val() === 'samourai') {
+        passphraseFieldGroup.show();
+        $('#id_passphrase').prop('disabled', false);
+        $('#samourai-warning').show();
+      } else {
+        passphraseFieldGroup.hide();
+        $('#id_passphrase').prop('disabled', true);
+        $('#id_passphrase').val('')
+        $('#samourai-warning').hide();
+      }
+    }
+
+    importTypeField.on('change', togglePassphraseField);
+
+    // Initial call to set the correct state on page load
+    togglePassphraseField();
+
+    form.on('submit', function () {
+      // Disable the OK button on form submission
+      $('#importLabelbaseModal button[type="submit"]').prop('disabled', true);
+    });
   });
-});
+
 {% endaddtoblock %}

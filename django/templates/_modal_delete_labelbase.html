@@ -1,0 +1,26 @@
+<div class="modal" tabindex="-1" id="deleteLabelbaseModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete labelbase and labels?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning" role="alert">
+         <strong>Warning:</strong>
+         <br>
+         <br>
+         This action will permanently delete the labelbase and its labels and cannot be undone.
+         <br><br>
+         Are you sure you want to proceed?
+        </div>
+      </div>
+      <form method="post" action="{% url 'del_labelbase' labelbase.pk %}">{% csrf_token %}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">DELETE</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -7,7 +7,10 @@ from pymempool import MempoolAPI
 from labelbase.receivers import compute_type_ref_hash
 from django.conf import settings
 from jsonfield import JSONField
+import json
 from django.contrib.auth.models import User
+from shared.encryption import get_fernet_key, cipher_suite
+
 
 
 import logging
@@ -42,7 +45,18 @@ class OutputStat(models.Model):
     confirmed_at_block_time = models.IntegerField(default=0)
 
     last_error = JSONField(default={})
-    next_input_attributes = JSONField(default={}) # will be used for fee estimation
+    next_enc_input_attrs = models.TextField(default=None, null=True)  # will be used for fee estimation
+
+    def set_next_input_attributes(self, data):
+        json_data = json.dumps(data).encode('utf-8')
+        encrypted_data = cipher_suite.encrypt(json_data)
+        self.next_enc_input_attrs = encrypted_data.decode('utf-8')
+
+    def next_input_attributes(self):
+        encrypted_data = self.next_enc_input_attrs.encode('utf-8')
+        decrypted_data = cipher_suite.decrypt(encrypted_data)
+        return json.loads(decrypted_data.decode('utf-8'))
+
     MAINNET = 'mainnet'
     TESTNET = 'testnet'
 

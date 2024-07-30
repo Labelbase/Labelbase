@@ -8,3 +8,8 @@ class UploadFileForm(forms.Form):
         choices=IMPORTER_CHOICES
     )
     file = forms.FileField()
+    passphrase = forms.CharField(
+        widget=forms.PasswordInput(),
+        required=False, 
+        max_length=100
+    )

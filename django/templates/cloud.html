@@ -1,0 +1,51 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block title %}Interoperability{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+  <div class="p-3 pb-md-4 mx-auto text-center">
+    <h1 style="padding-top: 1.6em; padding-bottom: 0.9em; text-transform: uppercase;font-weight:800;">L<span style="height:1.1em; width:1em" data-feather="tag" class="align-text-bottom"></span>belbase</h1>
+    <h2 class="display-6 fw-normal" style="padding-bottom: 0.9em;">All your labels in one place.</h2>
+  </div>
+
+
+
+  <main class="lb-header mx-auto text-center">
+    <!--
+    "Use your labels here, use your labels there – Dave doesn't care."
+
+    "Use this wallet today, use that wallet tomorrow – Dave doesn't care."
+    -->
+    <!-- Centered "Getting Started" CTA Block -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="mb-8">
+                  <img src="/static/Cloud.png"
+                class="card-img-top"
+                alt="..."
+                style="padding: 0.25em;">
+                <div class="card-body">
+                    <p style="font-weight: 700;">Cloud</p>
+
+                    <p><i>"Use your labels here, use your labels there – Dave doesn't care."</i></p>
+                    <p>
+                      Be like Dave with Labelbase, your ultimate cloud-based platform for managing, merging, and synchronizing wallet labels across all your devices and wallet applications.
+
+Labelbase seamlessly synchronizes your labels across various wallets and systems, ensuring you have consistent and organized data wherever you go. Simplify your financial management and stay in sync with Labelbase.
+                    </p>
+
+
+                    <p>
+                       <br><br>
+                      <a href="{{ reg_url }}" type="button" class="w-100 btn btn-lg btn-primary">Get started</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% load i18n %}
+{% load labelbase_tags %}
+{% load bootstrap %}
+<div class="modal" tabindex="-1" id="editLabelbaseModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="{% url 'edit_labelbase' labelbase.id %}" method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Edit labelbase</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% labelbaseform_edit labelbase as edit_form %}
+        {{ edit_form|bootstrap  }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">OK</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

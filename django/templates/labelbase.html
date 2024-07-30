@@ -9,23 +9,19 @@
 
 {% include "_labelbase_header_info_menu.html" %}
 
-
 {% if labelbase %}
 {% if request.GET.tag %}
   Hashtag filter is active:
   <span class="badge badge-hashtag badge-hashtag-nohover">
-      <tt style="pointer-events: none;">{{ request.GET.tag }}</tt>
-      <button onclick="window.location='{% url 'labelbase' labelbase.id %}'";
-              type="button"
-              class="btn-close"
-              style="padding-left: 0.4rem; margin-right: -0.1rem; font-size: .6rem; font-weight: bolder !important;"
-              ></button>
+    <tt style="pointer-events: none;">{{ request.GET.tag }}</tt>
+    <button onclick="window.location='{% url 'labelbase' labelbase.id %}'";
+            type="button"
+            class="btn-close"
+            style="padding-left: 0.4rem; margin-right: -0.1rem; font-size: .6rem; font-weight: bolder !important;"></button>
   </span>
-{% else %}
 {% endif %}
 
-
-<div class="table-responsive" style="padding-top:1em" >
+<div class="table-responsive d-none d-md-block" style="padding-top:1em">
     {% if label_list %}
     <table id="bip329labels" class="table table-striped table-sm">
       <thead>
@@ -38,188 +34,301 @@
           <th scope="col">spendable</th>
         </tr>
       </thead>
-
       <tbody>
       </tbody>
     </table>
+    <div id="datatable-info-regular"></div>
     {% else %}
       <p>There are no labels in this labelbase.</p>
       <p>You can create new labels by using the 'New Label' button on the top right, or <a href="#" data-bs-toggle="modal" data-bs-target="#importLabelbaseModal">import your existing labels</a>.</p>
     {% endif %}
 </div>
-{% endif %}
 
-{% if labelbase %}
+<div class="d-md-none" style="padding-top:0.5em;">
+    <div id="datatable-info-mobile"></div>
+    <div class="input-group mb-3" style="padding-top:0.5em;">
+        <input type="text" id="mobileSearch" class="form-control" placeholder="Search">
+    </div>
+    <div id="mobileLabels" class="row">
+        <!-- Cards will be injected here -->
+    </div>
+    <div id="mobilePagination" class="mt-3">
+        <!-- DataTable pagination will be injected here -->
+    </div>
+</div>
 
 {% include "_modal_add_label.html" %}
+{% include "_modal_edit_labelbase.html" %}
+{% include "_modal_connect_api_key.html" %}
+{% include "_modal_delete_labelbase.html" %}
 
-<!-- modal -->
-<div class="modal" tabindex="-1" id="editLabelbaseModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <form action="{% url 'edit_labelbase' labelbase.id %}" method="post">
-      {% csrf_token %}
-      <div class="modal-header">
-        <h5 class="modal-title">Edit labelbase</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        {% labelbaseform_edit labelbase as edit_form %}
-        {{ edit_form|bootstrap  }}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">OK</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
+<style>
+    @media (max-width: 767.98px) {
+        .pagination {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
 
+        .pagination .page-item {
+            flex: 1;
+            text-align: center;
+        }
 
-<div class="modal" tabindex="-1" id="connectApiKeyLabelbaseModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">API Connect</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>
-          API Key: <strong><tt>{{ api_token }}</tt></strong>
-        <br>
-          Labelbase ID: <strong><tt>{{labelbase.id }}</tt></strong>
-        <br>
-          Base Endpoint: <strong><tt>https://labelbase.space/api/</tt></strong>
-        </p>
-        <center>
-          <div style="padding:1.5em;" id="qrcode"></div>
+        .pagination .page-link {
+            display: block;
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
 
-          <div class="alert alert-warning" role="alert">
-            API keys work like passwords. Keep them secret!<br>
-            Whoever knows the key can access your labelbases.<br>
-          </div>
-        </center>
-        <p>
-          Our API reference can be found here: <br>
-          <a href="https://labelbase.space/api-reference/">https://labelbase.space/api-reference/</a>
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
+        .pagination .page-item:first-child .page-link,
+        .pagination .page-item:last-child .page-link {
+            font-size: 1rem;
+            font-weight: bold;
+        }
 
+        .card {
+/*            margin-bottom: 1rem;*/
 
-<div class="modal" tabindex="-1" id="deleteLabelbaseModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Delete labelbase and labels?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-warning" role="alert">
-         <strong>Warning:</strong>
-         <br>
-         <br>
-         This action will permanently delete the labelbase and its labels and cannot be undone.
-         <br><br>
-         Are you sure you want to proceed?
-        </div>
-      </div>
-      <form method="post" action="{% url 'del_labelbase' labelbase.pk %}">{% csrf_token %}
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
-        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">DELETE</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
+        }
 
+        .card .card-body {
+            padding: 1rem;
+              padding-bottom: 0 !important;
+        }
 
+        .card-title {
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
 
-  <script>
+        .card-text {
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text strong {
+            display: inline-block;
+            min-width: 80px;
+            font-weight: bold;
+        }
+
+        .td-key {
+          width: 6rem;
+        }
+    }
+</style>
+
+<script>
     {% addtoblock "js" %}
     $(document).ready(function () {
-
-      const dt_table = $('#bip329labels').dataTable({
-        order: [[0, "asc"]],
-        columns: [
-            {
-                data: 'id',
-                orderable: true,
-                searchable: true
+        const dt_table = $('#bip329labels').DataTable({
+            order: [[0, "asc"]],
+            columns: [
+                { data: 'id', orderable: true, searchable: true },
+                { data: 'type', orderable: true, searchable: true },
+                { data: 'ref', orderable: true, searchable: true },
+                { data: 'label', orderable: true, searchable: true },
+                { data: 'origin', orderable: true, searchable: true },
+                { data: 'spendable', orderable: true, searchable: true }
+            ],
+            searching: true,
+            processing: false,
+            serverSide: true,
+            stateSave: true,
+            responsive: true,
+            ajax: {
+                url: "{% url 'labelbase_label_data' labelbase.pk %}?tag={{ request.GET.tag }}",
+                type: 'GET',
+                dataSrc: 'data'
             },
-            {
-                data: 'type',
-                orderable: true,
-                searchable: true
-            },
-            {
-                data: 'ref',
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: 'label',
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: 'origin',
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: 'spendable',
-                orderable: true,
-                searchable: true,
+            drawCallback: function(settings) {
+                let isMobile = $(window).width() < 768;
+                if (isMobile) {
+                    renderMobileView(settings.json.data, settings._iDisplayStart, settings._iDisplayLength, settings._iRecordsDisplay, settings.fnRecordsTotal());
+                }
             }
-        ],
-        searching: true,
-        processing: false,
-        serverSide: true,
-        stateSave: true,
-        responsive: true,
-        ajax: {
-              url: "{% url 'labelbase_label_data' labelbase.pk %}?tag={{ request.GET.tag }}",
-              type: 'GET'
-          },
-      });
+        });
+
+        function createCard(data) {
+          let originText = '';
+          if (data.origin) {
+              originText = `<p class="card-text"><strong>Origin:</strong> ${data.origin}</p>`;
+          }
+          let spendableText = '';
+          if (data.type === '<tt>output</tt>' && (data.spendable === "<tt>true</tt>" || data.spendable === "<tt>false</tt>")) {
+              spendableText = `<tr><td> <strong>Spendable:</strong></td><td> ${data.spendable === "<tt>true</tt>" ? 'true' : 'false'}</td></tr>`;
+          }
+          return `
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-body position-relative">
+                <strong>
+                    <span class="card-title" style="max-width: 88%; font-size: 1.2em; display: inline-block;">
+                        ${data.label}
+                    </span>
+                </strong>
+                <button type="button" class="btn btn-link btn-sm position-absolute top-0 end-0 m-2">
+                    #${data.id}
+                </button>
+                <table class="table table-borderless mt-3">
+                    <tbody>
+                        <tr>
+                            <td class="td-key"><strong>Type:</strong></td>
+                            <td>${data.type}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ref:</strong></td>
+                            <td>${data.ref}</td>
+                        </tr>
+                        ${originText ? `<tr><td colspan="2">${originText}</td></tr>` : ''}
+                        ${spendableText ? `${spendableText}` : ''}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+`;
+        }
 
 
-      var qrcode = new QRCode("qrcode", {
-          text: JSON.stringify({
-              api_key: '{{ api_token }}',
-              api_base: 'https://labelbase.space/api/',
-              labelbase_id: {{labelbase.id }},
-              name: '{{labelbase.name }}',
-              fingerprint: '{{  labelbase.fingerprint }}',
+        function renderMobileView(data, start, length, totalRecords, totalRecordsAll) {
+            $('#mobileLabels').empty();
+            data.forEach(function(item) {
+                $('#mobileLabels').append(createCard(item));
+            });
+
+            renderMobilePagination(start, length, totalRecords);
+        }
+
+        function renderMobilePagination(start, length, totalRecords) {
+            const totalPages = Math.ceil(totalRecords / length);
+            const currentPage = Math.ceil(start / length) + 1;
+
+            let paginationHtml = '<nav><ul class="pagination">';
+            if (currentPage > 1) {
+                paginationHtml += `<li class="page-item"><a class="page-link" href="#">Previous</a></li>`;
+            }
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#">${i}</a></li>`;
+            }
+            if (currentPage < totalPages) {
+                paginationHtml += `<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
+            }
+            paginationHtml += '</ul></nav>';
+
+            $('#mobilePagination').html(paginationHtml);
+
+            $('.page-link').click(function (e) {
+                e.preventDefault();
+                let page = $(this).text();
+                if (page === 'Previous') {
+                    page = currentPage - 1;
+                } else if (page === 'Next') {
+                    page = currentPage + 1;
+                } else {
+                    page = parseInt(page);
+                }
+                const newStart = (page - 1) * length;
+                dt_table.page(page - 1).draw(false);
+            });
+        }
+
+        function updateInfo(start, end, totalFiltered, total, isMobile) {
+            let info = `Showing ${start} to ${end} of ${totalFiltered} entries`;
+            if (totalFiltered !== total) {
+                info += ` (filtered from ${total} total entries)`;
+            }
+            if (isMobile) {
+                $('#datatable-info-mobile').html(info);
+                $('#datatable-info-regular').empty(); // Clear regular info
+            } else {
+                $('#datatable-info-regular').html(info);
+                $('#datatable-info-mobile').empty(); // Clear mobile info
+            }
+        }
+
+        $('#mobileSearch').on('keyup', function() {
+            $('#bip329labels_filter input').val(this.value).trigger('keyup');
+            update_showing();
+
+        });
+
+        $('#bip329labels_filter input').on('keyup', function() {
+            $('#mobileSearch').val(this.value);
+        });
+        /*
+        $(window).resize(function() {
+            let isMobile = $(window).width() < 768;
+            if (isMobile) {
+                dt_table.ajax.reload(function(json) {
+                    renderMobileView(json.data, dt_table.page.info().start, dt_table.page.info().length, dt_table.page.info().recordsDisplay, dt_table.page.info().recordsTotal);
+                    updateInfo(dt_table.page.info().start + 1, Math.min(dt_table.page.info().start + dt_table.page.info().length, dt_table.page.info().recordsDisplay), dt_table.page.info().recordsDisplay, dt_table.page.info().recordsTotal, true);
+                });
+            }
+        });
+
+        if ($(window).width() < 768) {
+            dt_table.ajax.reload(function(json) {
+                renderMobileView(json.data, dt_table.page.info().start, dt_table.page.info().length, dt_table.page.info().recordsDisplay, dt_table.page.info().recordsTotal);
+                updateInfo(dt_table.page.info().start + 1, Math.min(dt_table.page.info().start + dt_table.page.info().length, dt_table.page.info().recordsDisplay), dt_table.page.info().recordsDisplay, dt_table.page.info().recordsTotal, true);
+            });
+        } */
+
+
+
+        function update_showing() {
+          if ($(window).width() < 768) {
+              dt_table.ajax.reload(function(json) {
+                  let start = dt_table.page.info().start;
+                  let length = json.data.length;
+                  let recordsDisplay = dt_table.page.info().recordsDisplay;
+                  let recordsTotal = dt_table.page.info().recordsTotal;
+
+                  renderMobileView(json.data, start, length, recordsDisplay, recordsTotal);
+                  updateInfo(Math.min(recordsDisplay, start +1), Math.min(start + length, recordsDisplay), length, recordsTotal, true);
+              });
+          }
+        }
+        // run once
+        update_showing();
+
+        $(window).resize(function() {
+            let isMobile = $(window).width() < 768;
+            if (isMobile) {
+                update_showing();
+                /*dt_table.ajax.reload(function(json) {
+                    let start = dt_table.page.info().start;
+                    let length = json.data.length;
+                    let recordsDisplay = dt_table.page.info().recordsDisplay;
+                    let recordsTotal = dt_table.page.info().recordsTotal;
+
+                    renderMobileView(json.data, start, length, recordsDisplay, recordsTotal);
+                    updateInfo(start + 1, Math.min(start + length, recordsDisplay), length, recordsTotal, true);
+                });*/
+            }
+        });
+
+
+
+        var qrcode = new QRCode("qrcode", {
+            text: JSON.stringify({
+                api_key: '{{ api_token }}',
+                api_base: 'https://labelbase.space/api/',
+                labelbase_id: {{ labelbase.id }},
+                name: '{{ labelbase.name }}',
+                fingerprint: '{{ labelbase.fingerprint }}'
             }),
-
-          width: 200,
-          height: 200,
-          colorDark : "#000000",
-          colorLight : "#ffffff",
-          correctLevel : QRCode.CorrectLevel.H
-      });
-
+            width: 200,
+            height: 200,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
     });
-
-    function removeHashtag() {
-        alert("Hashtag removed!"); // Example alert
-    }
-
     {% endaddtoblock %}
-  </script>
-
-
+</script>
 
 {% endif %}
-<!-- end modal -->
-
 {% endblock %}

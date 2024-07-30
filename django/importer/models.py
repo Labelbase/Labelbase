@@ -2,15 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from labelbase.models import Labelbase
 from uuid_upload_path import upload_to
+from django.conf import settings
 
-IMPORTER_CHOICES = (
+IMPORTER_CHOICES = [
     ("BIP-0329", "BIP-329 .jsonl"),
     # TODO: ("BIP-0329-7z-enc" , "BIP-329 (encrypted) .7z"),
     ("csv-bluewallet", "BlueWallet .csv"),
     ("csv-bitbox", "BitBox .csv"),
-    ("pocket-accointing", "Pocket Accointing .csv")
-)
+    ("pocket-accointing", "Pocket Accointing .csv"),
+]
 
+if settings.SELF_HOSTED:
+    IMPORTER_CHOICES.append(("samourai", "Samourai .txt, (v2)"))
 
 class UploadedData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

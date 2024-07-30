@@ -8,30 +8,35 @@
       {% endif %}
     </div>
     <div class="col float-end" >
+
       <div class="btn-group float-end" role="group" style="padding-top: 2em;">
-        <button type="button" class="rounded-start  btn btn-sm btn-outline-secondary "
+
+<!--        <button type="button" class="rounded-start  btn btn-sm btn-outline-secondary "
                 data-bs-toggle="modal"  data-bs-target="#addLabelModal">New Label</button>
-        <!--button type="button" class="rounded-start d-md-none btn btn-sm btn-outline-secondary "          data-bs-toggle="modal"  data-bs-target="#addLabelModal">New</button-->
-        {% comment %}
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
-            Import
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBip329LabelsModal">BIP-0329 Labels</a></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBlueWalletCSVLabelsModal">BlueWallet CSV History</a></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importBitboxCSVLabelsModal">BitBox App CSV History</a></li>
-          </ul>
-        </div>
-        <a href="{% url 'export_labels' labelbase.id %}" class="btn btn-sm btn-outline-secondary">Export</a>
-        {% endcomment %}
+-->
+        <button type="button" class="rounded-start btn btn-sm btn-outline-secondary d-md-none"
+                data-bs-toggle="modal" data-bs-target="#addLabelModal"> New </button>
+        <button type="button" class="rounded-start btn btn-sm btn-outline-secondary d-none d-md-inline"
+            style="border-right-width: 0;"
+                data-bs-toggle="modal" data-bs-target="#addLabelModal"> New Label </button>
+
+
+
+
       <div class="btn-group" role="group">
       <!--button type="button" class="d-md-none btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           Labels
       </button-->
-      <button type="button" class="{#d-none d-md-block #} btn btn-sm btn-outline-secondary dropdown-toggle rounded-end me-2" data-bs-toggle="dropdown" aria-expanded="false">
+    <!--  <button type="button" class="{#d-none d-md-block #} btn btn-sm btn-outline-secondary dropdown-toggle rounded-end me-2" data-bs-toggle="dropdown" aria-expanded="false">
           Label Actions
       </button>
+-->
+      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-end me-2 d-md-none"
+        data-bs-toggle="dropdown" aria-expanded="false"> Actions </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-end me-2 d-none d-md-inline"
+        data-bs-toggle="dropdown" aria-expanded="false"> Label Actions </button>
+
+
       <ul class="dropdown-menu">
         <li>
             <a class="dropdown-item" href="{% url "labelbase_actions" labelbase_id=labelbase.id action="update-spent-outputs" %}">

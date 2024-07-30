@@ -1,8 +1,6 @@
 import logging
 from background_task import background
 from background_task.management.commands.remove_completed import _remove_completed_task
-
-
 from labelbase.models import Label
 from finances.electrum import checkup_label
 

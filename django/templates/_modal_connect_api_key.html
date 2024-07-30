@@ -1,0 +1,35 @@
+<div class="modal" tabindex="-1" id="connectApiKeyLabelbaseModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">API Connect</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          API Key: <strong><tt>{{ api_token }}</tt></strong>
+        <br>
+          Labelbase ID: <strong><tt>{{labelbase.id }}</tt></strong>
+        <br>
+          Base Endpoint: <strong><tt>https://labelbase.space/api/v0/</tt></strong><br>
+          <small>NOTE: Replace "https://labelbase.space" with your own host. </small>
+        </p>
+        <center>
+          <div style="padding:1.5em;" id="qrcode"></div>
+
+          <div class="alert alert-warning" role="alert">
+            API keys work like passwords. Keep them secret!<br>
+            Whoever knows the key can access your labelbases.<br>
+          </div>
+        </center>
+        <p>
+          Our API reference can be found here: <br>
+          <a href="https://labelbase.space/api-reference/">https://labelbase.space/api-reference/</a>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

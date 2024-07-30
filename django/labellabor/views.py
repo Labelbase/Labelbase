@@ -101,6 +101,22 @@ class BitcoinAddressDatatableView(BaseDatatableView):
                         pub = key.derive(f"m/0/{idx}").key
                         sc = script.p2wpkh(pub)
                         address = sc.address(NETWORKS["main"])
+                    elif derivation == 'm/44' and xpub.startswith("tpub"):
+                        # BIP 44 - Legacy Addresses (P2PKH)
+                        pub = key.derive(f"m/0/{idx}").key
+                        sc = script.p2pkh(pub)
+                        address = sc.address(NETWORKS["test"])
+                    elif derivation == 'm/49' and xpub.startswith("upub"):
+                        # BIP 49 - SegWit Addresses (P2SH-P2WPKH)
+                        pub = key.derive(f"m/0/{idx}").key
+                        witness_script = script.p2wpkh(pub)
+                        sc = script.p2sh(witness_script)
+                        address = sc.address(NETWORKS["test"])
+                    elif derivation == 'm/84' and xpub.startswith("vpub"):
+                        # BIP 84 - Native SegWit Addresses (P2WPKH)
+                        pub = key.derive(f"m/0/{idx}").key
+                        sc = script.p2wpkh(pub)
+                        address = sc.address(NETWORKS["test"])
                     else:
                         continue
 
@@ -169,6 +185,10 @@ class EncryptionView(TemplateView):
 
 class InteroperationalView(TemplateView):
     template_name = "interoperational.html"
+
+
+class CloudView(TemplateView):
+    template_name = "cloud.html"
 
 
 class HomeView(TemplateView):

@@ -130,7 +130,7 @@ class Label(models.Model):
     TYPE_PUBKEY = "pubkey"
     TYPE_INPUT = "input"
     TYPE_OUTPUT = "output"
-    TYPE_XPUT = "xpub"
+    TYPE_XPUB = "xpub"
 
     TYPE_CHOICES = [
         (TYPE_TX, "tx"),
@@ -138,7 +138,7 @@ class Label(models.Model):
         (TYPE_PUBKEY, "pubkey"),
         (TYPE_INPUT, "input"),
         (TYPE_OUTPUT, "output"),
-        (TYPE_XPUT, "xpub"),
+        (TYPE_XPUB, "xpub"),
     ]
 
     type = models.CharField(

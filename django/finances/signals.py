@@ -12,7 +12,4 @@ def perform_tasks_on_login(sender, user, request, **kwargs):
         if Label.objects.filter(labelbase__user_id=user.id).exists():
             messages.info(request, "<strong>Sync in progress:</strong> We are checking your unspent transaction outputs now.")
     # Store nearest price information.
-    try:
-        HistoricalPrice.get_or_create_from_api(-1)
-    except Exception as ex:
-        logger.error(ex, exc_info=True)
+    HistoricalPrice.get_or_create_from_api(user, -1)

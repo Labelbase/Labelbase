@@ -302,6 +302,10 @@ urlpatterns = [
         include('attachments.urls', namespace='attachments')
     ),
     path(
+        "messages/",
+        include("messages_extends.urls", "messages_extends")
+    ),
+    path(
         "has_seen_welcome_popup/",
         has_seen_welcome_popup,
         name='has_seen_welcome_popup'

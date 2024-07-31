@@ -42,7 +42,6 @@ async def interact_addr(conn, server_info, method, addr):
         try:
             hextx = await conn.RPC(method, addr)
             if hextx is not None:
-                print(hextx)
                 return hextx
             else:
                 print("Failed to fetch transaction.")
@@ -57,6 +56,7 @@ def is_valid_output_ref(ref):
     if ":" in ref:
         return True
     return False
+
 
 def checkup_label(label_id, loop):
     if label_id and loop:
@@ -91,7 +91,7 @@ def checkup_label(label_id, loop):
                         #output.next_input_attributes = utxo_data
                         output.set_next_input_attributes(utxo_data)
                     if blocktime:
-                        HistoricalPrice.get_or_create_from_api(timestamp=blocktime)
+                        HistoricalPrice.get_or_create_from_api(None, timestamp=blocktime)
 
                     try:
                         unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.address.listunspent", address))
@@ -149,12 +149,11 @@ def checkup_label_buggy(label_id, loop):
                                             type_ref_hash=elem.type_ref_hash,
                                             network=elem.labelbase.network).last()
         if not output:
-            print("Creating OutputStat")
             output = OutputStat(user=elem.labelbase.user,
                                 type_ref_hash=elem.type_ref_hash,
                                 network=elem.labelbase.network, value=0)
-        print("Using OutputStat id {}".format(output))
-        print("elem.type {} {} {} {}".format(elem.type, is_valid_output_ref(elem.ref), elem.ref, output.spent))
+        #print("Using OutputStat id {}".format(output))
+        #print("elem.type {} {} {} {}".format(elem.type, is_valid_output_ref(elem.ref), elem.ref, output.spent))
         if elem.type == "output" and is_valid_output_ref(elem.ref) and \
                 (output.spent is not True or output.confirmed_at_block_time == 0):
             electrum_hostname = elem.labelbase.user.profile.electrum_hostname
@@ -163,9 +162,7 @@ def checkup_label_buggy(label_id, loop):
             electrum_ports = elem.labelbase.user.profile.electrum_ports
             if not electrum_ports:
                 electrum_ports = "s50002"
-            print("going for server_info")
             server_info = ServerInfo(electrum_hostname, electrum_hostname, ports=((electrum_ports)))
-            print("server_info: {}".format(server_info))
             conn = StratumClient()
             assert elem.type_ref_hash
             utxo = elem.ref
@@ -173,22 +170,18 @@ def checkup_label_buggy(label_id, loop):
             utxo_resp = loop.run_until_complete(interact(conn, server_info, "blockchain.transaction.get", utxo))
             blocktime = 0
             if utxo_resp:
-                print("utxo_resp {}".format(utxo_resp))
                 txid, index, address, value, blocktime = utxo_resp
                 if blocktime:
-                    print("Found blocktime {} for label id {}.".format(blocktime, label_id))
-                    HistoricalPrice.get_or_create_from_api(timestamp=blocktime)
+                    #print("Found blocktime {} for label id {}.".format(blocktime, label_id))
+                    HistoricalPrice.get_or_create_from_api(None, timestamp=blocktime)
                 try:
                     unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.address.listunspent", address))
                 except:
                     conn.last_error = None # reset error if needed
                     unspents = loop.run_until_complete(interact_addr(conn, server_info, "blockchain.scripthash.listunspent", address))
-
                 unspent_utxo = False
                 utxo_value = 0
                 utxo_height = 0
-                print("unspents: {}".format(unspents))
-
                 if unspents:
                     for unspent in unspents:
                         if unspent.get('tx_hash') == tx_hash and \
@@ -198,7 +191,6 @@ def checkup_label_buggy(label_id, loop):
                             unspent_utxo = True
                             utxo_value = unspent.get('value')
                             utxo_height = unspent.get('height')
-                            print("found unspent: {}".format(unspent))
                             break
                 if output:
                     output.network = elem.labelbase.network
@@ -221,7 +213,6 @@ def checkup_label_buggy(label_id, loop):
             else:
                 output.last_error = {}
             output.save()
-            print("output id {} saved".format(output.id))
             try:
                 conn.close()
             except:

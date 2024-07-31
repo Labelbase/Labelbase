@@ -542,9 +542,9 @@ class TreeMapsView(ListView):
 
 
         # Store nearest price information.
-        # TODO: This should be done on new blocks.
+        # TODO: This should (or could) be done on new blocks too.
         from finances.models import HistoricalPrice
-        HistoricalPrice.get_or_create_from_api(-1)
+        HistoricalPrice.get_or_create_from_api(self.request.user, -1)
 
         context = super().get_context_data(**kwargs)
 

@@ -1,5 +1,6 @@
 import requests
 from django.db import models
+from django.contrib import messages
 from djmoney.models.fields import MoneyField
 from decimal import Decimal
 import datetime
@@ -102,8 +103,8 @@ class OutputStat(models.Model):
         # Check if the block time is confirmed
         if self.confirmed_at_block_time:
             # Get or create HistoricalPrice instance for the confirmed block time
-            obj, created = HistoricalPrice.get_or_create_from_api(
-                timestamp=self.confirmed_at_block_time
+            obj, created = HistoricalPrice.get_or_create_from_api(self.user,
+                                        timestamp=self.confirmed_at_block_time
             )
             if obj is None:
                 logger.error("No price info found for {}".format(self.confirmed_at_block_time))
@@ -126,8 +127,8 @@ class OutputStat(models.Model):
         timestamp = int(current_datetime.timestamp())
 
         # Get or create HistoricalPrice instance for the current time in UTC
-        obj_now, created = HistoricalPrice.get_or_create_from_api(
-            timestamp=timestamp
+        obj_now, created = HistoricalPrice.get_or_create_from_api(self.user,
+                                                        timestamp=timestamp
         )
 
         # Calculate the current price
@@ -158,7 +159,7 @@ class OutputStat(models.Model):
         Parses 'tracked_fiat_value' and 'fiat_currency' information from the given label.
         """
         if self.confirmed_at_block_time:
-            obj, created = HistoricalPrice.get_or_create_from_api(
+            obj, created = HistoricalPrice.get_or_create_from_api(self.user,
                                         timestamp=self.confirmed_at_block_time)
 
         performance = 0
@@ -224,10 +225,9 @@ class OutputStat(models.Model):
 
         if txid and vout:
             res = get_value_and_spent(txid, vout)
-            print (res)
+
             if res:
                 value, spent, confirmed_at_block_height, confirmed_at_block_time = res
-                print("called data {} {} for type_ref_hash {}".format(value, spent, type_ref_hash))
                 obj, created = cls.objects.get_or_create(user=user,
                         type_ref_hash=type_ref_hash, network=network,
                                 defaults={
@@ -279,17 +279,27 @@ class HistoricalPrice(models.Model):
         ordering = ['-timestamp']
 
     @classmethod
-    def get_or_create_from_api(cls, timestamp=-1):
-        print("running get_or_create_from_api @ timestamp {}".format(timestamp))
+    def get_or_create_from_api(user, cls, timestamp=-1):
         if timestamp == -1:
             current_datetime = datetime.datetime.now()
             timestamp = int(current_datetime.timestamp())
         cached_data = cls.objects.filter(timestamp=timestamp).first()
         if cached_data:
             return cached_data, False
-        url = f"https://mempool.space/api/v1/historical-price?timestamp={timestamp}"
-        response = requests.get(url)
-        api_response = response.json()
+        try:
+            if user:
+                mempool_endpoint = user.profile.mempool_endpoint
+            else:
+                mempool_endpoint = "https://mempool.space"
+            url = f"{mempool_endpoints}/api/v1/historical-price?timestamp={timestamp}"
+            response = requests.get(url)
+            api_response = response.json()
+        except Exception as ex:
+            #T ODO:
+            #if request:
+            #    messages.error(request, "Connection Error: Could not connect to Mempool to retrieve historical price.")
+            logger.error(ex, exc_info=True)
+            return None, None
         try:
             obj, created = cls.objects.get_or_create(timestamp=timestamp, defaults={
                 'usd_price': Decimal(str(api_response['prices'][0]['USD'])),

@@ -15,6 +15,10 @@
         <div class="overflow-auto scrollbar" style="height: 10rem;">
             <ul  class="profile nav d-flex flex-column mb-2 pb-1">
               <li class="nav-item">
+                <a class="nav-link {% block nav_user_notifications %}{% endblock %}"  href="JavaScript:void(0);"  onclick="window.location='{% url 'userprofile' %}';"><span data-feather="bell" class="align-text-bottom"></span> Notifications</a>
+              </li>
+
+              <li class="nav-item">
                 <a class="nav-link {% block nav_userprofile %}{% endblock %}"  href="JavaScript:void(0);"  onclick="window.location='{% url 'userprofile' %}';"><span data-feather="user" class="align-text-bottom"></span> Profile Settings</a>
               </li>
               <li class="nav-item">

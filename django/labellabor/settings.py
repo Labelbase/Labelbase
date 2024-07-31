@@ -118,6 +118,7 @@ INSTALLED_APPS = [
     "hashtags",
     "statusapp",
     "attachments",
+    "messages_extends",
 ]
 
 
@@ -134,6 +135,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
 ]
+
+MESSAGE_STORAGE = 'messages_extends.storages.FallbackStorage'
 
 
 ROOT_URLCONF = "labellabor.urls"

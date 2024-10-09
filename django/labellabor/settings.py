@@ -137,6 +137,8 @@ MIDDLEWARE = [
     # "django.middleware.cache.FetchFromCacheMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "threadlocals.middleware.ThreadLocalMiddleware",
+
 
 ]
 

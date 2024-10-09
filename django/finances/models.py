@@ -278,7 +278,7 @@ class HistoricalPrice(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
-    @classmethod 
+    @classmethod
     def get_or_create_from_api(cls, user=None, timestamp=-1):
         if timestamp == -1:
             current_datetime = datetime.datetime.now()
@@ -295,10 +295,13 @@ class HistoricalPrice(models.Model):
             response = requests.get(url)
             api_response = response.json()
         except Exception as ex:
-            #T ODO:
-            #if request:
-            #    messages.error(request, "Connection Error: Could not connect to Mempool to retrieve historical price.")
-            logger.error(ex, exc_info=True)
+            try:
+                from threadlocals.threadlocals import get_current_request
+                request = get_current_request()
+                if request:
+                    messages.error(request, "<strong>Connection Error:</strong> Could not connect to Mempool to retrieve historical price.")
+            except Exception as ex2:
+                logger.error(ex, exc_info=True)
             return None, None
         try:
             obj, created = cls.objects.get_or_create(timestamp=timestamp, defaults={

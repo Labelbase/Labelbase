@@ -278,8 +278,8 @@ class HistoricalPrice(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
-    @classmethod
-    def get_or_create_from_api(user, cls, timestamp=-1):
+    @classmethod 
+    def get_or_create_from_api(cls, user=None, timestamp=-1):
         if timestamp == -1:
             current_datetime = datetime.datetime.now()
             timestamp = int(current_datetime.timestamp())

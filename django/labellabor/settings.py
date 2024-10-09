@@ -54,7 +54,7 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     send_default_pii=True, # must be "True" here, will skip or omit in `before_send` callback
 )
-sentry_sdk.set_tag("version", "2.2.2")
+sentry_sdk.set_tag("version", "2.2.3")
 
 
 LOGGING = {
@@ -103,8 +103,11 @@ INSTALLED_APPS = [
     "django_otp",
     "django_otp.plugins.otp_static",
     "django_otp.plugins.otp_totp",
+
     "labelbase",
     "userprofile",
+    "notifications",
+
     "bootstrapform",
     "cryptography",
     "rest_framework",
@@ -119,6 +122,7 @@ INSTALLED_APPS = [
     "statusapp",
     "attachments",
     "messages_extends",
+
 ]
 
 

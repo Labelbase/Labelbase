@@ -11,9 +11,6 @@ from jsonfield import JSONField
 import json
 from django.contrib.auth.models import User
 from shared.encryption import get_fernet_key, cipher_suite
-
-
-
 import logging
 logger = logging.getLogger('labelbase')
 
@@ -54,9 +51,11 @@ class OutputStat(models.Model):
         self.next_enc_input_attrs = encrypted_data.decode('utf-8')
 
     def next_input_attributes(self):
-        encrypted_data = self.next_enc_input_attrs.encode('utf-8')
-        decrypted_data = cipher_suite.decrypt(encrypted_data)
-        return json.loads(decrypted_data.decode('utf-8'))
+        if self.next_enc_input_attrs:
+            encrypted_data = self.next_enc_input_attrs.encode('utf-8')
+            decrypted_data = cipher_suite.decrypt(encrypted_data)
+            return json.loads(decrypted_data.decode('utf-8'))
+        return json.loads("{}")
 
     MAINNET = 'mainnet'
     TESTNET = 'testnet'
@@ -207,13 +206,11 @@ class OutputStat(models.Model):
                                              network=network).last()
 
         if cached_data:
-            print("found cached data {} for type_ref_hash {}, created {}".format(cached_data, type_ref_hash, created))
             return cached_data, False
 
         def get_value_and_spent(txid, vout):
             mempool_api = MempoolAPI()
             res0 = mempool_api.get_transaction(txid)
-            print("res0 {}".format(res0))
             vouts = res0.get("vout", [])
             if vouts:
                 value = vouts[int(vout)].get("value", 0)
@@ -291,17 +288,18 @@ class HistoricalPrice(models.Model):
                 mempool_endpoint = user.profile.mempool_endpoint
             else:
                 mempool_endpoint = "https://mempool.space"
-            url = f"{mempool_endpoints}/api/v1/historical-price?timestamp={timestamp}"
+            url = f"{mempool_endpoint}/api/v1/historical-price?timestamp={timestamp}"
             response = requests.get(url)
             api_response = response.json()
         except Exception as ex:
+            logger.error(ex, exc_info=True)
             try:
                 from threadlocals.threadlocals import get_current_request
                 request = get_current_request()
                 if request:
                     messages.error(request, "<strong>Connection Error:</strong> Could not connect to Mempool to retrieve historical price.")
             except Exception as ex2:
-                logger.error(ex, exc_info=True)
+                logger.error(ex2, exc_info=True)
             return None, None
         try:
             obj, created = cls.objects.get_or_create(timestamp=timestamp, defaults={

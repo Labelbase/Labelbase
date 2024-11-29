@@ -49,13 +49,7 @@
   <p style="padding-top: 2.1em;">
       {% url 'registration' as reg_url %}
       <strong>First time here?</strong> Let's <a href="{{ reg_url }}">get started</a>.
-
   </p>
-  <p style="padding-top: .1em;">
-       <strong>Having problems logging in?</strong> If your credentials are not functioning as expected, it is possible that your account is hosted our <a href="https://legacy.labelbase.space/">legacy system</a>.
-  </p>
-
-
   {% endif %}
 
   {% block 'backup_tokens' %}

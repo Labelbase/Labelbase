@@ -1,8 +1,5 @@
 from django.contrib.auth.models import User
-
 from messages_extends.models import Message
-
-
 from messages_extends import constants
 """
 DEBUG = 10
@@ -40,14 +37,3 @@ def notify_error_persistent(username, message):
 
 def notify_error(username, message):
     notify_user(username, message, level=constants.ERROR)
-
-
-"""
-{% for message in messages %}
-    <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %}">
-        {# close-href is used because href is used by bootstrap to closing other divs #}
-        <a class="close" data-dismiss="alert"{% if message.pk %} close-href="{% url message_mark_read message.pk %}"{% endif %}>×</a>
-        {{ message }}
-    </div>
-{% endfor %}
-"""

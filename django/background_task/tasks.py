@@ -38,7 +38,6 @@ def bg_runner(proxy_task, task=None, loop=None, *args, **kwargs):
                 task = task_qs[0]
         if func is None:
             raise BackgroundTaskError("Function is None, can't execute!")
-        print("bg_runner, loop {}".format(loop))
         kwargs['loop'] = loop
         func(*args, **kwargs)
 
@@ -96,8 +95,6 @@ class Tasks(object):
         return _decorator
 
     def run_task(self, task_name, loop, args=None, kwargs=None):
-        print("run_task loop {}".format(loop))
-        # task_name can be either the name of a task or a Task instance.
         if isinstance(task_name, Task):
             task = task_name
             task_name = task.task_name

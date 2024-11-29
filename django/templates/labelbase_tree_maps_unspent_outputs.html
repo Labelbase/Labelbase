@@ -188,8 +188,6 @@ function getPopoverContent(index) {
         }
 
 */
-
-
         var content = '<div class="popover-content">';
         content += '<div><strong>Label:</strong> ' + window.records[index].label + '</div>';
         content += '<div><strong>Output:</strong> ' + window.records[index].ref + '</div>';
@@ -204,9 +202,6 @@ function getPopoverContent(index) {
         content += '<div><strong>Performance:</strong> ' + window.records[index].performance + '%</div>';
         content += '<div><strong>Spent:</strong> ' + window.records[index].spent + '</div>';
         content += '<div><strong>Spendable:</strong> ' + window.records[index].spendable + '</div>';
-
-
-
         content += '</div>';
         return content;
     }
@@ -294,25 +289,9 @@ NO LABELBASE
 <script>
 {% addtoblock "js" %}
 $(document).ready(function () {
-
-
-
   $('[data-toggle="popover"]').popover()
-
-
-
 });
 {% endaddtoblock %}
-
-
-
-
-
-
-
 </script>
-
-
-
 
 {% endblock %}

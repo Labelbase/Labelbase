@@ -833,7 +833,6 @@ class LabelUpdateView(UpdateView):
                 return "label_derive_addresses.html"
             elif action == 'output-details':
                 return "label_edit_output_details.html"
-
         return "label_edit_update.html"
 
     def get_context_data(self, **kwargs):

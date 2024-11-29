@@ -55,7 +55,7 @@ def is_valid_output_ref(ref):
     return False
 
 
-def checkup_label(label_id, loop): 
+def checkup_label(label_id, loop):
     if label_id and loop:
         try:
             elem = Label.objects.get(id=label_id)
@@ -102,7 +102,7 @@ def checkup_label(label_id, loop):
                     logger.debug(f"Transaction {txid} fetched with blocktime {blocktime}")
                     if blocktime:
                         output.confirmed_at_block_time = blocktime
-                        output.confirmed_at_block_height = txn.get('height', 0)
+                        HistoricalPrice.get_or_create_from_api(None, timestamp=blocktime)
 
                     # Fetch all unspents for the address
                     try:

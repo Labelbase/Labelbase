@@ -99,12 +99,12 @@ class Labelbase(models.Model):
         return self.network == self.TESTNET
 
     def get_mempool_api(self):
-        base_endpoint = self.user.profile.mempool_endpoint.rstrip("/")
         if self.network != "mainnet":
-            mempool_endpoint = f"{base_endpoint}/{self.network}"
+            mempool_endpoint = \
+                "{}/{}".format(self.user.profile.mempool_endpoint, self.network)
         else:
-            mempool_endpoint = base_endpoint
-        return MempoolAPI(api_base_url=f"{mempool_endpoint}/api")
+            mempool_endpoint = self.user.profile.mempool_endpoint
+        return MempoolAPI(api_base_url="{}{}".format(mempool_endpoint, "/api/"))
 
     def get_absolute_url(self):
         return reverse("labelbase", args=[self.id])

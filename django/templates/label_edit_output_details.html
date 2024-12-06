@@ -9,8 +9,9 @@
 {% if action == "output-details" %}
   {% if form.instance.type == "output" %}
   <br>
+  <!-- ID: {{ output.id }} -->
   <pre>
-    
+
     Output, ref:  {{ label.ref }}
     Output value, in sats: {{ output.value }}
     Confirmed at block height: {{ output.confirmed_at_block_height }}

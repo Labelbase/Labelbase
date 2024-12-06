@@ -17,7 +17,7 @@
     Confirmed at block height: {{ output.confirmed_at_block_height }}
     Confirmed at block time: {{ output.confirmed_at_block_time }}
     Network: {{ output.get_network_display }}
-    Spent: {{ output.spent }}
+    Spent: {{ output.get_spent_status }} 
     {% if output.next_input_attributes %}
     Fee estimation will be made based on:
 

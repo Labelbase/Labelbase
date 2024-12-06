@@ -916,6 +916,13 @@ class ExampleSecretView(OTPRequiredMixin, TemplateView):
 
 class OutputStatUpdateRedirectView(View):
     def get(self, request, output_stats_id, label_id):
+        if not output_stats_id:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                "<strong>Hmmmm....</srong> Not ready yet. Please retry in a few seconds."
+            )
+            return redirect('edit_label', pk=label_id)
         try:
             output_stat = OutputStat.objects.get(id=output_stats_id)
         except OutputStat.DoesNotExist:

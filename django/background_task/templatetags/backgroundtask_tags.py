@@ -5,5 +5,8 @@ register = template.Library()
 
 @register.simple_tag
 def is_label_id_in_queue(label_id):
-    return Task.objects.filter(task_name="finances.tasks.check_spent",
-                                    task_params__contains=label_id).exists()
+    try:
+        return Task.objects.filter(task_name="finances.tasks.check_spent",
+                                        task_params__contains=label_id).exists()
+    except:
+        return False                                     

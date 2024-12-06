@@ -77,13 +77,13 @@ class OutputStat(models.Model):
 
     @property
     def get_spent_status(self):
-        if self.confirmed_at_block_time == 0:
-            return "unconfirmed"
         if self.spent:
             return "spent"
         if not self.spent:
             return "unspent"
-
+        if self.confirmed_at_block_time == 0:
+            return "unconfirmed"
+            
     def output_metrics_dict(self, tracked_fiat_value=0, fiat_currency="USD"):
         """
         Get output metrics dictionary for the current instance.

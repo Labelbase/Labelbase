@@ -10,11 +10,13 @@
   {% if form.instance.type == "output" %}
   <br>
   <pre>
+    
     Output, ref:  {{ label.ref }}
     Output value, in sats: {{ output.value }}
     Confirmed at block height: {{ output.confirmed_at_block_height }}
     Confirmed at block time: {{ output.confirmed_at_block_time }}
     Network: {{ output.get_network_display }}
+    Spent: {{ output.spent }}
     {% if output.next_input_attributes %}
     Fee estimation will be made based on:
 

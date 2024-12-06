@@ -67,11 +67,12 @@ def checkup_label(label_id, loop):
                 user=elem.labelbase.user,
                 type_ref_hash=elem.type_ref_hash,
                 network=elem.labelbase.network,
-                value=None,
+                value=0,
                 spent=None,
-                confirmed_at_block_height=None,
-                confirmed_at_block_time=None
+                confirmed_at_block_height=0,
+                confirmed_at_block_time=0
             )
+            output.save()
         logger.debug(f"Output before processing: {output.output_metrics_dict()}")
 
         if elem.type == "output" and is_valid_output_ref(elem.ref) and (

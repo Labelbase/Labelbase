@@ -942,7 +942,7 @@ class OutputStatUpdateRedirectView(View):
             )
             return redirect("home")
 
-        spent = request.GET.get('force-spent', None)
+        spent = request.GET.get('force-spent', -1)
 
         if spent not in ["true", "false", "none"]:
             messages.add_message(

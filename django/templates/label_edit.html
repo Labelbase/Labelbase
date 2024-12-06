@@ -136,39 +136,35 @@
     <strong>Output in queue!</strong> This output is currently in the processing queue. It will be checked shortly.
   </div>
   {% else %}
+    {% if object.type == "output" %}
+      {% switch output.get_spent_status %}
+      {% case "spent" %}
+        <div class="bd-callout bd-callout-warning">
+          <strong>Output spent!</strong> Blockchain records indicate that this output has been spent in another transaction.
+        </div>
+      {% case "unspent" %}
+        <div class="bd-callout bd-callout-good">
+          <strong>Output unspent!</strong> Blockchain records indicate that this output has not been spent yet.
+        </div>
+      {% case "unconfirmed" %}
+        <div class="alert bd-callout bd-callout-info">
+          <div class="btn-group" role="group" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;">
+            <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
+              Actions
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=none">
+                  Verify output status</a></li>
+            </ul>
+          </div>
+          <strong>Output unconfirmed!</strong> Blockchain records indicate that this output has not been confirmed yet.
+        </div>
+      {% endswitch %}
+    {% endif %}
+{% endif %}
 
-
-        {% if object.type == "output" %}
-          {% switch output.get_spent_status %}
-          {% case "spent" %}
-            <div class="bd-callout bd-callout-warning">
-              <strong>Output spent!</strong> Blockchain records indicate that this output has been spent in another transaction.
-            </div>
-          {% case "unspent" %}
-            <div class="bd-callout bd-callout-good">
-              <strong>Output unspent!</strong> Blockchain records indicate that this output has not been spent yet.
-            </div>
-          {% case "unconfirmed" %}
-            <div class="alert bd-callout bd-callout-info">
-              <div class="btn-group" role="group" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;">
-                <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
-                  Actions
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=none">
-                      Verify output status</a></li>
-                </ul>
-              </div>
-              <strong>Output unconfirmed!</strong> Blockchain records indicate that this output has not been confirmed yet.
-            </div>
-          {% endswitch %}
-        {% endif %}
-
-
-
-  {% endif %}
-
-
+<!-- t: {{ object.type }} -->
+<!-- spent: {{output.get_spent_status }} --> 
 
 
 <!--div class="bd-callout bd-callout-warning">

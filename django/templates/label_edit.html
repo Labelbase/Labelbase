@@ -164,6 +164,7 @@
     {% endif %}
 {% endif %}
 {% endcomment %}
+
 {% is_label_id_in_queue object.id as is_in_queue %}
 {% if is_in_queue %}
 <div class="alert bd-callout bd-callout-info">
@@ -202,10 +203,6 @@
     {% endif %}
   {% endif %}
 {% endif %}
-
-<!-- t: {{ object.type }} -->
-<!-- spent: {{output.get_spent_status }} -->
-
 
 <!--div class="bd-callout bd-callout-warning">
   <strong>Heads up!</strong> There are multiple records for this transaction output. <a href="">Review & merge</a>

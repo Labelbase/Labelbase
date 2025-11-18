@@ -185,8 +185,8 @@ DATABASES = {
         "USER": proj_config.get("database", "user"),
         "OPTIONS": {"charset": "utf8mb4"},
         "PASSWORD": proj_config.get("database", "password"),
-        'HOST': 'localhost',
-        'PORT': 3306,
+        'HOST': proj_config.get("database", "host", fallback="labelbase_mysql"),
+        'PORT': int(proj_config.get("database", "port", fallback="3306")),
         'OPTIONS': {
             'charset': 'utf8mb4',
         },

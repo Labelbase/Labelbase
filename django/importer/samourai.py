@@ -61,8 +61,6 @@ def import_samourai_labels(labelbase, content, passphrase):
             logger.info(f"data: {data}")
             version = data.get("version", 1)
             payload = data.get("payload", "")
-            logger.info(f"version: {version}, payload {payload}, passphrase {passphrase}")
-
             if payload:
                 if version in [1, "1"]:
                     decrypted_data = decrypt_v1(payload, passphrase)

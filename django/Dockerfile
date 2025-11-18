@@ -11,7 +11,7 @@ RUN apt-get update && \
         default-libmysqlclient-dev \
         build-essential \
         cron vim logrotate \
-        libpcre3-dev \
+        libpcre2-dev \
         default-mysql-client \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --upgrade pip \

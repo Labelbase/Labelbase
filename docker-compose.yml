@@ -9,6 +9,7 @@ services:
       - MYSQL_USER=ulabelbase
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_HOST=labelbase_mysql
     ports:
       - "3306:3306"
     volumes:
@@ -39,6 +40,8 @@ services:
       - MYSQL_DATABASE=labelbase
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_HOST=labelbase_mysql
+      - MYSQL_PORT=3306
     command: /app/run.sh
   labelbase_nginx:
     build:

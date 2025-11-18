@@ -42,7 +42,7 @@ typing_extensions==4.1.1
 uritemplate==4.1.1
 urllib3==1.26.18
 zipp==3.6.0
-bip329==0.0.3
+bip329==1.0.0
 pymempool==0.0.5
 django-datatables-view==1.20.0
 django-money==3.3

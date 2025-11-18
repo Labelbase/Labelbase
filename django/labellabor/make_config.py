@@ -37,7 +37,8 @@ def generate_config_file(config_file_path="config.ini"):
         'name': 'labelbase',
         'user': 'ulabelbase',
         'password': database_password,
-    #    'host': '127.0.0.1'
+        'host': os.getenv("MYSQL_HOST", "127.0.0.1"),  
+        'port': os.getenv("MYSQL_PORT", "3306"),
     }
 
     with open(config_file_path, 'w') as configfile:

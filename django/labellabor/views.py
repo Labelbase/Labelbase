@@ -234,8 +234,10 @@ class LabelbaseDeleteView(DeleteView):
 class LabelbaseDatatableView(BaseDatatableView):
     model = Label
 
-    columns = ["id", "type", "ref", "label", "origin", "spendable"]
-
+    columns = ["id", "type", "ref", "label", "origin", "spendable",
+            "height", "time", "fee", "value", "rate",
+            "keypath", "fmv", "heights"
+        ]
     order_columns = ["id", "type", "ref", "label", "origin", "spendable"]
 
     max_display_length = 100
@@ -814,7 +816,11 @@ class ExportLabelsView(View):
 
 class LabelUpdateView(UpdateView):
     model = Label
-    fields = ["type", "ref", "label", "origin", "spendable"]
+    fields = [
+        "type", "ref", "label", "origin", "spendable",
+        "height", "time", "fee", "value", "rate",
+        "keypath", "fmv", "heights"
+    ]
 
     def get_object(self):
         user_id = self.request.user.id

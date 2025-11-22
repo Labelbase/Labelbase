@@ -255,10 +255,104 @@
   </div
 
 
+
+
+
   <script>
   {% addtoblock "js" %}
+
+      // Validate rate field (JSON object with currency codes)
+      const rateField = document.getElementById('id_rate');
+      if (rateField) {
+          rateField.addEventListener('blur', function() {
+              try {
+                  if (this.value && this.value.trim()) {
+                      const parsed = JSON.parse(this.value);
+                      if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+                          alert('Rate must be a JSON object like {"USD": 105620.00}');
+                          return;
+                      }
+                      // Validate values are numeric
+                      for (const [key, value] of Object.entries(parsed)) {
+                          if (typeof value !== 'number') {
+                              alert(`Rate value for ${key} must be numeric`);
+                              return;
+                          }
+                      }
+                  }
+              } catch (e) {
+                  alert('Invalid JSON format for rate field');
+              }
+          });
+      }
+
+      // Validate fmv field (JSON object with currency codes)
+      const fmvField = document.getElementById('id_fmv');
+      if (fmvField) {
+          fmvField.addEventListener('blur', function() {
+              try {
+                  if (this.value && this.value.trim()) {
+                      const parsed = JSON.parse(this.value);
+                      if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+                          alert('FMV must be a JSON object like {"USD": 1233.45}');
+                          return;
+                      }
+                      // Validate values are numeric
+                      for (const [key, value] of Object.entries(parsed)) {
+                          if (typeof value !== 'number') {
+                              alert(`FMV value for ${key} must be numeric`);
+                              return;
+                          }
+                      }
+                  }
+              } catch (e) {
+                  alert('Invalid JSON format for fmv field');
+              }
+          });
+      }
+
+      // Validate heights field (JSON array of integers)
+      const heightsField = document.getElementById('id_heights');
+      if (heightsField) {
+          heightsField.addEventListener('blur', function() {
+              try {
+                  if (this.value && this.value.trim()) {
+                      const parsed = JSON.parse(this.value);
+                      if (!Array.isArray(parsed)) {
+                          alert('Heights must be a JSON array like [123456, 789012]');
+                          return;
+                      }
+                      // Validate all values are integers
+                      for (const height of parsed) {
+                          if (!Number.isInteger(height)) {
+                              alert('All heights must be integers');
+                              return;
+                          }
+                      }
+                  }
+              } catch (e) {
+                  alert('Invalid JSON format for heights field');
+              }
+          });
+      }
+
+      // Validate integer fields (height, fee, value)
+      const integerFields = ['id_height', 'id_fee', 'id_value'];
+      integerFields.forEach(fieldId => {
+          const field = document.getElementById(fieldId);
+          if (field) {
+              field.addEventListener('blur', function() {
+                  if (this.value && this.value.trim()) {
+                      if (!/^-?\d+$/.test(this.value.trim())) {
+                          alert(`${fieldId.replace('id_', '')} must be an integer`);
+                      }
+                  }
+              });
+          }
+      });
+
   {% endaddtoblock %}
-</script>
+  </script>
 
 
 {% endblock %}

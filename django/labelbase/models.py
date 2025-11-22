@@ -180,9 +180,77 @@ class Label(models.Model):
         )
     )
 
-    labelbase = models.ForeignKey(Labelbase, on_delete=models.CASCADE)
+    labelbase = models.ForeignKey(
+        Labelbase,
+        on_delete=models.CASCADE
+    )
 
-    type_ref_hash = models.CharField(max_length=64, blank=True)
+    type_ref_hash = models.CharField(
+        max_length=64,
+        blank=True)
+
+    # All additional fields (from the BIP-329 upgrade) encrypted for maximum privacy
+    height = encrypt(
+        models.CharField(
+            max_length=16,
+            null=True,
+            blank=True,
+            help_text="Block height where transaction was confirmed"
+        )
+    )
+    time = encrypt(
+        models.CharField(
+            max_length=64,
+            null=True,
+            blank=True,
+            help_text="ISO-8601 timestamp of the block"
+        )
+    )
+    fee = encrypt(
+        models.CharField(
+            max_length=32,
+            null=True,
+            blank=True,
+            help_text="Transaction fee in satoshis (stored as string)"
+        )
+    )
+    value = encrypt(
+        models.CharField(
+            max_length=32,
+            null=True,
+            blank=True,
+            help_text="Transaction value in satoshis, signed (stored as string)"
+        )
+    )
+    rate = encrypt(
+        models.TextField(
+            null=True,
+            blank=True,
+            help_text="Exchange rate at transaction time (JSON string)"
+        )
+    )
+    keypath = encrypt(
+        models.CharField(
+            max_length=256,
+            null=True,
+            blank=True,
+            help_text="Key derivation path (e.g., /1/123)"
+        )
+    )
+    fmv = encrypt(
+        models.TextField(
+            null=True,
+            blank=True,
+            help_text="Fair market value (JSON string)"
+        )
+    )
+    heights = encrypt(
+        models.TextField(
+            null=True,
+            blank=True,
+            help_text="Block heights for address activity (JSON array as string)"
+        )
+    )
 
     def get_extracted_fiat_value(self):
         return extract_fiat_value(self.label)

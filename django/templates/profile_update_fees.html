@@ -1,0 +1,40 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load sekizai_tags %}
+{% load bootstrap %}
+
+{% block content %}
+{% include "profile_header_menu.html" %}
+<div style="padding-top: 2rem; ">
+{% block profile_content %}{% endblock %}
+</div>
+
+<p class="fs-6 text-muted">
+<!--  Select your fee for new transactions. The suggestion shown is taken from your mempool instance.-->
+
+  Define the fee for new transactions. This will be used to evaluate the health of your unspent transaction outputs.
+
+  <br><br>
+  🟢 Healthy fee: < 1% (fee/amount < 0.01)<br>
+  🟡 Warning: 1-3%<br>
+  🔴 High: > 3%<br>
+
+
+
+  <form action="" method="POST">
+    {% csrf_token %}
+    <table>
+      {{ form|bootstrap }}
+      <tr>
+        <td>&nbsp;</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: center;">
+          <button class="btn btn-primary" type="submit">Update fee</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</p>
+{% endblock %}

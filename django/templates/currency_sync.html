@@ -1,0 +1,212 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load labelbase_tags %}
+{% load sekizai_tags %}
+
+{% block content %}
+
+{% if labelbase %}
+<div class="row">
+  <div class="col float-start">
+    <h2 style="padding-top: 1em;">Currency Data Sync - {{ labelbase.name }}</h2>
+    {% if labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }}</tt>{% endif %}
+    {% if labelbase.about %}
+    <p>{{ labelbase.about }}</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="col">
+  <p>
+    Sync currency data between label text (legacy format like "CHF 615.00") and the structured FMV field.
+  </p>
+
+  {% if text_only or fmv_only or conflicts %}
+  <div class="alert bd-callout bd-callout-info">
+    <strong>{{ text_only|length|add:fmv_only|length|add:conflicts|length }} labels need attention!</strong>
+  </div>
+  {% else %}
+  <div class="alert bd-callout bd-callout-good">
+    <strong>All good!</strong> All {{ synced|length }} labels have matching currency data.
+  </div>
+  {% endif %}
+
+  <!-- Card 1: Currency in label text but missing FMV -->
+  {% if text_only %}
+  <div class="card mt-3">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse_text_only">
+      <h5 class="mb-0 d-flex justify-content-between align-items-center">
+        <span>{{ text_only|length }} Labels with currency in text but no FMV field</span>
+        <button class="btn btn-primary" type="button">Review</button>
+      </h5>
+      <p class="mb-0">These labels have currency values in the label text that can be synced to the FMV field.</p>
+    </div>
+    <div id="collapse_text_only" class="collapse">
+      <div class="card-body">
+        <ul class="list-unstyled">
+          {% for label in text_only %}
+          <li class="border-bottom pb-3 mb-3">
+            <div class="row">
+              <div class="col-md-8">
+                <strong>{{ label.get_type_display }}</strong>: <tt>{{ label.ref }}</tt><br>
+                <strong>Label:</strong> <tt>{{ label.label }}</tt><br>
+                <strong>FMV:</strong> <span class="text-muted">(empty)</span>
+              </div>
+              <div class="col-md-4 text-end">
+                <form method="post" action="{% url 'currency_sync_action' labelbase_id=labelbase.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="label_id" value="{{ label.id }}">
+                  <input type="hidden" name="action" value="text_to_fmv">
+                  <button type="submit" class="btn btn-sm btn-outline-primary">Sync to FMV →</button>
+                </form>
+                <a href="{% url 'edit_label' label.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        <form method="post" action="{% url 'currency_sync_action' labelbase_id=labelbase.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="sync_all_text_to_fmv">
+          <button type="submit" class="btn btn-primary">Sync All to FMV →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Card 2: FMV but no currency in label text -->
+  {% if fmv_only %}
+  <div class="card mt-3">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse_fmv_only">
+      <h5 class="mb-0 d-flex justify-content-between align-items-center">
+        <span>{{ fmv_only|length }} Labels with FMV but no currency in text</span>
+        <button class="btn btn-primary" type="button">Review</button>
+      </h5>
+      <p class="mb-0">These labels have FMV data that can be added to the label text.</p>
+    </div>
+    <div id="collapse_fmv_only" class="collapse">
+      <div class="card-body">
+        <ul class="list-unstyled">
+          {% for label in fmv_only %}
+          <li class="border-bottom pb-3 mb-3">
+            <div class="row">
+              <div class="col-md-8">
+                <strong>{{ label.get_type_display }}</strong>: <tt>{{ label.ref }}</tt><br>
+                <strong>Label:</strong> <tt>{{ label.label|default:"(empty)" }}</tt><br>
+                <strong>FMV:</strong> <tt>{{ label.fmv }}</tt>
+              </div>
+              <div class="col-md-4 text-end">
+                <form method="post" action="{% url 'currency_sync_action' labelbase_id=labelbase.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="label_id" value="{{ label.id }}">
+                  <input type="hidden" name="action" value="fmv_to_text">
+                  <button type="submit" class="btn btn-sm btn-outline-primary">← Sync to Label</button>
+                </form>
+                <a href="{% url 'edit_label' label.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        <form method="post" action="{% url 'currency_sync_action' labelbase_id=labelbase.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="sync_all_fmv_to_text">
+          <button type="submit" class="btn btn-primary">← Sync All to Label</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Card 3: Conflicting currency data -->
+  {% if conflicts %}
+  <div class="card mt-3">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse_conflicts">
+      <h5 class="mb-0 d-flex justify-content-between align-items-center">
+        <span>{{ conflicts|length }} Labels with conflicting currency data</span>
+        <button class="btn btn-warning" type="button">Review</button>
+      </h5>
+      <p class="mb-0">These labels have mismatched currency values between label text and FMV field.</p>
+    </div>
+    <div id="collapse_conflicts" class="collapse">
+      <div class="card-body">
+        <ul class="list-unstyled">
+          {% for label in conflicts %}
+          <li class="border-bottom pb-3 mb-3">
+            <div class="row">
+              <div class="col-md-7">
+                <strong>{{ label.get_type_display }}</strong>: <tt>{{ label.ref }}</tt><br>
+                <strong>Label:</strong> <tt>{{ label.label }}</tt><br>
+                <strong>FMV:</strong> <tt>{{ label.fmv }}</tt>
+              </div>
+              <div class="col-md-5 text-end">
+                <form method="post" action="{% url 'currency_sync_action' labelbase_id=labelbase.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="label_id" value="{{ label.id }}">
+                  <input type="hidden" name="action" value="text_to_fmv">
+                  <button type="submit" class="btn btn-sm btn-outline-primary">Keep Label →</button>
+                </form>
+                <form method="post" action="{% url 'currency_sync_action' labelbase_id=labelbase.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="label_id" value="{{ label.id }}">
+                  <input type="hidden" name="action" value="fmv_to_text">
+                  <button type="submit" class="btn btn-sm btn-outline-primary">← Keep FMV</button>
+                </form>
+                <a href="{% url 'edit_label' label.id %}" class="btn btn-sm btn-outline-secondary">Edit Manually</a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Card 4: All synced --> 
+  {% if synced %}
+  <div class="card mt-3">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse_synced">
+      <h5 class="mb-0 d-flex justify-content-between align-items-center">
+        <span>✓ {{ synced|length }} Labels with matching currency data</span>
+        <button class="btn btn-success" type="button">View</button>
+      </h5>
+      <p class="mb-0">These labels have currency data properly synced between label text and FMV field.</p>
+    </div>
+    <div id="collapse_synced" class="collapse">
+      <div class="card-body">
+        <ul class="list-unstyled">
+          {% for label in synced %}
+          <li class="border-bottom pb-3 mb-3">
+            <div class="row">
+              <div class="col-md-9">
+                <strong>{{ label.get_type_display }}</strong>: <tt>{{ label.ref }}</tt><br>
+                <strong>Label:</strong> <tt>{{ label.label }}</tt><br>
+                <strong>FMV:</strong> <tt>{{ label.fmv }}</tt>
+              </div>
+              <div class="col-md-3 text-end">
+                <a href="{% url 'edit_label' label.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+{% else %}
+<p>Labelbase not found.</p>
+{% endif %}
+
+<script>
+{% addtoblock "js" %}
+// No additional JS needed for now
+{% endaddtoblock %}
+</script>
+
+{% endblock %}

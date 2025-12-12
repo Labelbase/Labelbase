@@ -1,0 +1,128 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load labelbase_tags %}
+{% load sekizai_tags %}
+
+{% block content %}
+
+{% if labelbase %}
+<div class="row">
+  <div class="col float-start">
+    <h2 style="padding-top: 1em;">Fill Missing Data - {{ labelbase.name }}</h2>
+    {% if labelbase.fingerprint %}<tt>{{ labelbase.fingerprint }}</tt>{% endif %}
+    {% if labelbase.about %}
+    <p>{{ labelbase.about }}</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="col">
+  <p>
+    Auto-populate BIP-329 additional fields (height, time, value) for outputs from OutputStat data.
+  </p>
+
+  {% if can_fill_from_outputstat %}
+  <div class="alert bd-callout bd-callout-info">
+    <strong>{{ can_fill_from_outputstat|length }} output labels can be filled!</strong>
+  </div>
+  {% else %}
+  <div class="alert bd-callout bd-callout-good">
+    <strong>All good!</strong> All {{ already_complete|length }} output labels have their fields populated.
+  </div>
+  {% endif %}
+
+  <!-- Card 1: Can populate from OutputStat -->
+  {% if can_fill_from_outputstat %}
+  <div class="card mt-3">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse_outputstat">
+      <h5 class="mb-0 d-flex justify-content-between align-items-center">
+        <span>{{ can_fill_from_outputstat|length }} Output labels can be filled from OutputStat</span>
+        <button class="btn btn-primary" type="button">Review</button>
+      </h5>
+      <p class="mb-0">These output labels have OutputStat data available. Can populate: height, time, value.</p>
+    </div>
+    <div id="collapse_outputstat" class="collapse">
+      <div class="card-body">
+        <ul class="list-unstyled">
+          {% for item in can_fill_from_outputstat %}
+          <li class="border-bottom pb-3 mb-3">
+            <div class="row">
+              <div class="col-md-8">
+                <strong>{{ item.label.get_type_display }}</strong>: <tt>{{ item.label.ref }}</tt><br>
+                <strong>Label:</strong> <tt>{{ item.label.label|default:"(empty)" }}</tt><br>
+                <strong>Missing fields:</strong>
+                <span class="badge bg-warning text-dark">{{ item.missing_fields|join:", " }}</span><br>
+                <strong>Available data:</strong>
+                <small class="text-muted">
+                  height={{ item.output_stat.confirmed_at_block_height }},
+                  time={{ item.output_stat.confirmed_at_block_time }},
+                  value={{ item.output_stat.value }} sats
+                </small>
+              </div>
+              <div class="col-md-4 text-end">
+                <form method="post" action="{% url 'fill_missing_data_action' labelbase_id=labelbase.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="label_id" value="{{ item.label.id }}">
+                  <input type="hidden" name="action" value="fill_single_from_outputstat">
+                  <button type="submit" class="btn btn-sm btn-outline-primary">Fill Now</button>
+                </form>
+                <a href="{% url 'edit_label' item.label.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        <form method="post" action="{% url 'fill_missing_data_action' labelbase_id=labelbase.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="fill_all_from_outputstat">
+          <button type="submit" class="btn btn-primary">Fill All from OutputStat</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Card 2: Already complete -->
+  {% if already_complete %}
+  <div class="card mt-3">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapse_complete">
+      <h5 class="mb-0 d-flex justify-content-between align-items-center">
+        <span>✓ {{ already_complete|length }} Output labels already have all fields populated</span>
+        <button class="btn btn-success" type="button">View</button>
+      </h5>
+      <p class="mb-0">These output labels have all applicable BIP-329 additional fields (height, time, value) populated.</p>
+    </div>
+    <div id="collapse_complete" class="collapse">
+      <div class="card-body">
+        <ul class="list-unstyled">
+          {% for label in already_complete %}
+          <li class="border-bottom pb-2 mb-2">
+            <div class="row">
+              <div class="col-md-10">
+                <strong>{{ label.get_type_display }}</strong>: <tt>{{ label.ref }}</tt><br>
+                <small class="text-muted">{{ label.label }}</small>
+              </div>
+              <div class="col-md-2 text-end">
+                <a href="{% url 'edit_label' label.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+{% else %}
+<p>Labelbase not found.</p>
+{% endif %}
+
+<script>
+{% addtoblock "js" %} 
+{% endaddtoblock %}
+</script>
+
+{% endblock %}

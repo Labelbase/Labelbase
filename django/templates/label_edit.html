@@ -5,42 +5,11 @@
 {% load backgroundtask_tags %}
 {% load attachments_tags %}
 
-{% block title %}{{ object.type }} {{ object.ref }}{% endblock %}
-
-
-{% comment %}<!--
-<li class="nav-item">
-  <a class="nav-link {% if action == "detail" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Transaction Detail</a>
-</li>
-
-<li class="nav-item">
-  <a class="nav-link {% if action == "history" %}active" aria-current="page"{% else %}"{% endif %} href="{#% url 'edit_label' object.id %#}">Label History</a>
-</li>
-
-<li class="nav-item">
-  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Transaction Output Labeling</a>
-</li>
-
-<li class="nav-item">
-  <a class="nav-link {% if action == "labeling" %}active" aria-current="page" {% else %}"{% endif %} href="{% url 'edit_label' object.id %}labeling/">Derived Addresses Labeling</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin Value</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Coin History</a>
-</li>
-
-
-
-  <div  class="col-{% if action == "derive-addresses-void" %}10{% else %}12{% endif %} float-start">
-
--->{% endcomment %}
+{% block title %}{{ object.type }} {{ object.ref }}{% endblock %}
 
 {% block content %}
 
 {% get_attachments_for object.get_label_attachment as my_attachments %}
-
 
 <div class="row">
   <ul class="nav nav-tabs" style="padding-top: 2rem;">
@@ -120,51 +89,6 @@
     </div>
   {% endif %}
 
-{% comment %}
-{% is_label_id_in_queue object.id as is_in_queue %}
-  {% if is_in_queue %}
-  <div class="alert bd-callout bd-callout-info">
-    <!--div class="btn-group" role="group" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;">
-      <button type="button" class="btn btn-sm btn-outline-danger dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
-        Actions
-      </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=none">Verify output status</a></li>
-        <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=true">Mark output as spent</a></li>
-        <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=false">Mark output as unspent</a></li>
-      </ul>
-    </div-->
-    <strong>Output in queue!</strong> This output is currently in the processing queue. It will be checked shortly.
-  </div>
-{% else %}
-    {% if object.type == "output" %}
-      {% switch output.get_spent_status %}
-      {% case "spent" %}
-        <div class="bd-callout bd-callout-warning">
-          <strong>Output spent!</strong> Blockchain records indicate that this output has been spent in another transaction.
-        </div>
-      {% case "unspent" %}
-        <div class="bd-callout bd-callout-good">
-          <strong>Output unspent!</strong> Blockchain records indicate that this output has not been spent yet.
-        </div>
-      {% case "unconfirmed" %}
-        <div class="alert bd-callout bd-callout-info">
-          <div class="btn-group" role="group" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;">
-            <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle  " data-bs-toggle="dropdown" aria-expanded="false">
-              Actions
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'outputstat_update_redirect' output_stats_id=output.id label_id=object.id %}?force-spent=none">
-                  Verify output status</a></li>
-            </ul>
-          </div>
-          <strong>Output unconfirmed!</strong> Blockchain records indicate that this output has not been confirmed yet.
-        </div>
-      {% endswitch %}
-    {% endif %}
-{% endif %}
-{% endcomment %}
-
 {% is_label_id_in_queue object.id as is_in_queue %}
 {% if is_in_queue %}
 <div class="alert bd-callout bd-callout-info">
@@ -204,31 +128,10 @@
   {% endif %}
 {% endif %}
 
-<!--div class="bd-callout bd-callout-warning">
-  <strong>Heads up!</strong> There are multiple records for this transaction output. <a href="">Review & merge</a>
-</div-->
-
-{% comment %}
-{% if object.type == "addr" %}
-<div class="bd-callout bd-callout-warning">
-  <strong>Heads up!</strong> There are multiple transaction outputs sent to this address. For privacy reasons, do not reuse addresses.
-</div>
-{% endif %}
-{% endcomment %}
-
 {% block label_edit_content %}
 {% endblock %}
 
-
-
-
-
-
 </div>
-
-
-
-
 
 <div class="modal" tabindex="-1" id="deleteLabelModal">
   <div class="modal-dialog modal-dialog-centered">
@@ -252,107 +155,160 @@
       </div>
       </form>
     </div>
-  </div
+  </div>
+</div>
 
+<script>
+{% addtoblock "js" %}
 
+// BIP-329 field visibility based on type
+const fieldsByType = {
+    'tx': ['origin', 'height', 'time', 'fee', 'value', 'rate'],
+    'addr': ['origin', 'keypath', 'heights'],
+    'pubkey': ['origin', 'keypath'],
+    'input': ['origin', 'keypath', 'value', 'fmv', 'height', 'time'],
+    'output': ['origin', 'spendable', 'keypath', 'value', 'fmv', 'height', 'time'],
+    'xpub': ['origin']
+};
 
+function updateFieldVisibility() {
+    const typeField = document.getElementById('id_type');
+    if (!typeField) return;
 
+    const selectedType = typeField.value;
+    const allowedFields = fieldsByType[selectedType] || [];
 
-  <script>
-  {% addtoblock "js" %}
+    // All additional fields (excluding core fields: type, ref, label)
+    const allAdditionalFields = ['origin', 'spendable', 'height', 'time', 'fee', 'value', 'rate', 'keypath', 'fmv', 'heights'];
 
-      // Validate rate field (JSON object with currency codes)
-      const rateField = document.getElementById('id_rate');
-      if (rateField) {
-          rateField.addEventListener('blur', function() {
-              try {
-                  if (this.value && this.value.trim()) {
-                      const parsed = JSON.parse(this.value);
-                      if (typeof parsed !== 'object' || Array.isArray(parsed)) {
-                          alert('Rate must be a JSON object like {"USD": 105620.00}');
-                          return;
-                      }
-                      // Validate values are numeric
-                      for (const [key, value] of Object.entries(parsed)) {
-                          if (typeof value !== 'number') {
-                              alert(`Rate value for ${key} must be numeric`);
-                              return;
-                          }
-                      }
-                  }
-              } catch (e) {
-                  alert('Invalid JSON format for rate field');
-              }
-          });
-      }
+    allAdditionalFields.forEach(fieldName => {
+        const field = document.getElementById(`id_${fieldName}`);
+        if (field) {
+            // Find the parent form-group/control-group div
+            const wrapper = field.closest('.form-group') || field.closest('.control-group') || field.closest('.mb-3') || field.parentElement.parentElement;
 
-      // Validate fmv field (JSON object with currency codes)
-      const fmvField = document.getElementById('id_fmv');
-      if (fmvField) {
-          fmvField.addEventListener('blur', function() {
-              try {
-                  if (this.value && this.value.trim()) {
-                      const parsed = JSON.parse(this.value);
-                      if (typeof parsed !== 'object' || Array.isArray(parsed)) {
-                          alert('FMV must be a JSON object like {"USD": 1233.45}');
-                          return;
-                      }
-                      // Validate values are numeric
-                      for (const [key, value] of Object.entries(parsed)) {
-                          if (typeof value !== 'number') {
-                              alert(`FMV value for ${key} must be numeric`);
-                              return;
-                          }
-                      }
-                  }
-              } catch (e) {
-                  alert('Invalid JSON format for fmv field');
-              }
-          });
-      }
+            if (wrapper) {
+                if (allowedFields.includes(fieldName)) {
+                    wrapper.style.display = '';
+                    field.removeAttribute('disabled');
+                } else {
+                    wrapper.style.display = 'none';
+                    field.setAttribute('disabled', 'disabled');
+                    field.value = ''; // Clear hidden fields
+                }
+            }
+        }
+    });
+}
 
-      // Validate heights field (JSON array of integers)
-      const heightsField = document.getElementById('id_heights');
-      if (heightsField) {
-          heightsField.addEventListener('blur', function() {
-              try {
-                  if (this.value && this.value.trim()) {
-                      const parsed = JSON.parse(this.value);
-                      if (!Array.isArray(parsed)) {
-                          alert('Heights must be a JSON array like [123456, 789012]');
-                          return;
-                      }
-                      // Validate all values are integers
-                      for (const height of parsed) {
-                          if (!Number.isInteger(height)) {
-                              alert('All heights must be integers');
-                              return;
-                          }
-                      }
-                  }
-              } catch (e) {
-                  alert('Invalid JSON format for heights field');
-              }
-          });
-      }
+// Run on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateFieldVisibility();
 
-      // Validate integer fields (height, fee, value)
-      const integerFields = ['id_height', 'id_fee', 'id_value'];
-      integerFields.forEach(fieldId => {
-          const field = document.getElementById(fieldId);
-          if (field) {
-              field.addEventListener('blur', function() {
-                  if (this.value && this.value.trim()) {
-                      if (!/^-?\d+$/.test(this.value.trim())) {
-                          alert(`${fieldId.replace('id_', '')} must be an integer`);
-                      }
-                  }
-              });
-          }
-      });
+    // Run when type changes
+    const typeField = document.getElementById('id_type');
+    if (typeField) {
+        typeField.addEventListener('change', updateFieldVisibility);
+    }
+});
 
-  {% endaddtoblock %}
-  </script>
+// Validate fmv field (JSON object with currency codes)
+const fmvField = document.getElementById('id_fmv');
+if (fmvField) {
+    fmvField.addEventListener('blur', function() {
+        try {
+            if (this.value && this.value.trim()) {
+                const parsed = JSON.parse(this.value);
+                if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+                    alert('FMV must be a JSON object like {"USD": 1233.45}');
+                    return;
+                }
+                // Validate values are numeric (accept both numbers and numeric strings)
+                for (const [key, value] of Object.entries(parsed)) {
+                    // Check if it's a number OR a numeric string
+                    const isNumeric = typeof value === 'number' ||
+                                     (typeof value === 'string' && !isNaN(parseFloat(value)) && isFinite(value));
+                    if (!isNumeric) {
+                        alert(`FMV value for ${key} must be numeric (got: ${typeof value})`);
+                        return;
+                    }
+                }
+            }
+        } catch (e) {
+            alert('Invalid JSON format for fmv field');
+        }
+    });
+}
 
+// Validate rate field (JSON object with currency codes)
+const rateField = document.getElementById('id_rate');
+if (rateField) {
+    rateField.addEventListener('blur', function() {
+        try {
+            if (this.value && this.value.trim()) {
+                const parsed = JSON.parse(this.value);
+                if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+                    alert('Rate must be a JSON object like {"USD": 105620.00}');
+                    return;
+                }
+                // Validate values are numeric (accept both numbers and numeric strings)
+                for (const [key, value] of Object.entries(parsed)) {
+                    // Check if it's a number OR a numeric string
+                    const isNumeric = typeof value === 'number' ||
+                                     (typeof value === 'string' && !isNaN(parseFloat(value)) && isFinite(value));
+                    if (!isNumeric) {
+                        alert(`Rate value for ${key} must be numeric (got: ${typeof value})`);
+                        return;
+                    }
+                }
+            }
+        } catch (e) {
+            alert('Invalid JSON format for rate field');
+        }
+    });
+}
+
+// Validate heights field (JSON array of integers)
+const heightsField = document.getElementById('id_heights');
+if (heightsField) {
+    heightsField.addEventListener('blur', function() {
+        try {
+            if (this.value && this.value.trim()) {
+                const parsed = JSON.parse(this.value);
+                if (!Array.isArray(parsed)) {
+                    alert('Heights must be a JSON array like [123456, 789012]');
+                    return;
+                }
+                // Validate all values are integers
+                for (const height of parsed) {
+                    if (!Number.isInteger(height)) {
+                        alert('All heights must be integers');
+                        return;
+                    }
+                }
+            }
+        } catch (e) {
+            alert('Invalid JSON format for heights field');
+        }
+    });
+}
+
+// Validate integer fields (height, fee, value)
+const integerFields = ['id_height', 'id_fee', 'id_value'];
+integerFields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.addEventListener('blur', function() {
+            if (this.value && this.value.trim()) {
+                if (!/^-?\d+$/.test(this.value.trim())) {
+                    alert(`${fieldId.replace('id_', '')} must be an integer`);
+                }
+            }
+        });
+    }
+});
+
+{% endaddtoblock %}
+</script>
 
 {% endblock %}

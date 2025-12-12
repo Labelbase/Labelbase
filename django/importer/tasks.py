@@ -27,6 +27,9 @@ def process_uploaded_data(uploaded_data_id, passphrase=None, loop=None):
                 if buf in EOLSTOP:
                     break
                 data = json.loads(buf)
+
+                logger.info(f"Parsed data: {data}")
+
                 data["labelbase"] = labelbase.id
                 serializer = LabelSerializer(data=data)
                 if serializer.is_valid():

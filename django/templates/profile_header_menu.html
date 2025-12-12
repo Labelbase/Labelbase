@@ -17,6 +17,10 @@
     {% url 'userprofile_mempool' as mempool_url %}
     <a class="nav-link {% if request.path == mempool_url %}active" aria-current="page" {% else %}"{% endif %} href="{{ mempool_url }}">Mempool</a>
   </li>
+  <li class="nav-item">
+    {% url 'userprofile_fees' as mempool_fees_url %}
+    <a class="nav-link {% if request.path == mempool_fees_url %}active" aria-current="page" {% else %}"{% endif %} href="{{ mempool_fees_url }}">Mempool Fees</a>
+  </li>
   {% if request.user.profile.use_fiatfinances %}
   <li class="nav-item">
     {% url 'userprofile_currency' as my_currency_url %}

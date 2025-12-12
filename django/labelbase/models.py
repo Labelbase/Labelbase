@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django_cryptography.fields import encrypt
+from django.utils.safestring import mark_safe
 
 from pymempool import MempoolAPI
 
@@ -298,3 +299,102 @@ class Label(models.Model):
         except:
             pass
         return ""
+
+
+    def get_fee_health_status(self):
+        """
+        Calculate fee health status for this label if it's a spendable unspent output.
+        """
+        # Only calculate for spendable outputs
+        if self.type != self.TYPE_OUTPUT or not self.spendable:
+            return {
+                'status': None,
+                'fee_sats': None,
+                'value_sats': None,
+                'fee_percentage': None,
+                'threshold_healthy': None,
+                'threshold_warning': None,
+                'threshold_high': None
+            }
+
+        try:
+            value_sats = int(self.value) if self.value else None
+        except (ValueError, TypeError):
+            value_sats = None
+
+        if not value_sats or value_sats <= 0:
+            return {
+                'status': None,
+                'fee_sats': None,
+                'value_sats': value_sats,
+                'fee_percentage': None,
+                'threshold_healthy': None,
+                'threshold_warning': None,
+                'threshold_high': None
+            }
+
+        # Get user's fee rate from profile
+        user_fee_rate = self.labelbase.user.profile.my_fee  # sats per vbyte
+        threshold_adjustment = self.labelbase.user.profile.my_fee_rate_threshold  # percentage points
+
+        # Use P2WPKH as default - most common modern type
+        # Simple 1-in, 2-out transaction
+        from finances.tx_math import calculate_transaction_size, calculate_fee
+
+        inputs = [{'input_script': 'P2WPKH'}]
+        output_counts = {'p2wpkh': 2}
+
+        tx_size = calculate_transaction_size(inputs, output_counts)
+        fee_sats = calculate_fee(tx_size['txVBytes'], user_fee_rate)
+
+        # Calculate fee as percentage of output value
+        fee_percentage = (fee_sats / value_sats) * 100
+
+        # Define thresholds (base + user adjustment)
+        threshold_healthy = 1.0 + threshold_adjustment
+        threshold_warning = 3.0 + threshold_adjustment
+
+        # Determine status
+        if fee_percentage < threshold_healthy:
+            status = 'green'
+        elif fee_percentage < threshold_warning:
+            status = 'yellow'
+        else:
+            status = 'red'
+
+        return {
+            'status': status,
+            'fee_sats': fee_sats,
+            'value_sats': value_sats,
+            'fee_percentage': round(fee_percentage, 3),
+            'threshold_healthy': threshold_healthy,
+            'threshold_warning': threshold_warning,
+            'threshold_high': threshold_warning
+        }
+
+
+    @property
+    def get_fee_health_status_display(self):
+        """
+        Returns text representation of fee health status for DataTables display.
+        """
+        health = self.get_fee_health_status()
+
+        if not health['status']:
+            return ''
+
+        status_map = {
+            'green': '🟢',
+            'yellow': '🟡',
+            'red': '🔴'
+        }
+        # FIXME: escaping in data tables
+        #status_map = {
+        #    'green': '<span data-feather="circle-check" class="align-text-bottom"></span>',
+        #    'yellow': '<span data-feather="alert-circle" class="align-text-bottom"></span>',
+        #    'red': '<span color:red; data-feather="alert-triangle" class="align-text-bottom"></span>'
+        #}
+
+        emoji = status_map.get(health['status'], '')
+
+        return f"{emoji} {health['fee_percentage']}%"

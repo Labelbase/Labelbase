@@ -10,9 +10,12 @@ from userprofile.views import (ProfileView,
                                ProfileAvatarUpdateView,
                                ProfileCurrencyUpdateView,
                                MempoolUpdateView,
+                               ProfileFeeUpdateView,
                                ElectrumInfoUpdateView)
 from userprofile.views import APIKeyView
 from userprofile.views import has_seen_welcome_popup
+
+
 
 from hashtags.views import HashtagListView, HashtagUpdateView, LabelbaseProxyView
 
@@ -46,7 +49,12 @@ from .views import (
     #LabelbasePortfolioView,
     OutputStatUpdateRedirectView,
     BitcoinAddressDatatableView,
+    CurrencySyncView,
+    CurrencySyncActionView,
+    FillMissingDataView,
+    FillMissingDataActionView
 )
+
 
 from importer.views import upload_labels
 from django.contrib.auth import views as auth_views
@@ -92,6 +100,11 @@ urlpatterns = [
         "account/userprofile-mempool/",
         login_required(MempoolUpdateView.as_view()),
         name="userprofile_mempool",
+    ),
+    path(
+        "account/userprofile-mempool-fees/",
+        login_required(ProfileFeeUpdateView.as_view()),
+        name="userprofile_fees",
     ),
     path(
         "account/userprofile-currency/",
@@ -150,6 +163,27 @@ urlpatterns = [
         login_required(LabelbaseMergeView.as_view()),
         name="labelbase_merge"
     ),
+    path(
+        'labelbase/<int:labelbase_id>/currency-sync/',
+        CurrencySyncView.as_view(),
+        name='currency_sync'
+    ),
+    path(
+        'labelbase/<int:labelbase_id>/currency-sync/action/',
+        CurrencySyncActionView.as_view(),
+        name='currency_sync_action'
+    ),
+    path(
+        'labelbase/<int:labelbase_id>/fill-missing-data/',
+        FillMissingDataView.as_view(),
+        name='fill_missing_data'
+    ),
+    path(
+        'labelbase/<int:labelbase_id>/fill-missing-data/action/',
+        FillMissingDataActionView.as_view(),
+        name='fill_missing_data_action'
+    ),
+
     #path(
     #    "labelbase/<int:labelbase_id>/portfolio/",
     #    login_required(LabelbasePortfolioView.as_view()),

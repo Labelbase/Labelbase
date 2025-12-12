@@ -41,4 +41,11 @@ class ProfileCurrencyForm(forms.ModelForm):
         fields = ['my_currency']
 
 
+
+class ProfileFeeForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['my_fee', "my_fee_rate_threshold"]
+
+
 #

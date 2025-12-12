@@ -184,11 +184,12 @@
                     {% endif %}
                     {% endwith %}
                     <li><a class="nav-link" style="font-size: .875rem;" href="{% url "labelbase_fix_and_manage" labelbase_id=labelbase.id %}"><span data-feather="git-merge" class="align-text-bottom"></span> Fix & Manage</a></li>
+                    <li><a class="nav-link" style="font-size: .875rem;" href="{% url "fill_missing_data" labelbase_id=labelbase.id %}"><span data-feather="refresh-cw" class="align-text-bottom"></span> Sync Fields</a></li>
                     {% comment %}<li><a class="nav-link" style="font-size: .875rem;" href="{% url "labelbase_health" labelbase_id=labelbase.id %}"><span data-feather="activity" class="align-text-bottom"></span>UTXOs Health</a></li>{% endcomment %}
                     <li><a class="nav-link" style="font-size: .875rem;" href="{% url "labelbase_tree_maps" pk=labelbase.id %}unspent-outputs/"><span data-feather="grid" class="align-text-bottom"></span> Tree Map</a></li>
                     {% comment %}<li><a class="nav-link" style="font-size: .875rem;" href="{% url "labelbase_stats_and_kpi" labelbase_id=labelbase.id %}"><span data-feather="pie-chart" class="align-text-bottom"></span> Stats & KPIs</a></li>{% endcomment %}
                     {% if request.user.profile.use_fiatfinances %}
-                    <li><a class="nav-link" style="font-size: .875rem;"><span data-feather="dollar-sign" class="align-text-bottom"></span> Fiat Finances</a></li>
+                    <li><a class="nav-link" style="font-size: .875rem;" href="{% url "currency_sync" labelbase_id=labelbase.id %}"><span data-feather="dollar-sign" class="align-text-bottom"></span> Fiat Finances</a></li>
                     {% endif %}
                     <li><a class="nav-link" style="font-size: .875rem;" data-bs-toggle="modal" data-bs-target="#importLabelbaseModal"><span data-feather="upload-cloud" class="align-text-bottom"></span> Import</a></li>
                     <li><a class="nav-link" style="font-size: .875rem;" data-bs-toggle="modal" data-bs-target="#exportLabelbaseModal"><span data-feather="download-cloud" class="align-text-bottom"></span> Export</a></li>

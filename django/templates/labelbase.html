@@ -23,6 +23,31 @@
 
 <div class="table-responsive d-none d-md-block" style="padding-top:1em">
     {% if label_list %}
+
+    <ul class="nav nav-tabs" id="typeFilterTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {% if not request.GET.type or request.GET.type == 'all' %}active{% endif %}" data-type="all">All</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {% if request.GET.type == 'tx' %}active{% endif %}" data-type="tx">Transactions</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {% if request.GET.type == 'output' %}active{% endif %}" data-type="output">Outputs</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {% if request.GET.type == 'input' %}active{% endif %}" data-type="input">Inputs</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {% if request.GET.type == 'addr' %}active{% endif %}" data-type="addr">Addresses</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {% if request.GET.type == 'pubkey' %}active{% endif %}" data-type="pubkey">Pubkeys</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {% if request.GET.type == 'xpub' %}active{% endif %}" data-type="xpub">XPubs</button>
+      </li>
+    </ul>
+    <br>
     <table id="bip329labels" class="table table-striped table-sm">
       <thead>
         <tr>
@@ -32,6 +57,8 @@
           <th scope="col">label</th>
           <th scope="col">origin</th>
           <th scope="col">spendable</th>
+          <th scope="col">health</th>
+
         </tr>
       </thead>
       <tbody>
@@ -123,6 +150,7 @@
 <script>
     {% addtoblock "js" %}
     $(document).ready(function () {
+        window.currentTypeFilter = 'all';
         const dt_table = $('#bip329labels').DataTable({
             order: [[0, "asc"]],
             columns: [
@@ -131,15 +159,19 @@
                 { data: 'ref', orderable: true, searchable: true },
                 { data: 'label', orderable: true, searchable: true },
                 { data: 'origin', orderable: true, searchable: true },
-                { data: 'spendable', orderable: true, searchable: true }
+                { data: 'spendable', orderable: true, searchable: true },
+                { data: 'get_fee_health_status_display', orderable: false, searchable: false}
+
             ],
+
             searching: true,
             processing: false,
             serverSide: true,
             stateSave: true,
             responsive: true,
             ajax: {
-                url: "{% url 'labelbase_label_data' labelbase.pk %}?tag={{ request.GET.tag }}",
+  //              url: "{% url 'labelbase_label_data' labelbase.pk %}?tag={{ request.GET.tag }}",
+                url: "{% url 'labelbase_label_data' labelbase.pk %}?tag={{ request.GET.tag }}&type={{ request.GET.type|default:'all' }}",
                 type: 'GET',
                 dataSrc: 'data'
             },
@@ -151,6 +183,21 @@
             }
         });
 
+        // Tab click handler - full page reload
+        $('#typeFilterTabs button').on('click', function() {
+            const typeFilter = $(this).data('type');
+            const urlParams = new URLSearchParams(window.location.search);
+
+            if (typeFilter === 'all') {
+                urlParams.delete('type');
+            } else {
+                urlParams.set('type', typeFilter);
+            }
+
+            // Full page reload with new URL
+            window.location.search = urlParams.toString();
+        });
+
         function createCard(data) {
           let originText = '';
           if (data.origin) {
@@ -160,6 +207,12 @@
           if (data.type === '<tt>output</tt>' && (data.spendable === "<tt>true</tt>" || data.spendable === "<tt>false</tt>")) {
               spendableText = `<tr><td> <strong>Spendable:</strong></td><td> ${data.spendable === "<tt>true</tt>" ? 'true' : 'false'}</td></tr>`;
           }
+          let healthText = '';
+          if (data.get_fee_health_status_display) {
+              healthText = `<tr><td><strong>Health:</strong></td><td>${data.get_fee_health_status_display}</td></tr>`;
+          }
+
+
           return `
     <div class="col-12 mb-3">
         <div class="card">
@@ -184,6 +237,7 @@
                         </tr>
                         ${originText ? `<tr><td colspan="2">${originText}</td></tr>` : ''}
                         ${spendableText ? `${spendableText}` : ''}
+                        ${healthText}
                     </tbody>
                 </table>
             </div>
@@ -191,6 +245,7 @@
     </div>
 `;
         }
+
 
 
         function renderMobileView(data, start, length, totalRecords, totalRecordsAll) {

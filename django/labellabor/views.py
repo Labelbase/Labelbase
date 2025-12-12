@@ -1,6 +1,11 @@
+import logging
+from datetime import datetime
+from decimal import Decimal
 import os
 import time
+import re
 import tempfile
+import json
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect, resolve_url
@@ -27,19 +32,16 @@ from labelbase.forms import LabelForm, LabelbaseForm
 from labelbase.forms import ExportLabelsForm
 from finances.models import OutputStat
 from finances.tasks import check_all_outputs
+from finances.models import HistoricalPrice
 from .utils import hashtag_to_badge, extract_fiat_value
-
-
-
-
-
 from embit import bip32, script
 from embit.networks import NETWORKS
-
 from django.http import JsonResponse
-from django_datatables_view.base_datatable_view import BaseDatatableView
 from embit import bip32, script
 from embit.networks import NETWORKS
+
+
+logger = logging.getLogger('labelbase')
 
 DEFAULT_DERIVE_ADDRESS_COUNT = 100
 
@@ -300,6 +302,7 @@ class LabelbaseDatatableView(BaseDatatableView):
 
     def filter_queryset(self, qs):
         search = self.request.GET.get('search[value]', None)
+        type_filter = self.request.GET.get('type', None)
         if search:
             # Due to encryption, we need to use a super slow process here...
             res_ids = []
@@ -317,7 +320,9 @@ class LabelbaseDatatableView(BaseDatatableView):
                 if record.origin and search in record.origin.lower():
                     res_ids.append(record.id)
                     continue
-            return qs.filter(id__in=res_ids)
+            qs = qs.filter(id__in=res_ids)
+        if type_filter and type_filter != 'all':
+            qs = qs.filter(type=type_filter)
         return qs
 
 
@@ -724,6 +729,210 @@ class FixAndMergeLabelsView(View):
             })
 
 
+class CurrencySyncView(View):
+    template_name = "currency_sync.html"
+
+    def get(self, request, *args, **kwargs):
+        labelbase_id = self.kwargs["labelbase_id"]
+        labelbase = get_object_or_404(Labelbase, id=labelbase_id, user_id=request.user.id)
+
+        # Get all output and input labels (types that support fmv)
+        labels = Label.objects.filter(
+            labelbase_id=labelbase_id,
+            type__in=['output', 'input']
+        )
+
+        # Categorize
+        text_only = []  # Has currency in label, no FMV
+        fmv_only = []   # Has FMV, no currency in label
+        conflicts = []  # Both exist but don't match
+        synced = []     # Both exist and match
+
+        for label in labels:
+            label_currency = extract_fiat_value(label.label)  # (value, currency)
+            fmv_data = self._parse_fmv(label.fmv)  # Parse JSON
+
+            has_label_currency = label_currency[0] > 0
+            has_fmv = fmv_data is not None
+
+            if has_label_currency and not has_fmv:
+                text_only.append(label)
+            elif has_fmv and not has_label_currency:
+                fmv_only.append(label)
+            elif has_label_currency and has_fmv:
+                if self._currencies_match(label_currency, fmv_data):
+                    synced.append(label)
+                else:
+                    conflicts.append(label)
+
+        return render(request, self.template_name, {
+            'labelbase': labelbase,
+            'text_only': text_only,
+            'fmv_only': fmv_only,
+            'conflicts': conflicts,
+            'synced': synced,
+            'active_labelbase_id': labelbase_id,
+        })
+
+    def _parse_fmv(self, fmv_str):
+        """Parse FMV JSON string"""
+        if not fmv_str or not fmv_str.strip():
+            return None
+        try:
+            return json.loads(fmv_str)
+        except (json.JSONDecodeError, ValueError):
+            return None
+
+    def _currencies_match(self, label_currency, fmv_data):
+        """Check if label currency matches FMV"""
+        value, currency = label_currency
+
+        if currency not in fmv_data:
+            return False
+
+        # Get FMV value and convert to Decimal if it's a string
+        fmv_value = fmv_data[currency]
+        if isinstance(fmv_value, str):
+            try:
+                fmv_value = Decimal(fmv_value)
+            except (ValueError, TypeError):
+                return False
+        else:
+            fmv_value = Decimal(str(fmv_value))
+
+        # Convert label value to Decimal if needed
+        if not isinstance(value, Decimal):
+            value = Decimal(str(value))
+
+        # Compare with small tolerance for rounding differences
+        return abs(fmv_value - value) < Decimal('0.01')
+
+
+
+#import json
+#from django.views import View
+#from django.shortcuts import get_object_or_404, redirect
+#from django.http import HttpResponseRedirect
+#from django.urls import reverse
+#from django.contrib import messages
+#from labelbase.models import Label
+#from labellabor.utils import extract_fiat_value
+
+
+class CurrencySyncActionView(View):
+    def post(self, request, *args, **kwargs):
+        labelbase_id = self.kwargs["labelbase_id"]
+        label_id = request.POST.get('label_id')
+        action = request.POST.get('action')
+
+        if action == 'sync_all_text_to_fmv':
+            # Batch sync: text → FMV
+            labels = Label.objects.filter(
+                labelbase_id=labelbase_id,
+                labelbase__user_id=request.user.id,
+                type__in=['output', 'input']
+            )
+
+            count = 0
+            for label in labels:
+                value, currency = extract_fiat_value(label.label)
+                if value > 0 and currency:
+                    # Convert Decimal to string, then create dict, then JSON
+                    fmv_dict = {currency: str(value)}
+                    label.fmv = json.dumps(fmv_dict)
+                    label.save()
+                    count += 1
+
+            messages.success(request, f"Synced {count} labels from text to FMV field.")
+            return HttpResponseRedirect(reverse('currency_sync', kwargs={'labelbase_id': labelbase_id}))
+
+        elif action == 'sync_all_fmv_to_text':
+            labels = Label.objects.filter(
+                labelbase_id=labelbase_id,
+                labelbase__user_id=request.user.id,
+                type__in=['output', 'input']
+            )
+            count = 0
+            for label in labels:
+                if label.fmv and label.fmv.strip():
+                    try:
+                        fmv_data = json.loads(label.fmv)
+                        if fmv_data:
+                            currency, value_str = list(fmv_data.items())[0]
+                            value = Decimal(value_str) if isinstance(value_str, str) else Decimal(str(value_str))
+                            existing_value, existing_currency = extract_fiat_value(label.label)
+                            if existing_value == 0 or not existing_currency:
+                                if label.label:
+                                    label.label = f"{label.label} {currency} {value:.2f}".strip()
+                                else:
+                                    label.label = f"{currency} {value:.2f}".strip()
+                                label.save()
+                                count += 1
+                    except (json.JSONDecodeError, ValueError) as e:
+                        logging.warning(f"Error processing label {label.id}: {e}")
+                        continue
+
+            messages.success(request, f"Synced {count} labels from FMV to text field.")
+            return HttpResponseRedirect(reverse('currency_sync', kwargs={'labelbase_id': labelbase_id}))
+
+        # Single label actions
+        if not label_id:
+            messages.error(request, "No label specified.")
+            return HttpResponseRedirect(reverse('currency_sync', kwargs={'labelbase_id': labelbase_id}))
+
+        label = get_object_or_404(
+            Label,
+            id=label_id,
+            labelbase__user_id=request.user.id
+        )
+
+        if action == 'text_to_fmv':
+            # Extract from label text and populate FMV
+            value, currency = extract_fiat_value(label.label)
+            if value > 0 and currency:
+                # Store as string to preserve precision
+                fmv_dict = {currency: str(value)}
+                label.fmv = json.dumps(fmv_dict)
+                label.save()
+                messages.success(request, f"Synced currency from label text to FMV field.")
+            else:
+                messages.warning(request, "No valid currency found in label text.")
+
+        elif action == 'fmv_to_text':
+            # Extract from FMV and update label text
+            if label.fmv and label.fmv.strip():
+                try:
+                    fmv_data = json.loads(label.fmv)
+                    if fmv_data:
+                        currency, value_str = list(fmv_data.items())[0]
+                        # Parse value back from string
+                        value = Decimal(value_str) if isinstance(value_str, str) else Decimal(str(value_str))
+
+                        # Check if currency already in label
+                        existing_value, existing_currency = extract_fiat_value(label.label)
+                        if existing_value == 0 or not existing_currency:  # No currency in label
+                            # Append to label with proper decimal formatting
+                            if label.label:
+                                label.label = f"{label.label} {currency} {value:.2f}".strip()
+                            else:
+                                label.label = f"{currency} {value:.2f}".strip()
+                            label.save()
+                            messages.success(request, f"Synced currency from FMV to label text.")
+                        else:
+                            # Pattern to match currency and value like "CHF 615.00" or "USD 1000.50"
+                            pattern = r'\b' + re.escape(existing_currency) + r'\s+\d+\.?\d*\b'
+                            new_text = f"{currency} {value:.2f}"
+                            label.label = re.sub(pattern, new_text, label.label)
+                            label.save()
+                            messages.success(request, f"Updated currency in label text from FMV.")
+                except (json.JSONDecodeError, ValueError) as e:
+                    messages.error(request, f"Error parsing FMV data: {e}")
+            else:
+                messages.warning(request, "No FMV data found.")
+
+        return HttpResponseRedirect(reverse('currency_sync', kwargs={'labelbase_id': labelbase_id}))
+
+
 class ExportLabelsView(View):
     def post(self, request, *args, **kwargs):
         labelbase_id = self.kwargs["labelbase_id"]
@@ -783,11 +992,54 @@ class ExportLabelsView(View):
                         "ref": label.ref,
                         "label": label.label,
                     }
-
                     if label.origin and label.type == "tx":
                         label_entry["origin"] = label.origin
                     if label.spendable in [True, False] and label.type == "output":
                         label_entry["spendable"] = label.spendable
+                    # Additional BIP-329 fields with robust error handling
+                    # Integer fields (height, fee, value)
+                    if label.height:
+                        try:
+                            label_entry["height"] = int(label.height)
+                        except (ValueError, TypeError) as e:
+                            logging.warning(f"Invalid height value for label {label.id}: {e}")
+
+                    if label.time:
+                        label_entry["time"] = label.time
+
+                    if label.fee:
+                        try:
+                            label_entry["fee"] = int(label.fee)
+                        except (ValueError, TypeError) as e:
+                            logging.warning(f"Invalid fee value for label {label.id}: {e}")
+
+                    if label.value:
+                        try:
+                            label_entry["value"] = int(label.value)
+                        except (ValueError, TypeError) as e:
+                            logging.warning(f"Invalid value for label {label.id}: {e}")
+
+                    # JSON fields (rate, fmv, heights)
+                    if label.rate and label.rate.strip():
+                        try:
+                            label_entry["rate"] = json.loads(label.rate)
+                        except json.JSONDecodeError as e:
+                            logging.warning(f"Invalid rate JSON for label {label.id}: {e}")
+
+                    if label.keypath:
+                        label_entry["keypath"] = label.keypath
+
+                    if label.fmv and label.fmv.strip():
+                        try:
+                            label_entry["fmv"] = json.loads(label.fmv)
+                        except json.JSONDecodeError as e:
+                            logging.warning(f"Invalid fmv JSON for label {label.id}: {e}")
+
+                    if label.heights and label.heights.strip():
+                        try:
+                            label_entry["heights"] = json.loads(label.heights)
+                        except json.JSONDecodeError as e:
+                            logging.warning(f"Invalid heights JSON for label {label.id}: {e}")
 
                     # Write the label entry to the file
                     label_writer.write_label(label_entry)
@@ -971,3 +1223,128 @@ class OutputStatUpdateRedirectView(View):
         )
         label.save() # will trigger a check agains Electrum
         return redirect('edit_label', pk=label_id)
+
+
+class FillMissingDataView(View):
+    template_name = "fill_missing_data.html"
+
+    def get(self, request, *args, **kwargs):
+        labelbase_id = self.kwargs["labelbase_id"]
+        labelbase = get_object_or_404(Labelbase, id=labelbase_id, user_id=request.user.id)
+
+        # Get all output labels (only type that uses OutputStat)
+        output_labels = Label.objects.filter(
+            labelbase_id=labelbase_id,
+            type='output'
+        )
+
+        can_fill_from_outputstat = []
+        already_complete = []
+
+        for label in output_labels:
+            missing_fields = self._get_missing_fields(label)
+            if not missing_fields:
+                already_complete.append(label)
+                continue
+
+            # Check if OutputStat exists
+            output_stat = OutputStat.objects.filter(
+                user=label.labelbase.user,
+                type_ref_hash=label.type_ref_hash,
+                network=label.labelbase.network
+            ).first()
+
+            if output_stat:
+                can_fill_from_outputstat.append({
+                    'label': label,
+                    'missing_fields': missing_fields,
+                    'output_stat': output_stat
+                })
+
+        return render(request, self.template_name, {
+            'labelbase': labelbase,
+            'can_fill_from_outputstat': can_fill_from_outputstat,
+            'already_complete': already_complete,
+            'active_labelbase_id': labelbase_id,
+        })
+
+    def _get_missing_fields(self, label):
+        """Return list of fields that are missing for output type"""
+        missing = []
+
+        # Only check fields applicable to outputs
+        applicable_fields = ['height', 'time', 'value']
+
+        for field in applicable_fields:
+            value = getattr(label, field, None)
+            if not value or (isinstance(value, str) and not value.strip()):
+                missing.append(field)
+
+        return missing
+
+
+
+class FillMissingDataActionView(View):
+    def post(self, request, *args, **kwargs):
+        labelbase_id = self.kwargs["labelbase_id"]
+        action = request.POST.get('action')
+        label_id = request.POST.get('label_id')
+        if action == 'fill_all_from_outputstat':
+            count = self._fill_all_from_outputstat(request.user.id, labelbase_id)
+            messages.success(request, f"Filled {count} labels from OutputStat data.")
+        elif action == 'fill_single_from_outputstat':
+            label = get_object_or_404(Label, id=label_id, labelbase__user_id=request.user.id)
+            if self._fill_label_from_outputstat(label):
+                messages.success(request, "Filled label data from OutputStat.")
+            else:
+                messages.error(request, "Could not fill label data.")
+        return HttpResponseRedirect(reverse('fill_missing_data', kwargs={'labelbase_id': labelbase_id}))
+
+    def _fill_all_from_outputstat(self, user_id, labelbase_id):
+        """Fill all output labels that have OutputStat data"""
+        labels = Label.objects.filter(
+            labelbase_id=labelbase_id,
+            labelbase__user_id=user_id,
+            type='output'
+        )
+        count = 0
+        for label in labels:
+            if self._fill_label_from_outputstat(label):
+                count += 1
+
+        return count
+
+    def _fill_label_from_outputstat(self, label):
+        """Fill a single label from OutputStat data"""
+        output_stat = OutputStat.objects.filter(
+            user=label.labelbase.user,
+            type_ref_hash=label.type_ref_hash,
+            network=label.labelbase.network
+        ).first()
+
+        if not output_stat:
+            return False
+
+        updated = False
+
+        # Fill height (only if empty)
+        if not label.height and output_stat.confirmed_at_block_height:
+            label.height = str(output_stat.confirmed_at_block_height)
+            updated = True
+
+        # Fill time (only if empty)
+        if not label.time and output_stat.confirmed_at_block_time:
+            # Convert Unix timestamp to ISO-8601
+            dt = datetime.utcfromtimestamp(output_stat.confirmed_at_block_time)
+            label.time = dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+            updated = True
+
+        # Fill value (only if empty)
+        if not label.value and output_stat.value:
+            label.value = str(output_stat.value)
+            updated = True
+
+        if updated:
+            label.save()
+
+        return updated

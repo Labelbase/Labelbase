@@ -11,7 +11,8 @@ from .forms import (
     ProfileAvatarForm,
     ProfileCurrencyForm,
     ElectrumServerInfoForm,
-    MempoolForm)
+    MempoolForm,
+    ProfileFeeForm)
 
 
 
@@ -134,4 +135,20 @@ class ProfileCurrencyUpdateView(UpdateView):
 
     def form_valid(self, form):
         messages.success(self.request, "<strong>Success!</strong> Currency updated successfully.")
+        return super().form_valid(form)
+
+
+class ProfileFeeUpdateView(UpdateView):
+    model = Profile
+    form_class = ProfileFeeForm
+    template_name = 'profile_update_fees.html'
+
+    def get_success_url(self):
+        return reverse_lazy('userprofile_fees')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Profile, user=self.request.user)
+
+    def form_valid(self, form):
+        messages.success(self.request, "<strong>Success!</strong> Fees updated successfully.")
         return super().form_valid(form)

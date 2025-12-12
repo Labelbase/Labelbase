@@ -49,7 +49,10 @@ class Profile(models.Model):
                                    choices=CURRENCY_CHOICES,
                                    default='USD')
 
+    my_fee = models.IntegerField(default=1, help_text="Fee used when broadcasting transactions")
+    my_fee_rate_threshold = models.IntegerField(default=1, help_text="Overwrite healthy fee")
     has_seen_welcome_popup = models.BooleanField(default=False)
+
     def labelbases(self):
         return Labelbase.objects.filter(user_id=self.user_id)
 

@@ -1098,6 +1098,7 @@ class LabelUpdateView(UpdateView):
         context["active_labelbase_id"] = self.object.labelbase.id
         context["labelbase"] = self.object.labelbase
         context["action"] = self.kwargs.get('action', 'update')
+
         if context["action"] in ["labeling", "derive-addresses"]:
             context["labelform"] = LabelForm(
                 request=self.request, labelbase_id=self.object.labelbase.id
@@ -1107,15 +1108,32 @@ class LabelUpdateView(UpdateView):
                 mempool_api = self.object.labelbase.get_mempool_api()
                 context["res_tx"] = mempool_api.get_transaction(self.object.ref)
 
-
         if self.object.type == "xpub":
             context["address_count"] = self.request.GET.get("address_count", DEFAULT_DERIVE_ADDRESS_COUNT)
             context["offset"] = int(self.request.GET.get("offset", 0))
 
         if self.object.type == "output":
-            context["output"] = OutputStat.objects.filter(
-                                    user=self.object.labelbase.user,
-                                    type_ref_hash=self.object.type_ref_hash).last()
+            output_stat = OutputStat.objects.filter(
+                user=self.object.labelbase.user,
+                type_ref_hash=self.object.type_ref_hash
+            ).last()
+            context["output"] = output_stat
+
+            # Convert Unix timestamp to human-readable UTC formats
+            if output_stat and output_stat.confirmed_at_block_time:
+                dt = datetime.utcfromtimestamp(output_stat.confirmed_at_block_time)
+                context["output_block_time_utc"] = dt.strftime('%Y-%m-%d %H:%M:%S')
+                context["output_block_time_iso"] = dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+            # Check for missing BIP-329 fields
+            if context["action"] == "output-details":
+                missing_fields = []
+                applicable_fields = ['height', 'time', 'value']
+                for field in applicable_fields:
+                    value = getattr(self.object, field, None)
+                    if not value or (isinstance(value, str) and not value.strip()):
+                        missing_fields.append(field)
+                context["missing_fields"] = missing_fields
 
         return context
 
@@ -1340,6 +1358,59 @@ class FillMissingDataActionView(View):
             updated = True
 
         # Fill value (only if empty)
+        if not label.value and output_stat.value:
+            label.value = str(output_stat.value)
+            updated = True
+
+        if updated:
+            label.save()
+
+        return updated
+
+
+class FillOutputFieldsActionView(View):
+    """Single output field fill action from output-details page"""
+    def post(self, request, *args, **kwargs):
+        label_id = self.kwargs["label_id"]
+        label = get_object_or_404(
+            Label,
+            id=label_id,
+            labelbase__user_id=request.user.id,
+            type='output'
+        )
+
+        # Reuse the existing fill logic
+        if self._fill_label_from_outputstat(label):
+            messages.success(request, "Successfully filled BIP-329 fields from OutputStat data.")
+        else:
+            messages.error(request, "Could not fill fields. OutputStat data may not be available.")
+
+        return HttpResponseRedirect(
+            reverse('edit_label', kwargs={'pk': label_id}) + '?action=output-details'
+        )
+
+    def _fill_label_from_outputstat(self, label):
+        """Fill a single label from OutputStat data (reused from FillMissingDataActionView)"""
+        output_stat = OutputStat.objects.filter(
+            user=label.labelbase.user,
+            type_ref_hash=label.type_ref_hash,
+            network=label.labelbase.network
+        ).first()
+
+        if not output_stat:
+            return False
+
+        updated = False
+
+        if not label.height and output_stat.confirmed_at_block_height:
+            label.height = str(output_stat.confirmed_at_block_height)
+            updated = True
+
+        if not label.time and output_stat.confirmed_at_block_time:
+            dt = datetime.utcfromtimestamp(output_stat.confirmed_at_block_time)
+            label.time = dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+            updated = True
+
         if not label.value and output_stat.value:
             label.value = str(output_stat.value)
             updated = True

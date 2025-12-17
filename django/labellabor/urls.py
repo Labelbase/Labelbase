@@ -52,7 +52,8 @@ from .views import (
     CurrencySyncView,
     CurrencySyncActionView,
     FillMissingDataView,
-    FillMissingDataActionView
+    FillMissingDataActionView,
+    FillOutputFieldsActionView
 )
 
 
@@ -178,6 +179,9 @@ urlpatterns = [
         FillMissingDataView.as_view(),
         name='fill_missing_data'
     ),
+    path('label/<int:label_id>/fill-output-fields/',
+        FillOutputFieldsActionView.as_view(),
+        name='fill_output_fields_action'),
     path(
         'labelbase/<int:labelbase_id>/fill-missing-data/action/',
         FillMissingDataActionView.as_view(),

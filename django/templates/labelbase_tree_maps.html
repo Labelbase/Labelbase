@@ -16,6 +16,12 @@
   <li class="nav-item">
     <a class="nav-link {% if action == "unspent-spendable-outputs" %}active" aria-current="page" {% else %}"{% endif %} href="{% url "labelbase_tree_maps" pk=labelbase.id %}unspent-spendable-outputs/">Unspent Spendable Outputs</a>
   </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link {% if action == 'fee-efficiency' %}active{% endif %}"
+       href="{% url 'labelbase_tree_maps' labelbase.id 'fee-efficiency' %}">
+        Fee Efficiency (VTER)
+    </a>
+  </li>
 </ul>
 
 

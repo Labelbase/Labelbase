@@ -15,9 +15,11 @@
   Define the fee for new transactions. This will be used to evaluate the health of your unspent transaction outputs.
 
   <br><br>
-  🟢 Healthy fee: < 1% (fee/amount < 0.01)<br>
-  🟡 Warning: 1-3%<br>
-  🔴 High: > 3%<br>
+<!--(fee/amount < 0.01)<br>-->
+
+  🟢 Healthy fee: < {{ request.user.profile.my_fee_threshold_healthy }}%
+  🟡 Warning: {{ request.user.profile.my_fee_threshold_healthy }}-{{ user.profile.my_fee_threshold_warning }}%
+  🔴 High: > {{ request.user.profile.my_fee_threshold_warning }}%
 
 
 

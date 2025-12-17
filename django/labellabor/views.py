@@ -564,7 +564,7 @@ class TreeMapsView(ListView):
         context['action'] = self.kwargs.get('action', 'unspent-outputs')
         return context
 
-    def get_queryset(self):
+    def get_queryset_OLD(self):
         #action = self.kwargs.get('action', 'unspent-outputs')
         label_ids = []
 
@@ -588,6 +588,38 @@ class TreeMapsView(ListView):
                     #    label_ids.append(l.id)
                     #else:
                     label_ids.append(l.id)
+        if label_ids:
+            qs = qs.filter(id__in=label_ids,
+                           labelbase__user_id=self.request.user.id,
+                           labelbase_id=self.kwargs["pk"])
+        else:
+            qs = Label.objects.none()
+        return qs.order_by("id")
+
+    def get_queryset(self):
+        label_ids = []
+
+        qs = Label.objects.filter(
+            labelbase__user_id=self.request.user.id,
+            labelbase_id=self.kwargs["pk"],
+        )
+
+        action = self.kwargs.get('action', 'unspent-outputs')
+
+        for l in qs:
+            if l.type == "output":
+                output = OutputStat.objects.filter(
+                                            user=l.labelbase.user,
+                                            type_ref_hash=l.type_ref_hash,
+                                            network=l.labelbase.network).last()
+                if output and output.spent is False:
+                    # For fee-efficiency, only show spendable outputs
+                    if action == 'fee-efficiency':
+                        if l.spendable is True:
+                            label_ids.append(l.id)
+                    else:
+                        label_ids.append(l.id)
+
         if label_ids:
             qs = qs.filter(id__in=label_ids,
                            labelbase__user_id=self.request.user.id,

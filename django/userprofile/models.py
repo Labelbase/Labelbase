@@ -50,8 +50,19 @@ class Profile(models.Model):
                                    default='USD')
 
     my_fee = models.IntegerField(default=1, help_text="Fee used when broadcasting transactions")
-    my_fee_rate_threshold = models.IntegerField(default=1, help_text="Overwrite healthy fee")
+    my_fee_rate_threshold = models.IntegerField(default=1, help_text="Adjust fee health thresholds (percentage points). Default: 0 = no adjustment, +1 = more lenient, -1 = more strict")
+
     has_seen_welcome_popup = models.BooleanField(default=False)
+
+    @property
+    def my_fee_threshold_healthy(self):
+        """Calculate healthy threshold with user adjustment"""
+        return 1.0 + self.my_fee_rate_threshold
+
+    @property
+    def my_fee_threshold_warning(self):
+        """Calculate warning threshold with user adjustment"""
+        return 3.0 + self.my_fee_rate_threshold
 
     def labelbases(self):
         return Labelbase.objects.filter(user_id=self.user_id)

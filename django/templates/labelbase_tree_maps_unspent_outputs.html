@@ -11,14 +11,26 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@0.2.3"></script>
 
-
-{% if labelbase.is_testnet %}
+{% if action == "fee-efficiency" %}
+<div class="alert alert-dismissible bd-callout bd-callout-info">
+  <button type="button" class="btn-close" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;" data-bs-dismiss="alert" aria-label="Close"></button>
+  <div style="padding-right: 1.8rem;">
+    <strong>Fee Efficiency (VTER):</strong> Color shows how efficient it is to spend each output based on the fee-to-value ratio.
+    <br><br>
+    🟢 <strong>Healthy:</strong> Fee &lt; {{ request.user.profile.my_fee_threshold_healthy }}% of value<br>
+    🟡 <strong>Warning:</strong> Fee {{ request.user.profile.my_fee_threshold_healthy }}-{{ request.user.profile.my_fee_threshold_warning }}% of value<br>
+    🔴 <strong>High:</strong> Fee &gt; {{ request.user.profile.my_fee_threshold_warning }}% of value
+    <br><br>
+    <small>Box size represents output value in sats. Thresholds based on your fee settings. <a href="{% url 'userprofile_fees' %}">Adjust in Profile → Fees</a></small>
+  </div>
+</div>
+{% elif labelbase.is_testnet %}
 <div class="alert alert-dismissible bd-callout bd-callout-info">
   <button type="button" class="btn-close" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;" data-bs-dismiss="alert" aria-label="Close"></button>
   <div style="padding-right: 1.8rem;">
     <strong>Important Notice for Testnet Transactions:</strong> Testnet coins hold no real-world value and are solely intended for testing purposes.
   </div>
-</div
+</div>
 {% else %}
 <div class="alert alert-dismissible bd-callout bd-callout-info ">
   <button type="button" class="btn-close" style="position: absolute; top: -8px; right: -4px; padding: 1.25rem 1rem;" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -28,6 +40,7 @@ If the UTXO value is not provided, Labelbase will estimate it based on historica
 </div>
 </div>
 {% endif %}
+
 <div class="row ">
 
 <style>
@@ -40,8 +53,6 @@ If the UTXO value is not provided, Labelbase will estimate it based on historica
   <canvas id="chart-area"  style="height: 56vh;"></canvas>
 </div>
 
-
-
 <script type="text/javascript">
 
 function colorFromValue(value, index, border) {
@@ -53,7 +64,6 @@ function colorFromValue(value, index, border) {
     } else {
       var color = "#F7931A";
     }
-    //var color = "orange";
     if (border) {
       alpha += 0.01;
     }
@@ -62,15 +72,11 @@ function colorFromValue(value, index, border) {
       .rgbString();
 }
 
-
 function red_or_greem_fromValue(value, index, border) {
     var alpha = (1 + Math.log(value)) / 5;
     var color;
 
     value = window.records[index].performance;
-   /*  if (window.records[index].spendable == "false") {
-      color = "#dee2e6";
-    } else */
     if (value > 0) {
         color = "rgba(46, 204, 113, 1)"; // muted green color for positive values
     } else if (value < 0) {
@@ -88,12 +94,39 @@ function red_or_greem_fromValue(value, index, border) {
         .rgbString();
 }
 
-window.records = [
+function healthColorFromValue(value, index, border) {
+    var health_status = window.records[index].health_status;
+    var alpha = (1 + Math.log(value)) / 5;
+    var color;
 
+    switch(health_status) {
+        case 'green':
+            color = "rgba(46, 204, 113, 1)"; // Green
+            break;
+        case 'yellow':
+            color = "rgba(241, 196, 15, 1)"; // Yellow
+            break;
+        case 'red':
+            color = "rgba(231, 76, 60, 1)"; // Red
+            break;
+        default:
+            color = "#dee2e6"; // Gray - no health data
+    }
+
+    if (border) {
+        alpha += 0.01;
+    }
+
+    return Chart.helpers.color(color)
+        .alpha(alpha)
+        .rgbString();
+}
+
+window.records = [
   {% for label in label_list %}
-    {% if action == "unspent-spendable-outputs" and label.spendable or action == "unspent-outputs" %}
+    {% if action == "unspent-spendable-outputs" and label.spendable or action == "unspent-outputs" or action == "fee-efficiency" %}
     {
-      'spendable': {% if  label.spendable is None %}'Undefined'{% else %}'{{ label.spendable }}'{% endif %},
+      'spendable': {% if  label.spendable is None %}'Undefined'{% else %}'{{ label.spendable }}'{% endif %},
       'spent': '{{ label.get_finance_output_metrics_dict.spent }}',
       'ref': '{{ label.ref }}',
       'label': '{{ label.label }}',
@@ -105,22 +138,23 @@ window.records = [
       'type_ref_hash': '{{ label.get_finance_output_metrics_dict.type_ref_hash }}',
       'performance': {{label.get_finance_output_metrics_dict.performance|floatformat:"2" }},
       'current_price': {{label.get_finance_output_metrics_dict.current_price|floatformat:"2" }},
-      'fiat_value_old': {{label.get_finance_output_metrics_dict.fiat_value_old|floatformat:"2" }}, // historical or tracked value
-      'is_tracked': {{label.get_finance_output_metrics_dict.is_tracked|lower }} // tracked value
-
+      'fiat_value_old': {{label.get_finance_output_metrics_dict.fiat_value_old|floatformat:"2" }},
+      'is_tracked': {{label.get_finance_output_metrics_dict.is_tracked|lower }},
+      {% if action == "fee-efficiency" %}
+      'health_status': '{{ label.get_fee_health_status.status }}',
+      'health_display': '{{ label.get_fee_health_status_display }}',
+      'health_fee_sats': {{ label.get_fee_health_status.fee_sats|default:"null" }},
+      'health_fee_percentage': {{ label.get_fee_health_status.fee_percentage|default:"null" }},
+      {% endif %}
     },
-    {% else %}
     {% endif %}
   {% endfor %}
 ];
-
 
 // Sorting the array by the 'sats' property in descending order
 window.records.sort(function(a, b) {
   return b.sats - a.sats;
 });
-
-
 
 var ctx = document.getElementById("chart-area").getContext("2d");
 
@@ -133,10 +167,18 @@ data: {
       data: window.records,
       key: 'sats',
       backgroundColor: function(ctx) {
-        return red_or_greem_fromValue(ctx.dataset.data[ctx.dataIndex].v, ctx.dataIndex);
+        {% if action == "fee-efficiency" %}
+          return healthColorFromValue(ctx.dataset.data[ctx.dataIndex].v, ctx.dataIndex);
+        {% else %}
+          return red_or_greem_fromValue(ctx.dataset.data[ctx.dataIndex].v, ctx.dataIndex);
+        {% endif %}
       },
       borderColor: function(ctx) {
-        return red_or_greem_fromValue(ctx.dataset.data[ctx.dataIndex].v, ctx.dataIndex, true);
+        {% if action == "fee-efficiency" %}
+          return healthColorFromValue(ctx.dataset.data[ctx.dataIndex].v, ctx.dataIndex, true);
+        {% else %}
+          return red_or_greem_fromValue(ctx.dataset.data[ctx.dataIndex].v, ctx.dataIndex, true);
+        {% endif %}
       },
       spacing: 1,
       borderWidth: 0,
@@ -148,7 +190,7 @@ options: {
   maintainAspectRatio: false,
   title: {
     display: true,
-    text: "Unspent {% if action == "unspent-spendable-outputs" %}Spendable {% endif %}Outputs"
+    text: "{% if action == 'fee-efficiency' %}Fee Efficiency (VTER){% elif action == 'unspent-spendable-outputs' %}Unspent Spendable Outputs{% else %}Unspent Outputs{% endif %}"
   },
   legend: {
      display: false
@@ -160,8 +202,6 @@ options: {
 }
 });
 
-
-
 document.getElementById("chart-area").onclick = function(evt) {
       var activePoints = window.chart1.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
       if (activePoints[0]) {
@@ -169,28 +209,26 @@ document.getElementById("chart-area").onclick = function(evt) {
       }
   };
 
-  // Track the current popover index
-  window.curr_popover_index = -1;
+// Track the current popover index
+window.curr_popover_index = -1;
 
 // Define popover content
 function getPopoverContent(index) {
     if (index >= 0 && index < window.records.length) {
-
-      /*
-        var is_spent = "no";
-        if (window.records[index].spent) {
-          is_spent = "yes";
-        }
-
-        var is_spendable = "no";
-        if (window.records[index].spendable) {
-          is_spendable = "yes";
-        }
-
-*/
         var content = '<div class="popover-content">';
         content += '<div><strong>Label:</strong> ' + window.records[index].label + '</div>';
         content += '<div><strong>Output:</strong> ' + window.records[index].ref + '</div>';
+
+        {% if action == "fee-efficiency" %}
+        // Add health information for fee-efficiency view
+        if (window.records[index].health_status) {
+            content += '<div><strong>Fee Health:</strong> ' + window.records[index].health_display + '</div>';
+            if (window.records[index].health_fee_sats !== null) {
+                content += '<div><strong>Estimated Fee:</strong> ' + window.records[index].health_fee_sats + ' sats</div>';
+            }
+        }
+        {% endif %}
+
         content += '<div><strong>Confirmed in block:</strong> ' + window.records[index].confirmed_at_block_height + '</div>';
         if (window.records[index].is_tracked) {
           content += '<div><strong>Tracked value:</strong> ' + window.records[index].fiat_cur + ' ' + window.records[index].fiat_value_old + '</div>';
@@ -238,16 +276,13 @@ document.body.onmousemove = function (evt) {
             var topPosition = evt.pageY - popoverHeight / 2;
             var leftPosition;
             if (evt.pageX <= element.getBoundingClientRect().left + element.offsetWidth / 2) {
-              // Inside the left half of chart-area, keep popover on the right side of the evt.pageX
               leftPosition = evt.pageX + 10;
             } else {
-              // Inside the right half of chart-area, keep popover on the left side of the evt.pageX (posx - popoverWidth = new pos x)
               leftPosition = evt.pageX - popoverWidth - 10;
             }
-            leftPosition = Math.min(leftPosition, window.innerWidth - popoverWidth - 10); // Ensure the popover doesn't exceed the right screen border
-            leftPosition = Math.max(leftPosition, 10); // Ensure the popover doesn't exceed the left screen border
+            leftPosition = Math.min(leftPosition, window.innerWidth - popoverWidth - 10);
+            leftPosition = Math.max(leftPosition, 10);
 
-            // Ensure that the top position is within the viewport
             if (topPosition < 0) {
               topPosition = 0;
             } else if (topPosition + popoverHeight > window.innerHeight) {
@@ -279,12 +314,9 @@ document.getElementById("chart-area").onmouseout = function (evt) {
 
 </div>
 
-
 {% else %}
 NO LABELBASE
 {% endif %}
-
-
 
 <script>
 {% addtoblock "js" %}

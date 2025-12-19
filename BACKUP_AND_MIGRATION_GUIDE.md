@@ -7,6 +7,7 @@ A comprehensive guide for safely backing up your Labelbase database and running 
 - [Quick Backup](#quick-backup)
 - [Automated Backup Script](#automated-backup-script)
 - [Running Migrations Safely](#running-migrations-safely)
+- [Upgrading Labelbase](#upgrading-labelbase)
 - [Restoring from Backup](#restoring-from-backup)
 - [Scheduled Backups](#scheduled-backups)
 - [Best Practices](#best-practices)
@@ -139,15 +140,15 @@ docker-compose exec -T labelbase_mysql mysqldump \
 # Check if backup was successful
 if [ $? -eq 0 ] && [ -s "$BACKUP_FILE" ]; then
     echo -e "${GREEN}✓ Backup successful!${NC}"
-    
+
     # Get file size
     SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
     echo "Backup size: $SIZE"
-    
+
     # Compress backup to save space
     echo "Compressing backup..."
     gzip "$BACKUP_FILE"
-    
+
     if [ $? -eq 0 ]; then
         COMPRESSED_SIZE=$(du -h "${BACKUP_FILE}.gz" | cut -f1)
         echo -e "${GREEN}✓ Compressed to: $COMPRESSED_SIZE${NC}"
@@ -155,29 +156,29 @@ if [ $? -eq 0 ] && [ -s "$BACKUP_FILE" ]; then
     else
         echo -e "${YELLOW}⚠ Compression failed, keeping uncompressed backup${NC}"
     fi
-    
+
     # Clean up old backups (keep only last N backups)
     echo "Cleaning up old backups (keeping last $KEEP_BACKUPS)..."
     BACKUP_COUNT=$(ls -1 "$BACKUP_DIR"/labelbase_backup_*.sql.gz 2>/dev/null | wc -l)
-    
+
     if [ "$BACKUP_COUNT" -gt "$KEEP_BACKUPS" ]; then
         ls -t "$BACKUP_DIR"/labelbase_backup_*.sql.gz | tail -n +$((KEEP_BACKUPS + 1)) | xargs -r rm
         echo -e "${GREEN}✓ Cleaned up old backups${NC}"
     else
         echo "No cleanup needed ($BACKUP_COUNT backups exist)"
     fi
-    
+
     echo ""
     echo -e "${GREEN}=== Backup Complete ===${NC}"
     echo "Database: ${BACKUP_FILE}.gz"
     echo "Config: ${CONFIG_BACKUP_FILE}"
-    
+
 else
     echo -e "${RED}✗ Backup failed!${NC}"
-    
+
     # Remove empty or failed backup file
     [ -f "$BACKUP_FILE" ] && rm "$BACKUP_FILE"
-    
+
     echo "Troubleshooting:"
     echo "1. Check if MySQL container is running: docker-compose ps"
     echo "2. Check MySQL logs: docker-compose logs labelbase_mysql"
@@ -275,6 +276,251 @@ After migrations complete:
 ### Step 6: If Something Goes Wrong
 
 If migrations fail or break functionality, restore from backup (see below).
+
+---
+
+## Upgrading Labelbase
+
+When new versions of Labelbase are released, follow this workflow to safely upgrade.
+
+### Complete Upgrade Workflow
+
+**Step 1: Backup First (Critical!)**
+
+```bash
+cd Labelbase
+./backup-labelbase.sh
+```
+
+**Step 2: Pull Latest Code**
+
+```bash
+git pull origin master
+```
+
+**Step 3: Rebuild Containers (if needed)**
+
+If dependencies or Docker configuration changed:
+
+```bash
+source exports.sh && docker-compose up --build -d
+```
+
+Or use the main script:
+
+```bash
+source exports.sh && ./build-and-run-labelbase.sh
+```
+
+**⚠️ IMPORTANT**: These commands are SAFE - they rebuild containers but preserve your data in Docker volumes. Your database and uploaded files are NOT deleted.
+
+**❌ DANGER ZONE - Commands that DELETE data:**
+```bash
+# NEVER run these unless you want to lose ALL data:
+docker-compose down -v    # The -v flag deletes volumes = data loss!
+docker volume prune       # Deletes unused volumes
+docker system prune -a    # Nuclear option - deletes everything
+```
+
+**Step 4: Apply Migrations and collect static files **
+
+```bash
+source exports.sh
+docker-compose exec labelbase_django python manage.py showmigrations
+docker-compose exec labelbase_django python manage.py migrate
+docker-compose exec labelbase_django python  manage.py collectstatic --noinput
+
+```
+
+**Step 5: Restart Services**
+
+```bash
+docker-compose restart labelbase_django
+```
+
+**Step 6: Verify Everything Works**
+
+1. Visit your Labelbase site
+2. Test critical functionality
+3. Check logs: `docker-compose logs -f labelbase_django`
+
+### Quick Upgrade Script
+
+Create `update-and-migrate.sh` for a streamlined upgrade process:
+
+```bash
+#!/bin/bash
+
+# Labelbase Quick Update & Migration Script
+# Usage: source exports.sh && ./update-and-migrate.sh
+
+# Colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+echo -e "${YELLOW}=== Labelbase Update & Migrate ===${NC}"
+
+# Check if we're in the right directory
+if [ ! -f "docker-compose.yml" ]; then
+    echo -e "${RED}Error: Not in Labelbase directory (docker-compose.yml not found)${NC}"
+    exit 1
+fi
+
+# Check env vars
+if [[ -z "${MYSQL_ROOT_PASSWORD}" ]]; then
+    echo -e "${RED}Error: Run 'source exports.sh' first!${NC}"
+    exit 1
+fi
+
+# Step 1: Backup
+echo -e "${YELLOW}Step 1: Creating backup...${NC}"
+if [ -f "backup-labelbase.sh" ]; then
+    ./backup-labelbase.sh
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}Backup failed! Aborting upgrade.${NC}"
+        exit 1
+    fi
+else
+    echo -e "${YELLOW}⚠ Warning: backup-labelbase.sh not found, skipping backup${NC}"
+    read -p "Continue without backup? (yes/no): " -r
+    if [[ ! $REPLY =~ ^[Yy][Ee][Ss]$ ]]; then
+        echo "Upgrade cancelled."
+        exit 0
+    fi
+fi
+
+# Step 2: Pull latest code
+echo ""
+echo -e "${YELLOW}Step 2: Pulling latest changes...${NC}"
+git pull origin master
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Git pull failed!${NC}"
+    exit 1
+fi
+
+# Step 3: Check for pending migrations
+echo ""
+echo -e "${YELLOW}Step 3: Checking for migrations...${NC}"
+PENDING=$(docker-compose exec -T labelbase_django python manage.py showmigrations --plan 2>/dev/null | grep "\[ \]" | wc -l)
+
+if [ $PENDING -gt 0 ]; then
+    echo -e "${YELLOW}Found $PENDING pending migration(s)${NC}"
+
+    # Show what will be migrated
+    echo "Pending migrations:"
+    docker-compose exec -T labelbase_django python manage.py showmigrations | grep "\[ \]"
+
+    echo ""
+    read -p "Apply migrations now? (y/n): " -n 1 -r
+    echo
+
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        echo "Applying migrations..."
+        docker-compose exec -T labelbase_django python manage.py migrate --noinput
+
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}✓ Migrations applied successfully${NC}"
+        else
+            echo -e "${RED}✗ Migrations failed!${NC}"
+            echo "Check logs: docker-compose logs labelbase_django"
+            exit 1
+        fi
+    else
+        echo -e "${YELLOW}⚠ Skipping migrations${NC}"
+        echo "Run manually later: docker-compose exec labelbase_django python manage.py migrate"
+    fi
+else
+    echo -e "${GREEN}✓ No pending migrations${NC}"
+fi
+
+# Step 4: Restart Django
+echo ""
+echo -e "${YELLOW}Step 4: Restarting Django...${NC}"
+docker-compose restart labelbase_django
+
+echo ""
+echo -e "${GREEN}=== Update Complete! ===${NC}"
+echo "Check logs: docker-compose logs -f labelbase_django"
+echo "Visit your site to verify everything works"
+```
+
+Make it executable:
+
+```bash
+chmod +x update-and-migrate.sh
+```
+
+### Using the Quick Upgrade Script
+
+```bash
+# Navigate to Labelbase
+cd Labelbase
+
+# Source environment and run update
+source exports.sh && ./update-and-migrate.sh
+```
+
+The script will:
+1. ✓ Create automatic backup
+2. ✓ Pull latest code from git
+3. ✓ Detect pending migrations
+4. ✓ Ask for confirmation before applying
+5. ✓ Restart services
+6. ✓ Provide verification steps
+
+### When to Rebuild vs. Restart
+
+**Just restart** (`docker-compose restart`) when:
+- Only Django code changed (Python files)
+- No dependency updates
+- No Dockerfile changes
+- Fastest option
+
+**Full rebuild** (`docker-compose up --build -d`) when:
+- requirements.txt changed
+- Dockerfile modified
+- New system packages needed
+- Docker configuration changed
+
+**Data Safety Note**: Both `restart` and `--build` are SAFE - they preserve your data. Docker stores your database and files in **volumes** that persist across rebuilds.
+
+If unsure, rebuild - it's safer and only takes a minute longer.
+
+### What Actually Deletes Data
+
+Only these commands delete data (requires `-v` flag):
+
+```bash
+# DANGER: This deletes ALL data including database!
+docker-compose down -v
+
+# To safely stop without deleting data, use:
+docker-compose down          # Safe - keeps volumes
+docker-compose stop          # Safe - just stops containers
+```
+
+**Rule of thumb**: If you see `-v` flag, your data is at risk!
+
+### Rollback After Failed Upgrade
+
+If something goes wrong:
+
+```bash
+# 1. Stop services
+docker-compose down
+
+# 2. Restore previous code
+git reset --hard HEAD~1
+
+# 3. Restore database
+./restore-labelbase.sh backups/labelbase_backup_TIMESTAMP.sql.gz
+
+# 4. Restart
+source exports.sh && docker-compose up -d
+```
 
 ---
 
@@ -481,6 +727,18 @@ tail -f /var/log/labelbase-backup.log
 3. ✓ Monitor backup file sizes (unexpected changes may indicate issues)
 4. ✓ Keep backup logs for troubleshooting
 
+### Docker Data Safety
+1. ✓ **SAFE commands** (preserve data):
+   - `docker-compose up --build -d` - Rebuild containers
+   - `docker-compose restart` - Restart services
+   - `docker-compose down` - Stop without deleting volumes
+   - `docker-compose stop` - Pause containers
+2. ✓ **DANGEROUS commands** (delete data):
+   - `docker-compose down -v` - ⚠️ Deletes ALL volumes/data
+   - `docker volume prune` - ⚠️ Removes unused volumes
+   - `docker system prune -a` - ⚠️ Nuclear option
+3. ✓ **Remember**: The `-v` flag means "delete volumes" = data loss!
+
 ---
 
 ## Troubleshooting
@@ -505,7 +763,7 @@ echo $MYSQL_ROOT_PASSWORD
 
 **Cause**: Wrong password in `exports.sh`
 
-**Solution**: 
+**Solution**:
 1. Check MySQL container logs: `docker-compose logs labelbase_mysql`
 2. Verify password in `exports.sh` matches what MySQL expects
 3. If lost, you may need to reset MySQL root password
@@ -577,6 +835,16 @@ docker-compose logs labelbase_django | tail -50
 ## Quick Command Reference
 
 ```bash
+# Quick upgrade (recommended)
+source exports.sh && ./update-and-migrate.sh
+
+# Manual upgrade workflow
+./backup-labelbase.sh
+git pull origin master
+source exports.sh && docker-compose up --build -d
+docker-compose exec labelbase_django python manage.py migrate
+docker-compose restart labelbase_django
+
 # Create backup (database + config.ini)
 ./backup-labelbase.sh
 

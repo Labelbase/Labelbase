@@ -109,7 +109,10 @@ exit
 docker-compose restart labelbase_django
 ```
 
-### Clean Rebuild (fresh start, deletes volumes)
+### Clean Rebuild (fresh start, deletes volumes!!)
+
+❌ DANGER ZONE
+
 ```bash
 docker-compose down -v
 source exports.sh && docker-compose up --build -d

@@ -344,36 +344,7 @@
 
 
   {% endblock %}
-  <!-- Chatwoot Modal  -->
-  <div class="modal " id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="chatModalLabel">Support Chat Disclosure</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <p>By clicking "Load Chatwoot Support Chat," you will be connected to a third-party
-                    support chat service provided by Chatwoot. Your interactions may be subject to their
-                    <a href="https://www.chatwoot.com/terms-of-service">terms of service</a> and <a href="https://www.chatwoot.com/privacy-policy">privacy policy</a>.</p>
-
-                    <p>The chat will be embedded on the bottom right of the page and you can disable in your <a href="{% url 'userprofile' %}">Profile Settings</a>.</p>
-
-                    <p>Do you want to proceed?</p>
-
-
-
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" onclick="loadChat()">Load Chatwoot Support Chat</button>
-
-
-              </div>
-
-          </div>
-      </div>
-  </div>
+ 
   {% csrf_token %}
 
   {% include "_modal_importWizzardModal.html" %}

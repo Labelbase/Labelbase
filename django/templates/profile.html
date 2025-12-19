@@ -69,16 +69,7 @@
   <h4>Privacy</h4>
   <table class="table">
       <tbody>
-          <tr>
-              <td style="width:21%;"><b>Chatwoot</b></td>
-              <td style="width:75%;"><small>Enable or disable <a href="https://www.chatwoot.com/">Chatwoot</a> support chat. Your interactions may be subject to their
-              <a href="https://www.chatwoot.com/terms-of-service">terms of service</a> and <a href="https://www.chatwoot.com/privacy-policy">privacy policy</a>.</small></td>
-              <td>
-                  <div class="form-check form-switch">
-                      <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.use_chatwoot %}checked="checked"{% endif %} id="use_chatwoot">
-                  </div>
-              </td>
-          </tr>
+           
           <tr>
               <td style="width:21%;"><b>Sentry</b></td>
               <td style="width:75%;"><small>Enable or disable anonymized error tracking.</small></td>
@@ -105,7 +96,7 @@
                     <input class="form-check-input user-setting" type="checkbox" {% if request.user.profile.update_utxo_on_login %}checked="checked"{% endif %} id="update_utxo_on_login">
                 </div>
             </td>
-         
+
       </tr>
   </table>
 

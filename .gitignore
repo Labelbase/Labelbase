@@ -5,6 +5,7 @@ labelbase.log
 labelbase.log.*
 bgt.log
 db/
+backup_*
 *.pyc
 __pycache__
 django/importer/uploadeddata/*

@@ -42,7 +42,9 @@ docker-compose exec -T labelbase_mysql mysqldump -u root -p"${MYSQL_ROOT_PASSWOR
 
 This creates a backup file like `backup_20250119_143022.sql`.
 
-There is also the `config.ini`  holding the encryption and other important data.
+### Backup config.ini (Important!)
+
+The `config.ini` file contains encryption keys and other critical settings. Always back it up too:
 
 ```bash
 # Navigate to Labelbase directory
@@ -54,6 +56,9 @@ source exports.sh
 # Create backup with timestamp
 docker-compose exec -T labelbase_django cat /app/config.ini > backup_$(date +%Y%m%d_%H%M%S)_config.ini
 ```
+
+This creates a backup file like `backup_20250119_143022_config.ini`.
+
 ---
 
 ## Automated Backup Script
@@ -106,9 +111,21 @@ mkdir -p "$BACKUP_DIR"
 # Generate backup filename with timestamp
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 BACKUP_FILE="$BACKUP_DIR/labelbase_backup_$TIMESTAMP.sql"
+CONFIG_BACKUP_FILE="$BACKUP_DIR/config_backup_$TIMESTAMP.ini"
 
 echo -e "${YELLOW}Starting backup...${NC}"
-echo "Backup file: $BACKUP_FILE"
+echo "Database backup: $BACKUP_FILE"
+echo "Config backup: $CONFIG_BACKUP_FILE"
+
+# Backup config.ini first (contains encryption keys!)
+echo "Backing up config.ini..."
+docker-compose exec -T labelbase_django cat /app/config.ini > "$CONFIG_BACKUP_FILE"
+
+if [ $? -eq 0 ] && [ -s "$CONFIG_BACKUP_FILE" ]; then
+    echo -e "${GREEN}✓ Config backup successful${NC}"
+else
+    echo -e "${YELLOW}⚠ Config backup failed or file is empty${NC}"
+fi
 
 # Create database backup
 docker-compose exec -T labelbase_mysql mysqldump \
@@ -122,15 +139,15 @@ docker-compose exec -T labelbase_mysql mysqldump \
 # Check if backup was successful
 if [ $? -eq 0 ] && [ -s "$BACKUP_FILE" ]; then
     echo -e "${GREEN}✓ Backup successful!${NC}"
-
+    
     # Get file size
     SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
     echo "Backup size: $SIZE"
-
+    
     # Compress backup to save space
     echo "Compressing backup..."
     gzip "$BACKUP_FILE"
-
+    
     if [ $? -eq 0 ]; then
         COMPRESSED_SIZE=$(du -h "${BACKUP_FILE}.gz" | cut -f1)
         echo -e "${GREEN}✓ Compressed to: $COMPRESSED_SIZE${NC}"
@@ -138,28 +155,29 @@ if [ $? -eq 0 ] && [ -s "$BACKUP_FILE" ]; then
     else
         echo -e "${YELLOW}⚠ Compression failed, keeping uncompressed backup${NC}"
     fi
-
+    
     # Clean up old backups (keep only last N backups)
     echo "Cleaning up old backups (keeping last $KEEP_BACKUPS)..."
     BACKUP_COUNT=$(ls -1 "$BACKUP_DIR"/labelbase_backup_*.sql.gz 2>/dev/null | wc -l)
-
+    
     if [ "$BACKUP_COUNT" -gt "$KEEP_BACKUPS" ]; then
         ls -t "$BACKUP_DIR"/labelbase_backup_*.sql.gz | tail -n +$((KEEP_BACKUPS + 1)) | xargs -r rm
         echo -e "${GREEN}✓ Cleaned up old backups${NC}"
     else
         echo "No cleanup needed ($BACKUP_COUNT backups exist)"
     fi
-
+    
     echo ""
     echo -e "${GREEN}=== Backup Complete ===${NC}"
-    echo "Location: ${BACKUP_FILE}.gz"
-
+    echo "Database: ${BACKUP_FILE}.gz"
+    echo "Config: ${CONFIG_BACKUP_FILE}"
+    
 else
     echo -e "${RED}✗ Backup failed!${NC}"
-
+    
     # Remove empty or failed backup file
     [ -f "$BACKUP_FILE" ] && rm "$BACKUP_FILE"
-
+    
     echo "Troubleshooting:"
     echo "1. Check if MySQL container is running: docker-compose ps"
     echo "2. Check MySQL logs: docker-compose logs labelbase_mysql"
@@ -362,6 +380,20 @@ fi
 echo "Restarting services..."
 docker-compose up -d
 
+# Optional: Restore config.ini if you have a backup from the same time
+# CONFIG_FILE="${BACKUP_FILE%_backup_*}_config_backup_${BACKUP_FILE##*_backup_}"
+# CONFIG_FILE="${CONFIG_FILE%.sql.gz}.ini"
+# if [ -f "$CONFIG_FILE" ]; then
+#     echo "Found config backup: $CONFIG_FILE"
+#     read -p "Restore config.ini too? (y/n) " -n 1 -r
+#     echo
+#     if [[ $REPLY =~ ^[Yy]$ ]]; then
+#         cat "$CONFIG_FILE" | docker-compose exec -T labelbase_django bash -c "cat > /app/config.ini"
+#         echo -e "${GREEN}✓ Config restored${NC}"
+#         docker-compose restart labelbase_django
+#     fi
+# fi
+
 echo ""
 echo -e "${GREEN}=== Restore Complete ===${NC}"
 echo "Check logs with: docker-compose logs -f labelbase_django"
@@ -434,11 +466,13 @@ tail -f /var/log/labelbase-backup.log
 ### Security
 1. ✓ Protect `exports.sh` - it contains database passwords
 2. ✓ Secure backup files - they contain all your data
-3. ✓ Use appropriate file permissions:
+3. ✓ Protect `config.ini` backups - they contain encryption keys
+4. ✓ Use appropriate file permissions:
    ```bash
    chmod 600 exports.sh
    chmod 700 backups/
    chmod 600 backups/*.sql.gz
+   chmod 600 backups/*_config.ini
    ```
 
 ### Regular Maintenance
@@ -471,7 +505,7 @@ echo $MYSQL_ROOT_PASSWORD
 
 **Cause**: Wrong password in `exports.sh`
 
-**Solution**:
+**Solution**: 
 1. Check MySQL container logs: `docker-compose logs labelbase_mysql`
 2. Verify password in `exports.sh` matches what MySQL expects
 3. If lost, you may need to reset MySQL root password
@@ -543,8 +577,14 @@ docker-compose logs labelbase_django | tail -50
 ## Quick Command Reference
 
 ```bash
-# Create backup
+# Create backup (database + config.ini)
 ./backup-labelbase.sh
+
+# Manual database backup
+docker-compose exec -T labelbase_mysql mysqldump -u root -p"${MYSQL_ROOT_PASSWORD}" labelbase > backup_$(date +%Y%m%d_%H%M%S).sql
+
+# Manual config.ini backup
+docker-compose exec -T labelbase_django cat /app/config.ini > backup_$(date +%Y%m%d_%H%M%S)_config.ini
 
 # List backups
 ls -lh backups/
